@@ -1,7 +1,6 @@
-package org.project;
+package org.project.server;
 
 import org.project.database.DbHelper;
-import org.project.database.Statements;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -14,19 +13,18 @@ public class ServerMain {
         try {
             ServerImpl server = new ServerImpl();
             Registry reg = LocateRegistry.createRegistry(Server.PORT);
-            reg.rebind("SERVER", server);
-
+            reg.rebind(Server.NAME, server);
+            System.out.println("SERVER PRONTO");
         } catch (RemoteException e) {
             e.printStackTrace();
         }
 
         try {
             DbHelper.getConnection();
-            Statements.initializeDb();
-
+            //Statements.initializeDb();
+            DbHelper.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -1,13 +1,9 @@
 package org.project.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DbHelper {
-    // Uniform resource locator
-    private final static String protocol = "jdbc:postgresql" + "://";
+    private final static String protocol = "jdbc:postgresql://";
     private final static String host = "localhost/";
     private final static String resource = "ProgettoCentriVaccinali";
     private final static String url = protocol + host + resource;
@@ -31,8 +27,7 @@ public class DbHelper {
 
     public static Statement getStatement() throws SQLException {
         if (statement == null) {
-            Connection connection = getConnection();
-            statement = connection.createStatement();
+            statement = getConnection().createStatement();
         }
         return statement;
     }
@@ -40,5 +35,11 @@ public class DbHelper {
     public static void closeStatement() throws SQLException {
         statement.close();
         statement = null;
+    }
+
+    public static PreparedStatement getPStmtInsertDataUser() throws SQLException {
+        return getConnection().prepareStatement("insert into cittadino_registrato " +
+                "(email, nome, cognome, codice_fiscale, password, nickname) " +
+                "values (?, ?, ?, ?, ?, ?);");
     }
 }
