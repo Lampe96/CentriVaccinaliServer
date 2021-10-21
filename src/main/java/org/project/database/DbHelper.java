@@ -39,7 +39,13 @@ public class DbHelper {
 
     public static PreparedStatement getPStmtInsertDataUser() throws SQLException {
         return getConnection().prepareStatement("insert into cittadino_registrato " +
-                "(email, nome, cognome, codice_fiscale, password, nickname) " +
+                "(nickname, email, nome, cognome, codice_fiscale, password) " +
                 "values (?, ?, ?, ?, ?, ?);");
+    }
+
+    public static PreparedStatement getPStmtInsertDataHub() throws SQLException {
+        return getConnection().prepareStatement("insert into centro_vaccinale " +
+                "(nome_centro, tipologia, password, qualificatore, via, numero, citta, provincia) " +
+                "values (?, ?, ?, ?, ?, ?, ?, ?);");
     }
 }

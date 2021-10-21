@@ -1,6 +1,6 @@
 package org.project.server;
 
-import org.project.database.DbHelper;
+import org.project.database.Statements;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -20,9 +20,7 @@ public class ServerMain {
         }
 
         try {
-            DbHelper.getConnection();
-            //Statements.initializeDb();
-            DbHelper.closeConnection();
+            Statements.initializeDb();
         } catch (SQLException e) {
             e.printStackTrace();
         }

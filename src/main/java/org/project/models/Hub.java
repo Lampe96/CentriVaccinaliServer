@@ -6,10 +6,10 @@ public class Hub implements Serializable {
 
     private String nameHub;
     private String password;
-    private String address;
+    private Address address;
     private String type;
 
-    public Hub(String nameHub, String password, String address, String type) {
+    public Hub(String nameHub, String password, Address address, String type) {
         this.nameHub = nameHub;
         this.password = password;
         this.address = address;
@@ -32,11 +32,11 @@ public class Hub implements Serializable {
         this.password = password;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
