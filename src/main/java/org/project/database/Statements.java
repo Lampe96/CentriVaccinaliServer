@@ -1,7 +1,9 @@
 package org.project.database;
 
+import com.password4j.Password;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
+import org.project.UserType;
 import org.project.models.Hub;
 import org.project.models.User;
 
@@ -97,10 +99,11 @@ public class Statements {
 
         while (rs.next()) {
             if (rs.getString(1).equals(nick)) {
+                DbHelper.closeStatement();
                 return false;
             }
         }
-
+        DbHelper.closeStatement();
         return true;
     }
 
@@ -112,10 +115,11 @@ public class Statements {
 
         while (rs.next()) {
             if (rs.getString(1).equals(email)) {
+                DbHelper.closeStatement();
                 return false;
             }
         }
-
+        DbHelper.closeStatement();
         return true;
     }
 
@@ -127,10 +131,67 @@ public class Statements {
 
         while (rs.next()) {
             if (rs.getString(1).equals(fiscalCode)) {
+                DbHelper.closeStatement();
                 return false;
             }
         }
-
+        DbHelper.closeStatement();
         return true;
+    }
+
+    public static boolean checkDuplicateHubName(String name) throws SQLException {
+        ResultSet rs = DbHelper.getStatement().executeQuery(
+                "SELECT nome_centro " +
+                        "FROM centro_vaccinale"
+        );
+
+        while (rs.next()) {
+            if (rs.getString(1).equals(name)) {
+                DbHelper.closeStatement();
+                return false;
+            }
+        }
+        DbHelper.closeStatement();
+        return true;
+    }
+
+    public static boolean checkDuplicateAddress(String address) throws SQLException {
+        ResultSet rs = DbHelper.getStatement().executeQuery(
+                "SELECT qualificatore, via, numero, citta, provincia " +
+                        "FROM centro_vaccinale"
+        );
+        String DBaddress;
+        while (rs.next()) {
+            DBaddress = rs.getString(1) + rs.getString(2) + rs.getString(3) + rs.getString(4) + rs.getString(5);
+            if (DBaddress.equals(address)) {
+                DbHelper.closeStatement();
+                return false;
+            }
+        }
+        DbHelper.closeStatement();
+        return true;
+    }
+
+    public static UserType checkCredential(String email, String pwd) throws SQLException {
+        PreparedStatement psU = DbHelper.getEmailAndPwdU();
+        psU.setString(1,email);
+        ResultSet rsU = psU.executeQuery();
+
+        if (rsU.next()) {
+            if (Password.check(pwd, rsU.getString(1)).withArgon2()) {
+                return UserType.USER;
+            }
+        }
+
+        PreparedStatement psH = DbHelper.getEmailAndPwdH();
+        psH.setString(1,email);
+        ResultSet rsH = psH.executeQuery();
+
+        if (rsH.next()) {
+            if (Password.check(pwd, rsH.getString(1)).withArgon2()) {
+                return UserType.HUB;
+            }
+        }
+        return null;
     }
 }

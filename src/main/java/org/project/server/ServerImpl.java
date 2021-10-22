@@ -1,5 +1,7 @@
 package org.project.server;
 
+import org.project.UserType;
+import org.project.database.DbHelper;
 import org.project.database.Statements;
 import org.project.models.Hub;
 import org.project.models.User;
@@ -65,5 +67,35 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean checkDuplicateHubName(String name) throws RemoteException {
+        try {
+            return Statements.checkDuplicateHubName(name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkDuplicateAddress(String address) throws RemoteException {
+        try {
+            return Statements.checkDuplicateAddress(address);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public UserType checkCredential(String email, String pwd) throws RemoteException {
+        try {
+            return Statements.checkCredential(email, pwd);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
