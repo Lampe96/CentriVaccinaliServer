@@ -57,4 +57,15 @@ public class Address implements Serializable {
     public void setProvince(String province) {
         this.province = province;
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "qualificator='" + qualificator + '\'' +
+                ", address='" + address + '\'' +
+                ", number='" + number + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                '}';
+    }
 }

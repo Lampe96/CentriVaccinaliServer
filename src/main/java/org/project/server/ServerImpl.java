@@ -1,7 +1,6 @@
 package org.project.server;
 
 import org.project.UserType;
-import org.project.database.DbHelper;
 import org.project.database.Statements;
 import org.project.models.Hub;
 import org.project.models.User;
@@ -43,7 +42,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
@@ -54,7 +52,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
@@ -65,7 +62,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 

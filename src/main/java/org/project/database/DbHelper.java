@@ -40,22 +40,22 @@ public class DbHelper {
     public static PreparedStatement getPStmtInsertDataUser() throws SQLException {
         return getConnection().prepareStatement(
                 "insert into cittadino_registrato " +
-                "(nickname, email, nome, cognome, codice_fiscale, password) " +
-                "values (?, ?, ?, ?, ?, ?);");
+                        "(nickname, email, nome, cognome, codice_fiscale, password) " +
+                        "values (?, ?, ?, ?, ?, ?);");
     }
 
     public static PreparedStatement getPStmtInsertDataHub() throws SQLException {
         return getConnection().prepareStatement(
                 "insert into centro_vaccinale " +
-                "(nome_centro, tipologia, password, qualificatore, via, numero, citta, provincia) " +
-                "values (?, ?, ?, ?, ?, ?, ?, ?);");
+                        "(nome_centro, tipologia, password, qualificatore, via, numero, citta, provincia) " +
+                        "values (?, ?, ?, ?, ?, ?, ?, ?);");
     }
 
     public static PreparedStatement getEmailAndPwdU() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT password " +
-                "FROM cittadino_registrato " +
-                "WHERE email = ?;");
+                        "FROM cittadino_registrato " +
+                        "WHERE email = ?;");
     }
 
     public static PreparedStatement getEmailAndPwdH() throws SQLException {

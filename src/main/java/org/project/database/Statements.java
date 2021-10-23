@@ -99,11 +99,9 @@ public class Statements {
 
         while (rs.next()) {
             if (rs.getString(1).equals(nick)) {
-                DbHelper.closeStatement();
                 return false;
             }
         }
-        DbHelper.closeStatement();
         return true;
     }
 
@@ -115,11 +113,9 @@ public class Statements {
 
         while (rs.next()) {
             if (rs.getString(1).equals(email)) {
-                DbHelper.closeStatement();
                 return false;
             }
         }
-        DbHelper.closeStatement();
         return true;
     }
 
@@ -131,11 +127,9 @@ public class Statements {
 
         while (rs.next()) {
             if (rs.getString(1).equals(fiscalCode)) {
-                DbHelper.closeStatement();
                 return false;
             }
         }
-        DbHelper.closeStatement();
         return true;
     }
 
@@ -147,11 +141,9 @@ public class Statements {
 
         while (rs.next()) {
             if (rs.getString(1).equals(name)) {
-                DbHelper.closeStatement();
                 return false;
             }
         }
-        DbHelper.closeStatement();
         return true;
     }
 
@@ -160,21 +152,20 @@ public class Statements {
                 "SELECT qualificatore, via, numero, citta, provincia " +
                         "FROM centro_vaccinale"
         );
-        String DBaddress;
+
+        String dbAddress;
         while (rs.next()) {
-            DBaddress = rs.getString(1) + rs.getString(2) + rs.getString(3) + rs.getString(4) + rs.getString(5);
-            if (DBaddress.equals(address)) {
-                DbHelper.closeStatement();
+            dbAddress = rs.getString(1) + rs.getString(2) + rs.getString(3) + rs.getString(4) + rs.getString(5);
+            if (dbAddress.equals(address)) {
                 return false;
             }
         }
-        DbHelper.closeStatement();
         return true;
     }
 
     public static UserType checkCredential(String email, String pwd) throws SQLException {
         PreparedStatement psU = DbHelper.getEmailAndPwdU();
-        psU.setString(1,email);
+        psU.setString(1, email);
         ResultSet rsU = psU.executeQuery();
 
         if (rsU.next()) {
@@ -184,7 +175,7 @@ public class Statements {
         }
 
         PreparedStatement psH = DbHelper.getEmailAndPwdH();
-        psH.setString(1,email);
+        psH.setString(1, email);
         ResultSet rsH = psH.executeQuery();
 
         if (rsH.next()) {
@@ -192,6 +183,7 @@ public class Statements {
                 return UserType.HUB;
             }
         }
+
         return null;
     }
 }
