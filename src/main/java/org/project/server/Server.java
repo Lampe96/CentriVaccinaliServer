@@ -28,4 +28,8 @@ public interface Server extends Remote {
     boolean checkDuplicateAddress(String address) throws RemoteException;
 
     UserType checkCredential(String email, String pwd) throws RemoteException;
+
+    void sendEmail(String email) throws RemoteException;
+
+    boolean verifyEmail(String email, int code) throws RemoteException;
 }
