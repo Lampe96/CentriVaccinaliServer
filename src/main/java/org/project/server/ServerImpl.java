@@ -63,6 +63,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
+    public boolean checkDuplicateTempEmail(String email) throws RemoteException {
+        return codeTracker.containsKey(email);
+    }
+
+    @Override
     public synchronized boolean checkDuplicateFiscalCode(String fiscalCode) throws RemoteException {
         try {
             return Statements.checkDuplicateFiscalCode(fiscalCode);
@@ -103,11 +108,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized void sendEmail(String email) throws RemoteException {
+    public synchronized void sendVerifyEmail(String email, String nickname) throws RemoteException {
         int code = ThreadLocalRandom.current().nextInt(100000, 999999);
 
         try {
-            EmailUtil.sendEmail(email, code);
+            EmailUtil.sendVerifyEmail(email, nickname, code);
             codeTracker.put(email, code);
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -115,9 +120,16 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized boolean verifyEmail(String email, int code) throws RemoteException {
+    public synchronized boolean verifyCodeEmail(String email, int code) throws RemoteException {
         boolean codeOk = codeTracker.get(email) == code;
-        codeTracker.remove(email);
+        if (codeOk) {
+            codeTracker.remove(email);
+        }
         return codeOk;
+    }
+
+    @Override
+    public synchronized void deleteReferenceVerifyEmail(String email) throws RemoteException {
+        codeTracker.remove(email);
     }
 }

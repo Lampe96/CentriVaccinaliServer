@@ -3,19 +3,20 @@ package org.project.database;
 import java.sql.*;
 
 public class DbHelper {
-    private final static String protocol = "jdbc:postgresql://";
-    private final static String host = "localhost/";
-    private final static String resource = "ProgettoCentriVaccinali";
-    private final static String url = protocol + host + resource;
-    private final static String username = "postgres";
-    private final static String password = "ProgettoLabB";
+
+    private final static String PROTOCOL = "jdbc:postgresql://";
+    private final static String HOST = "localhost/";
+    private final static String RESOURCE = "ProgettoCentriVaccinali";
+    private final static String URL = PROTOCOL + HOST + RESOURCE;
+    private final static String USERNAME = "postgres";
+    private final static String PASSWORD = "ProgettoLabB";
 
     private static Connection connection = null;
     private static Statement statement = null;
 
     public static Connection getConnection() throws SQLException {
         if (connection == null) {
-            connection = DriverManager.getConnection(url, username, password);
+            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         }
         return connection;
     }

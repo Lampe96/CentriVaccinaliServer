@@ -21,6 +21,8 @@ public interface Server extends Remote {
 
     boolean checkDuplicateEmail(String email) throws RemoteException;
 
+    boolean checkDuplicateTempEmail(String email) throws RemoteException;
+
     boolean checkDuplicateFiscalCode(String fiscalCode) throws RemoteException;
 
     boolean checkDuplicateHubName(String name) throws RemoteException;
@@ -29,7 +31,9 @@ public interface Server extends Remote {
 
     UserType checkCredential(String email, String pwd) throws RemoteException;
 
-    void sendEmail(String email) throws RemoteException;
+    void sendVerifyEmail(String email, String nickname) throws RemoteException;
 
-    boolean verifyEmail(String email, int code) throws RemoteException;
+    boolean verifyCodeEmail(String email, int code) throws RemoteException;
+
+    void deleteReferenceVerifyEmail(String email) throws RemoteException;
 }
