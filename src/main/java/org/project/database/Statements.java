@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class Statements {
 
     @Language("POSTGRES-SQL")
-    final static String CR_TB_CV =
+    private final static String CR_TB_CV =
             "CREATE TABLE IF NOT EXISTS Centro_Vaccinale(" +
                     "nome_centro VARCHAR(50) PRIMARY KEY," +
                     "tipologia VARCHAR(15) NOT NULL," +
@@ -23,21 +23,12 @@ public class Statements {
                     "via VARCHAR(50) NOT NULL," +
                     "numero VARCHAR(10) NOT NULL," +
                     "citta VARCHAR(30) NOT NULL," +
+                    "cap CHAR(5) NOT NULL," +
                     "provincia CHAR(2) NOT NULL" +
                     ");";
 
     @Language("POSTGRES-SQL")
-    final static String CR_TB_VAC_NOMCV =
-            "CREATE TABLE IF NOT EXISTS Vaccinato_NomeCentroVaccinale(" +
-                    "id_univoco bigint PRIMARY KEY," +
-                    "nickname VARCHAR(25) NOT NULL," +
-                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON UPDATE CASCADE ON DELETE SET NULL," +
-                    "data_vaccino date NOT NULL," +
-                    "tipo_vaccino VARCHAR(20) NOT NULL" +
-                    ");";
-
-    @Language("POSTGRES-SQL")
-    final static String CR_TB_CITT_REG =
+    private final static String CR_TB_CITT_REG =
             "CREATE TABLE IF NOT EXISTS Cittadino_Registrato(" +
                     "nickname VARCHAR(25) PRIMARY KEY," +
                     "email VARCHAR(50) NOT NULL," +
@@ -49,7 +40,7 @@ public class Statements {
                     ");";
 
     @Language("POSTGRES-SQL")
-    final static String CR_TB_EV_AVV =
+    private final static String CR_TB_EV_AVV =
             "CREATE TABLE IF NOT EXISTS Evento_Avverso(" +
                     "tipo VARCHAR(20)," +
                     "nickname VARCHAR(25) references Cittadino_Registrato (nickname) ON UPDATE CASCADE ON DELETE SET NULL," +
@@ -61,7 +52,7 @@ public class Statements {
 
     public static void initializeDb() throws SQLException {
         DbHelper.getStatement().executeUpdate(
-                CR_TB_CV + "\n" + CR_TB_VAC_NOMCV + "\n" + CR_TB_CITT_REG + "\n" + CR_TB_EV_AVV
+                CR_TB_CV + "\n" + CR_TB_CITT_REG + "\n" + CR_TB_EV_AVV
         );
     }
 
@@ -86,9 +77,16 @@ public class Statements {
         pStat.setString(5, hub.getAddress().getAddress());
         pStat.setString(6, hub.getAddress().getNumber());
         pStat.setString(7, hub.getAddress().getCity());
-        pStat.setString(8, hub.getAddress().getProvince());
+        pStat.setString(8, hub.getAddress().getCap());
+        pStat.setString(9, hub.getAddress().getProvince());
         pStat.executeUpdate();
         pStat.closeOnCompletion();
+
+        PreparedStatement pStatCr = DbHelper.getPStmtCreateHub();
+        pStatCr.setString(1, hub.getNameHub());
+        System.out.println(pStatCr);
+        pStatCr.executeUpdate();
+        pStatCr.closeOnCompletion();
     }
 
     public static boolean checkDuplicateNickname(String nick) throws SQLException {
@@ -149,13 +147,13 @@ public class Statements {
 
     public static boolean checkDuplicateAddress(String address) throws SQLException {
         ResultSet rs = DbHelper.getStatement().executeQuery(
-                "SELECT qualificatore, via, numero, citta, provincia " +
+                "SELECT qualificatore, via, numero, citta, cap, provincia " +
                         "FROM centro_vaccinale"
         );
 
         String dbAddress;
         while (rs.next()) {
-            dbAddress = rs.getString(1) + rs.getString(2) + rs.getString(3) + rs.getString(4) + rs.getString(5);
+            dbAddress = rs.getString(1) + rs.getString(2) + rs.getString(3) + rs.getString(4) + rs.getString(5) + rs.getString(6);
             if (dbAddress.equals(address)) {
                 return false;
             }

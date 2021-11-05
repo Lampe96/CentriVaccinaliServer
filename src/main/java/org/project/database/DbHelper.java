@@ -48,8 +48,21 @@ public class DbHelper {
     public static PreparedStatement getPStmtInsertDataHub() throws SQLException {
         return getConnection().prepareStatement(
                 "insert into centro_vaccinale " +
-                        "(nome_centro, tipologia, password, qualificatore, via, numero, citta, provincia) " +
-                        "values (?, ?, ?, ?, ?, ?, ?, ?);");
+                        "(nome_centro, tipologia, password, qualificatore, via, numero, citta, cap, provincia) " +
+                        "values (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+    }
+
+    public static PreparedStatement getPStmtCreateHub() throws SQLException {
+        return getConnection().prepareStatement(
+                "CREATE TABLE IF NOT EXISTS Vaccinato_?(" +
+                                    "id_univoco bigint PRIMARY KEY," +
+                                    "nome VARCHAR(25)," +
+                                    "cognome VARCHAR(25)," +
+                                    "codice_fiscale CHAR(16)," +
+                                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON UPDATE CASCADE ON DELETE SET NULL," +
+                                    "data_vaccino date," +
+                                    "tipo_vaccino VARCHAR(20)" +
+                                    ");");
     }
 
     public static PreparedStatement getEmailAndPwdU() throws SQLException {
