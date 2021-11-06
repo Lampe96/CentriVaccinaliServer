@@ -28,6 +28,18 @@ public class Statements {
                     ");";
 
     @Language("POSTGRES-SQL")
+    private static final String CR_TB_VAC_NOMCV =
+            "CREATE TABLE IF NOT EXISTS Vaccinato_NomeCentroVaccinale(" +
+                    "id_univoco bigint PRIMARY KEY," +
+                    "nome VARCHAR(25)," +
+                    "cognome VARCHAR(25)," +
+                    "codice_fiscale CHAR(16)," +
+                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON DELETE SET NULL ON UPDATE CASCADE," +
+                    "data_vaccino date," +
+                    "tipo_vaccino VARCHAR(20)" +
+                    ");";
+
+    @Language("POSTGRES-SQL")
     private final static String CR_TB_CITT_REG =
             "CREATE TABLE IF NOT EXISTS Cittadino_Registrato(" +
                     "nickname VARCHAR(25) PRIMARY KEY," +
@@ -52,7 +64,7 @@ public class Statements {
 
     public static void initializeDb() throws SQLException {
         DbHelper.getStatement().executeUpdate(
-                CR_TB_CV + "\n" + CR_TB_CITT_REG + "\n" + CR_TB_EV_AVV
+                CR_TB_CV + "\n" + CR_TB_VAC_NOMCV + "\n" + CR_TB_CITT_REG + "\n" + CR_TB_EV_AVV
         );
     }
 
@@ -82,11 +94,7 @@ public class Statements {
         pStat.executeUpdate();
         pStat.closeOnCompletion();
 
-        PreparedStatement pStatCr = DbHelper.getPStmtCreateHub();
-        pStatCr.setString(1, hub.getNameHub());
-        System.out.println(pStatCr);
-        pStatCr.executeUpdate();
-        pStatCr.closeOnCompletion();
+        DbHelper.getStatement().executeUpdate(CR_TB_VAC_NOMCV.replaceFirst("NomeCentroVaccinale", hub.getNameHub()));
     }
 
     public static boolean checkDuplicateNickname(String nick) throws SQLException {

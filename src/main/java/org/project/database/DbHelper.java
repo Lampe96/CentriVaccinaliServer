@@ -52,19 +52,6 @@ public class DbHelper {
                         "values (?, ?, ?, ?, ?, ?, ?, ?, ?);");
     }
 
-    public static PreparedStatement getPStmtCreateHub() throws SQLException {
-        return getConnection().prepareStatement(
-                "CREATE TABLE IF NOT EXISTS Vaccinato_?(" +
-                                    "id_univoco bigint PRIMARY KEY," +
-                                    "nome VARCHAR(25)," +
-                                    "cognome VARCHAR(25)," +
-                                    "codice_fiscale CHAR(16)," +
-                                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON UPDATE CASCADE ON DELETE SET NULL," +
-                                    "data_vaccino date," +
-                                    "tipo_vaccino VARCHAR(20)" +
-                                    ");");
-    }
-
     public static PreparedStatement getEmailAndPwdU() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT password " +

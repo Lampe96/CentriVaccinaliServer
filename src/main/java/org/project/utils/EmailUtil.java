@@ -15,18 +15,23 @@ public class EmailUtil {
     private final static String HOST = "smtp.gmail.com";
     private final static String PORT = "465";
 
-    private static Session getSession() {
+    private static MimeMessage getBaseMessage() throws MessagingException {
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", HOST);
         properties.put("mail.smtp.port", PORT);
         properties.put("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.auth", "true");
 
-        return Session.getInstance(properties, new javax.mail.Authenticator() {
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
             protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
                 return new javax.mail.PasswordAuthentication(FROM, PASSWORD);
             }
         });
+
+        MimeMessage message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(FROM));
+
+        return message;
     }
 
     private static void sendEmail(Message message) throws MessagingException {
@@ -34,8 +39,7 @@ public class EmailUtil {
     }
 
     public static void sendVerifyEmail(String to, String nickname, int code) throws MessagingException {
-        MimeMessage message = new MimeMessage(getSession());
-        message.setFrom(new InternetAddress(FROM));
+        MimeMessage message = getBaseMessage();
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
         message.setSubject("Codice di verifica");
 
@@ -437,9 +441,7 @@ public class EmailUtil {
                         "                                text-align: center;\n" +
                         "                              \"\n" +
                         "                            >\n" +
-                        "                              abbiamo notato che stai cercando di registrarti a\n" +
-                        "                              <span class=\"il\">Centri vaccinali italiani</span>.\n" +
-                        "                              Per completare la registrazione, immetti il codice\n" +
+                        "                              per completare la registrazione, immetti il codice\n" +
                         "                              seguente:\n" +
                         "                            </p>\n" +
                         "                          </th>\n" +
