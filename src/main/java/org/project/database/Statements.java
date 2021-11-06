@@ -6,10 +6,13 @@ import org.jetbrains.annotations.NotNull;
 import org.project.UserType;
 import org.project.models.Hub;
 import org.project.models.User;
+import org.project.models.VaccinatedUser;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class Statements {
 
@@ -31,24 +34,25 @@ public class Statements {
     private static final String CR_TB_VAC_NOMCV =
             "CREATE TABLE IF NOT EXISTS Vaccinato_NomeCentroVaccinale(" +
                     "id_univoco bigint PRIMARY KEY," +
-                    "nome VARCHAR(25)," +
-                    "cognome VARCHAR(25)," +
-                    "codice_fiscale CHAR(16)," +
+                    "nome VARCHAR(25) NOT NULL," +
+                    "cognome VARCHAR(25) NOT NULL," +
+                    "codice_fiscale CHAR(16) references Cittadino_Registrato (codice_fiscale) ON DELETE CASCADE ON UPDATE CASCADE," +
                     "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON DELETE SET NULL ON UPDATE CASCADE," +
-                    "data_vaccino date," +
-                    "tipo_vaccino VARCHAR(20)" +
+                    "data_vaccino date NOT NULL," +
+                    "tipo_vaccino VARCHAR(20) NOT NULL" +
                     ");";
 
     @Language("POSTGRES-SQL")
     private final static String CR_TB_CITT_REG =
             "CREATE TABLE IF NOT EXISTS Cittadino_Registrato(" +
-                    "nickname VARCHAR(25) PRIMARY KEY," +
+                    "nickname VARCHAR(25) UNIQUE," +
                     "email VARCHAR(50) NOT NULL," +
                     "nome VARCHAR(25) NOT NULL," +
                     "cognome VARCHAR(25) NOT NULL," +
-                    "codice_fiscale CHAR(16) UNIQUE NOT NULL," +
+                    "codice_fiscale CHAR(16) UNIQUE," +
                     "password VARCHAR(500) NOT NULL," +
-                    "id_univoco bigint references Vaccinato_NomeCentroVaccinale (id_univoco) ON UPDATE CASCADE ON DELETE SET NULL" +
+                    "id_univoco bigint DEFAULT NULL," +
+                    "PRIMARY KEY(codice_fiscale, nickname)" +
                     ");";
 
     @Language("POSTGRES-SQL")
@@ -64,7 +68,7 @@ public class Statements {
 
     public static void initializeDb() throws SQLException {
         DbHelper.getStatement().executeUpdate(
-                CR_TB_CV + "\n" + CR_TB_VAC_NOMCV + "\n" + CR_TB_CITT_REG + "\n" + CR_TB_EV_AVV
+                CR_TB_CV + "\n" + CR_TB_CITT_REG + "\n" + CR_TB_EV_AVV
         );
     }
 
@@ -94,7 +98,7 @@ public class Statements {
         pStat.executeUpdate();
         pStat.closeOnCompletion();
 
-        DbHelper.getStatement().executeUpdate(CR_TB_VAC_NOMCV.replaceFirst("NomeCentroVaccinale", hub.getNameHub()));
+        DbHelper.getStatement().executeUpdate(CR_TB_VAC_NOMCV.replaceFirst("NomeCentroVaccinale", hub.getNameHub().replaceAll("\\s+","_")));
     }
 
     public static boolean checkDuplicateNickname(String nick) throws SQLException {
@@ -191,5 +195,25 @@ public class Statements {
         }
 
         return null;
+    }
+
+    public static ArrayList<VaccinatedUser> fetchAllVaccinatedUser(String hubName) throws SQLException {
+        System.out.println(hubName);
+        String table_name =  hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+","_");
+        System.out.println(table_name);
+        ResultSet rs = DbHelper.getStatement().executeQuery(
+                "SELECT vaccinato_" + table_name + ".nome, vaccinato_" + table_name + ".cognome, cittadino_registrato.nickname, evento_avverso.nickname, vaccinato_" + table_name + ".id_univoco" +
+                        "FROM cittadino_registrato JOIN vaccinato_" + table_name + " ON cittadino_registrato.codice_fiscale = vaccinato_" + table_name + ".codice_fiscale" +
+                        "JOIN centro_vaccinale ON vaccinato_" + table_name + ".nome_centro = centro_vaccinale.nome_centro" +
+                        "JOIN evento_avverso ON centro_vaccinale.nome_centro = evento_avverso.nome_centro"
+        );
+
+        ArrayList<VaccinatedUser> vu = new ArrayList<>();
+        while (rs.next()){
+            VaccinatedUser vaccinatedUser = new VaccinatedUser( rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+            vu.add(vaccinatedUser);
+        }
+        System.out.println(vu);
+        return vu;
     }
 }

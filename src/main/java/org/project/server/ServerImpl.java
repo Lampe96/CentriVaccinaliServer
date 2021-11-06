@@ -4,12 +4,14 @@ import org.project.UserType;
 import org.project.database.Statements;
 import org.project.models.Hub;
 import org.project.models.User;
+import org.project.models.VaccinatedUser;
 import org.project.utils.EmailUtil;
 
 import javax.mail.MessagingException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -40,6 +42,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void insertNewVaccinated(User user) throws RemoteException {
+
     }
 
     @Override
@@ -131,5 +138,15 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public synchronized void deleteReferenceVerifyEmail(String email) throws RemoteException {
         codeTracker.remove(email);
+    }
+
+    @Override
+    public synchronized ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException {
+        try {
+           return Statements.fetchAllVaccinatedUser(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

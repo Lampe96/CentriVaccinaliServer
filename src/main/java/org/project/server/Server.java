@@ -3,9 +3,11 @@ package org.project.server;
 import org.project.UserType;
 import org.project.models.Hub;
 import org.project.models.User;
+import org.project.models.VaccinatedUser;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 @SuppressWarnings("unused")
 public interface Server extends Remote {
@@ -16,6 +18,8 @@ public interface Server extends Remote {
     void insertDataUser(User user) throws RemoteException;
 
     void insertDataHub(Hub hub) throws RemoteException;
+
+    void insertNewVaccinated(User user) throws RemoteException;
 
     boolean checkDuplicateNickname(String nick) throws RemoteException;
 
@@ -36,4 +40,6 @@ public interface Server extends Remote {
     boolean verifyCodeEmail(String email, int code) throws RemoteException;
 
     void deleteReferenceVerifyEmail(String email) throws RemoteException;
+
+    ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException;
 }
