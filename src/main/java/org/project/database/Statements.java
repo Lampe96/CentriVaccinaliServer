@@ -59,10 +59,10 @@ public class Statements {
     private final static String CR_TB_EV_AVV =
             "CREATE TABLE IF NOT EXISTS Evento_Avverso(" +
                     "tipo VARCHAR(20)," +
-                    "nickname VARCHAR(25) references Cittadino_Registrato (nickname) ON UPDATE CASCADE ON DELETE SET NULL," +
+                    "nickname VARCHAR(25) references Cittadino_Registrato (nickname) ON UPDATE CASCADE ON DELETE CASCADE," +
                     "severita SMALLINT NOT NULL," +
                     "testo VARCHAR(256) NOT NULL," +
-                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON UPDATE CASCADE ON DELETE SET NULL," +
+                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON UPDATE CASCADE ON DELETE CASCADE," +
                     "PRIMARY KEY(tipo, nickname)" +
                     ");";
 
@@ -98,7 +98,7 @@ public class Statements {
         pStat.executeUpdate();
         pStat.closeOnCompletion();
 
-        DbHelper.getStatement().executeUpdate(CR_TB_VAC_NOMCV.replaceFirst("NomeCentroVaccinale", hub.getNameHub().replaceAll("\\s+","_")));
+        DbHelper.getStatement().executeUpdate(CR_TB_VAC_NOMCV.replace("NomeCentroVaccinale", hub.getNameHub().replaceAll("\\s+", "_")));
     }
 
     public static boolean checkDuplicateNickname(String nick) throws SQLException {
@@ -198,22 +198,25 @@ public class Statements {
     }
 
     public static ArrayList<VaccinatedUser> fetchAllVaccinatedUser(String hubName) throws SQLException {
-        System.out.println(hubName);
-        String table_name =  hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+","_");
-        System.out.println(table_name);
+        String table_name = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
         ResultSet rs = DbHelper.getStatement().executeQuery(
-                "SELECT vaccinato_" + table_name + ".nome, vaccinato_" + table_name + ".cognome, cittadino_registrato.nickname, evento_avverso.nickname, vaccinato_" + table_name + ".id_univoco" +
-                        "FROM cittadino_registrato JOIN vaccinato_" + table_name + " ON cittadino_registrato.codice_fiscale = vaccinato_" + table_name + ".codice_fiscale" +
-                        "JOIN centro_vaccinale ON vaccinato_" + table_name + ".nome_centro = centro_vaccinale.nome_centro" +
-                        "JOIN evento_avverso ON centro_vaccinale.nome_centro = evento_avverso.nome_centro"
+                "SELECT VACCINATO_" + table_name + ".NOME," +
+                        "                VACCINATO_" + table_name + ".COGNOME," +
+                        "                CITTADINO_REGISTRATO.NICKNAME," +
+                        "                (SELECT EVENTO_AVVERSO.NICKNAME " +
+                        "        FROM EVENTO_AVVERSO " +
+                        "        JOIN CITTADINO_REGISTRATO ON CITTADINO_REGISTRATO.NICKNAME = EVENTO_AVVERSO.NICKNAME)," +
+                        "        VACCINATO_" + table_name + ".ID_UNIVOCO " +
+                        "        FROM CITTADINO_REGISTRATO " +
+                        "        JOIN VACCINATO_" + table_name + " ON CITTADINO_REGISTRATO.CODICE_FISCALE = VACCINATO_" + table_name + ".CODICE_FISCALE " +
+                        "        JOIN CENTRO_VACCINALE ON VACCINATO_" + table_name + ".NOME_CENTRO = CENTRO_VACCINALE.NOME_CENTRO"
         );
 
         ArrayList<VaccinatedUser> vu = new ArrayList<>();
-        while (rs.next()){
-            VaccinatedUser vaccinatedUser = new VaccinatedUser( rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
-            vu.add(vaccinatedUser);
+        while (rs.next()) {
+            vu.add(new VaccinatedUser(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
         }
-        System.out.println(vu);
+
         return vu;
     }
 }

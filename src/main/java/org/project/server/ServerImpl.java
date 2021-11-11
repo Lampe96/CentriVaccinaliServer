@@ -8,6 +8,7 @@ import org.project.models.VaccinatedUser;
 import org.project.utils.EmailUtil;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
@@ -45,7 +46,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void insertNewVaccinated(User user) throws RemoteException {
+    public synchronized void insertNewVaccinated(User user) throws RemoteException {
 
     }
 
@@ -70,7 +71,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public boolean checkDuplicateTempEmail(String email) throws RemoteException {
+    public synchronized boolean checkDuplicateTempEmail(String email) throws RemoteException {
         return codeTracker.containsKey(email);
     }
 
@@ -116,12 +117,31 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     @Override
     public synchronized void sendVerifyEmail(String email, String nickname) throws RemoteException {
-        int code = ThreadLocalRandom.current().nextInt(100000, 999999);
+        int code = ThreadLocalRandom.current().nextInt(100000, 1000000);
+
+        /*Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+
+        // this will convert any number sequence into 6 character.
+        System.out.println(String.format("%06d", number));*/
 
         try {
             EmailUtil.sendVerifyEmail(email, nickname, code);
             codeTracker.put(email, code);
-        } catch (MessagingException e) {
+
+            //todo mettere timer per rimuovere codice scaduto dopo 10 min
+            //problema che se fa nuovo codice dopo es 5 min quello nuovo verrà tolto dopo 5 min non dopo 10 perché questo timer continua ad andare
+            //possibile soluzione hash map di email e timer
+            /*new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    codeTracker.remove(email);
+                    //rimandane un altro?
+                }
+            }, 1000*60*10);*/
+
+
+        } catch (MessagingException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -143,7 +163,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public synchronized ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException {
         try {
-           return Statements.fetchAllVaccinatedUser(hubName);
+            return Statements.fetchAllVaccinatedUser(hubName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
