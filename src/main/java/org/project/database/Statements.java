@@ -210,38 +210,38 @@ public class Statements {
 
     public static ArrayList<VaccinatedUser> fetchAllVaccinatedUser(String hubName) throws SQLException {
         String table_name = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
-        ResultSet rs = DbHelper.getStatement().executeQuery(
-                "SELECT VACCINATO_" + table_name + ".NOME," +
-                        "                VACCINATO_" + table_name + ".COGNOME," +
-                        "                CITTADINO_REGISTRATO.NICKNAME," +
-                        "                (SELECT EVENTO_AVVERSO.NICKNAME " +
-                        "        FROM EVENTO_AVVERSO " +
-                        "        JOIN CITTADINO_REGISTRATO ON CITTADINO_REGISTRATO.NICKNAME = EVENTO_AVVERSO.NICKNAME)," +
-                        "        VACCINATO_" + table_name + ".ID_UNIVOCO " +
-                        "        FROM CITTADINO_REGISTRATO " +
-                        "        JOIN VACCINATO_" + table_name + " ON CITTADINO_REGISTRATO.CODICE_FISCALE = VACCINATO_" + table_name + ".CODICE_FISCALE " +
-                        "        JOIN CENTRO_VACCINALE ON VACCINATO_" + table_name + ".NOME_CENTRO = CENTRO_VACCINALE.NOME_CENTRO"
+        ResultSet rsAll = DbHelper.getStatement().executeQuery(
+                "SELECT NOME, " +
+                        "COGNOME, " +
+                        "NICKNAME, " +
+                        "id_univoco " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE codice_fiscale IN (SELECT codice_fiscale " +
+                        "FROM vaccinato_" + table_name + ")"
         );
 
-        /*SELECT NOME,
-                COGNOME,
-                NICKNAME,
-                id_univoco
-        FROM CITTADINO_REGISTRATO
-        WHERE codice_fiscale IN (SELECT codice_fiscale
-                FROM vaccinato_ospedale_gallarate)
+        ArrayList<VaccinatedUser> avu = new ArrayList<>();
 
-                SELECT nickname
-                   from cittadino_registrato
-                    where nickname IN (select nickname
-				  from evento_avverso) AND codice_fiscale IN (select codice_fiscale
-															 from vaccinato_ospedale_gallarate)*/
-
-        ArrayList<VaccinatedUser> vu = new ArrayList<>();
-        while (rs.next()) {
-            vu.add(new VaccinatedUser(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+        while (rsAll.next()) {
+            avu.add(new VaccinatedUser(rsAll.getString(1), rsAll.getString(2), rsAll.getString(3), null, rsAll.getString(4)));
         }
 
-        return vu;
+        ResultSet rsEvent = DbHelper.getStatement().executeQuery(
+                " SELECT nickname " +
+                        "from cittadino_registrato " +
+                        "where nickname IN (select nickname " +
+                        "from evento_avverso) AND codice_fiscale IN (select codice_fiscale " +
+                        "from vaccinato_" + table_name + ")"
+        );
+
+        while (rsEvent.next()) {
+            for (VaccinatedUser vu: avu) {
+                if(vu.getNickname().equals(rsEvent.getString(1))){
+                    vu.setEvent(rsEvent.getString(1));
+                }
+            }
+        }
+
+        return avu;
     }
 }
