@@ -2,6 +2,7 @@ package org.project.server;
 
 import org.project.UserType;
 import org.project.database.Statements;
+import org.project.models.Address;
 import org.project.models.Hub;
 import org.project.models.User;
 import org.project.models.VaccinatedUser;
@@ -12,17 +13,19 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class ServerImpl extends UnicastRemoteObject implements Server {
 
     private final HashMap<String, Integer> codeTracker;
+    private final HashMap<String, Timer> codeTimerTracker;
 
     protected ServerImpl() throws RemoteException {
         super();
         codeTracker = new HashMap<>();
+        codeTimerTracker = new HashMap<>();
     }
 
     @Override
@@ -48,6 +51,16 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public synchronized void insertNewVaccinated(User user) throws RemoteException {
 
+    }
+
+    @Override
+    public Address getAddress(String hubName) throws RemoteException {
+        try {
+            return Statements.getAddress(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -119,27 +132,19 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     public synchronized void sendVerifyEmail(String email, String nickname) throws RemoteException {
         int code = ThreadLocalRandom.current().nextInt(100000, 1000000);
 
-        /*Random rnd = new Random();
-        int number = rnd.nextInt(999999);
-
-        // this will convert any number sequence into 6 character.
-        System.out.println(String.format("%06d", number));*/
-
         try {
             EmailUtil.sendVerifyEmail(email, nickname, code);
             codeTracker.put(email, code);
 
-            //todo mettere timer per rimuovere codice scaduto dopo 10 min
-            //problema che se fa nuovo codice dopo es 5 min quello nuovo verrà tolto dopo 5 min non dopo 10 perché questo timer continua ad andare
-            //possibile soluzione hash map di email e timer
-            /*new Timer().schedule(new TimerTask() {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     codeTracker.remove(email);
-                    //rimandane un altro?
+                    codeTimerTracker.remove(email);
                 }
-            }, 1000*60*10);*/
-
+            }, 1000 * 60 * 5);
+            codeTimerTracker.put(email, timer);
 
         } catch (MessagingException | IOException e) {
             e.printStackTrace();
@@ -148,22 +153,34 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     @Override
     public synchronized boolean verifyCodeEmail(String email, int code) throws RemoteException {
-        boolean codeOk = codeTracker.get(email) == code;
-        if (codeOk) {
-            codeTracker.remove(email);
+        if (codeTracker.containsKey(email)) {
+            boolean codeOk = codeTracker.get(email) == code;
+            if (codeOk) {
+                codeTracker.remove(email);
+                if (codeTimerTracker.containsKey(email)) {
+                    codeTimerTracker.get(email).cancel();
+                    codeTimerTracker.remove(email);
+                }
+            }
+            return codeOk;
         }
-        return codeOk;
+
+        return false;
     }
 
     @Override
     public synchronized void deleteReferenceVerifyEmail(String email) throws RemoteException {
         codeTracker.remove(email);
+        if (codeTimerTracker.containsKey(email)) {
+            codeTimerTracker.get(email).cancel();
+            codeTimerTracker.remove(email);
+        }
     }
 
     @Override
     public synchronized ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException {
         try {
-            return Statements.fetchAllVaccinatedUser(hubName);
+            return (ArrayList<VaccinatedUser>) Statements.fetchAllVaccinatedUser(hubName).stream().sorted(Comparator.comparing(VaccinatedUser::getSurname, String.CASE_INSENSITIVE_ORDER).thenComparing(VaccinatedUser::getName, String.CASE_INSENSITIVE_ORDER).thenComparing(VaccinatedUser::getNickname, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
         } catch (SQLException e) {
             e.printStackTrace();
         }

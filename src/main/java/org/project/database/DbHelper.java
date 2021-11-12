@@ -65,4 +65,11 @@ public class DbHelper {
                         "FROM centro_vaccinale " +
                         "WHERE nome_centro = ?");
     }
+
+    public static PreparedStatement getAddress() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT qualificatore, via, numero, citta, cap, provincia " +
+                        "FROM centro_vaccinale " +
+                        "WHERE nome_centro = ?");
+    }
 }

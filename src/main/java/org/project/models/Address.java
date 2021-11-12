@@ -68,6 +68,10 @@ public class Address implements Serializable {
         this.province = province;
     }
 
+    public String toStringCustom() {
+        return qualificator + " " + address + " " + number + ", " + city + " " + cap + " (" + province + ")";
+    }
+
     @Override
     public String toString() {
         return "Address{" +

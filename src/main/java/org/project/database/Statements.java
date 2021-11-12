@@ -4,6 +4,7 @@ import com.password4j.Password;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.project.UserType;
+import org.project.models.Address;
 import org.project.models.Hub;
 import org.project.models.User;
 import org.project.models.VaccinatedUser;
@@ -61,7 +62,7 @@ public class Statements {
                     "tipo VARCHAR(20)," +
                     "nickname VARCHAR(25) references Cittadino_Registrato (nickname) ON UPDATE CASCADE ON DELETE CASCADE," +
                     "severita SMALLINT NOT NULL," +
-                    "testo VARCHAR(256) NOT NULL," +
+                    "testo VARCHAR(256)," +
                     "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON UPDATE CASCADE ON DELETE CASCADE," +
                     "PRIMARY KEY(tipo, nickname)" +
                     ");";
@@ -99,6 +100,16 @@ public class Statements {
         pStat.closeOnCompletion();
 
         DbHelper.getStatement().executeUpdate(CR_TB_VAC_NOMCV.replace("NomeCentroVaccinale", hub.getNameHub().replaceAll("\\s+", "_")));
+    }
+
+    public static Address getAddress(String hubName) throws SQLException {
+        PreparedStatement pStat = DbHelper.getAddress();
+        pStat.setString(1, hubName);
+
+        ResultSet rs = pStat.executeQuery();
+        rs.next();
+
+        return new Address(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
     }
 
     public static boolean checkDuplicateNickname(String nick) throws SQLException {
@@ -211,6 +222,20 @@ public class Statements {
                         "        JOIN VACCINATO_" + table_name + " ON CITTADINO_REGISTRATO.CODICE_FISCALE = VACCINATO_" + table_name + ".CODICE_FISCALE " +
                         "        JOIN CENTRO_VACCINALE ON VACCINATO_" + table_name + ".NOME_CENTRO = CENTRO_VACCINALE.NOME_CENTRO"
         );
+
+        /*SELECT NOME,
+                COGNOME,
+                NICKNAME,
+                id_univoco
+        FROM CITTADINO_REGISTRATO
+        WHERE codice_fiscale IN (SELECT codice_fiscale
+                FROM vaccinato_ospedale_gallarate)
+
+                SELECT nickname
+                   from cittadino_registrato
+                    where nickname IN (select nickname
+				  from evento_avverso) AND codice_fiscale IN (select codice_fiscale
+															 from vaccinato_ospedale_gallarate)*/
 
         ArrayList<VaccinatedUser> vu = new ArrayList<>();
         while (rs.next()) {

@@ -1,6 +1,7 @@
 package org.project.server;
 
 import org.project.UserType;
+import org.project.models.Address;
 import org.project.models.Hub;
 import org.project.models.User;
 import org.project.models.VaccinatedUser;
@@ -20,6 +21,8 @@ public interface Server extends Remote {
     void insertDataHub(Hub hub) throws RemoteException;
 
     void insertNewVaccinated(User user) throws RemoteException;
+
+    Address getAddress(String hubName) throws RemoteException;
 
     boolean checkDuplicateNickname(String nick) throws RemoteException;
 
