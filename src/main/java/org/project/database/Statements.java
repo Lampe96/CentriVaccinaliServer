@@ -40,7 +40,8 @@ public class Statements {
                     "codice_fiscale CHAR(16) references Cittadino_Registrato (codice_fiscale) ON DELETE CASCADE ON UPDATE CASCADE," +
                     "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON DELETE SET NULL ON UPDATE CASCADE," +
                     "data_vaccino date NOT NULL," +
-                    "tipo_vaccino VARCHAR(20) NOT NULL" +
+                    "tipo_vaccino VARCHAR(20) NOT NULL," +
+                    "immagine SMALLINT DEFAULT 0" +
                     ");";
 
     @Language("POSTGRES-SQL")
