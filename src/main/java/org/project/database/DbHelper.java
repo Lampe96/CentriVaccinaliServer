@@ -40,36 +40,36 @@ public class DbHelper {
 
     public static PreparedStatement getPStmtInsertDataUser() throws SQLException {
         return getConnection().prepareStatement(
-                "insert into cittadino_registrato " +
-                        "(nickname, email, nome, cognome, codice_fiscale, password) " +
-                        "values (?, ?, ?, ?, ?, ?)");
+                "INSERT INTO CITTADINO_REGISTRATO " +
+                        "(NICKNAME, EMAIL, NOME, COGNOME, CODICE_FISCALE, PASSWORD) " +
+                        "VALUES (?, ?, ?, ?, ?, ?)");
     }
 
     public static PreparedStatement getPStmtInsertDataHub() throws SQLException {
         return getConnection().prepareStatement(
-                "insert into centro_vaccinale " +
-                        "(nome_centro, tipologia, password, qualificatore, via, numero, citta, cap, provincia) " +
-                        "values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                "INSERT INTO CENTRO_VACCINALE " +
+                        "(NOME_CENTRO, TIPOLOGIA, PASSWORD, QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     }
 
     public static PreparedStatement getEmailAndPwdU() throws SQLException {
         return getConnection().prepareStatement(
-                "SELECT password " +
-                        "FROM cittadino_registrato " +
-                        "WHERE email = ?");
+                "SELECT PASSWORD " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE EMAIL = ?");
     }
 
     public static PreparedStatement getEmailAndPwdH() throws SQLException {
         return getConnection().prepareStatement(
-                "SELECT password " +
-                        "FROM centro_vaccinale " +
-                        "WHERE nome_centro = ?");
+                "SELECT PASSWORD " +
+                        "FROM CENTRO_VACCINALE " +
+                        "WHERE NOME_CENTRO = ?");
     }
 
     public static PreparedStatement getAddress() throws SQLException {
         return getConnection().prepareStatement(
-                "SELECT qualificatore, via, numero, citta, cap, provincia " +
-                        "FROM centro_vaccinale " +
-                        "WHERE nome_centro = ?");
+                "SELECT QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA " +
+                        "FROM CENTRO_VACCINALE " +
+                        "WHERE NOME_CENTRO = ?");
     }
 }

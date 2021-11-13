@@ -114,8 +114,8 @@ public class Statements {
 
     public static boolean checkDuplicateNickname(String nick) throws SQLException {
         ResultSet rs = DbHelper.getStatement().executeQuery(
-                "SELECT nickname " +
-                        "FROM cittadino_registrato"
+                "SELECT NICKNAME " +
+                        "FROM CITTADINO_REGISTRATO"
         );
 
         while (rs.next()) {
@@ -128,8 +128,8 @@ public class Statements {
 
     public static boolean checkDuplicateEmail(String email) throws SQLException {
         ResultSet rs = DbHelper.getStatement().executeQuery(
-                "SELECT email " +
-                        "FROM cittadino_registrato"
+                "SELECT EMAIL " +
+                        "FROM CITTADINO_REGISTRATO"
         );
 
         while (rs.next()) {
@@ -142,8 +142,8 @@ public class Statements {
 
     public static boolean checkDuplicateFiscalCode(String fiscalCode) throws SQLException {
         ResultSet rs = DbHelper.getStatement().executeQuery(
-                "SELECT codice_fiscale " +
-                        "FROM cittadino_registrato"
+                "SELECT CODICE_FISCALE " +
+                        "FROM CITTADINO_REGISTRATO"
         );
 
         while (rs.next()) {
@@ -156,8 +156,8 @@ public class Statements {
 
     public static boolean checkDuplicateHubName(String name) throws SQLException {
         ResultSet rs = DbHelper.getStatement().executeQuery(
-                "SELECT nome_centro " +
-                        "FROM centro_vaccinale"
+                "SELECT NOME_CENTRO " +
+                        "FROM CENTRO_VACCINALE"
         );
 
         while (rs.next()) {
@@ -170,8 +170,8 @@ public class Statements {
 
     public static boolean checkDuplicateAddress(String address) throws SQLException {
         ResultSet rs = DbHelper.getStatement().executeQuery(
-                "SELECT qualificatore, via, numero, citta, cap, provincia " +
-                        "FROM centro_vaccinale"
+                "SELECT QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA " +
+                        "FROM CENTRO_VACCINALE"
         );
 
         String dbAddress;
@@ -214,10 +214,10 @@ public class Statements {
                 "SELECT NOME, " +
                         "COGNOME, " +
                         "NICKNAME, " +
-                        "id_univoco " +
+                        "ID_UNIVOCO " +
                         "FROM CITTADINO_REGISTRATO " +
-                        "WHERE codice_fiscale IN (SELECT codice_fiscale " +
-                        "FROM vaccinato_" + table_name + ")"
+                        "WHERE CODICE_FISCALE IN (SELECT CODICE_FISCALE " +
+                        "FROM VACCINATO_" + table_name + ")"
         );
 
         ArrayList<VaccinatedUser> avu = new ArrayList<>();
@@ -227,16 +227,16 @@ public class Statements {
         }
 
         ResultSet rsEvent = DbHelper.getStatement().executeQuery(
-                " SELECT nickname " +
-                        "from cittadino_registrato " +
-                        "where nickname IN (select nickname " +
-                        "from evento_avverso) AND codice_fiscale IN (select codice_fiscale " +
-                        "from vaccinato_" + table_name + ")"
+                " SELECT NICKNAME " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE NICKNAME IN (SELECT NICKNAME " +
+                        "FROM EVENTO_AVVERSO) AND CODICE_FISCALE IN (SELECT CODICE_FISCALE " +
+                        "FROM VACCINATO_" + table_name + ")"
         );
 
         while (rsEvent.next()) {
-            for (VaccinatedUser vu: avu) {
-                if(vu.getNickname().equals(rsEvent.getString(1))){
+            for (VaccinatedUser vu : avu) {
+                if (vu.getNickname().equals(rsEvent.getString(1))) {
                     vu.setEvent(rsEvent.getString(1));
                 }
             }

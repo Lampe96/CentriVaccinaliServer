@@ -54,7 +54,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public Address getAddress(String hubName) throws RemoteException {
+    public synchronized Address getAddress(String hubName) throws RemoteException {
         try {
             return Statements.getAddress(hubName);
         } catch (SQLException e) {
@@ -143,7 +143,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
                     codeTracker.remove(email);
                     codeTimerTracker.remove(email);
                 }
-            }, 1000 * 60 * 5);
+            }, 1000 * 60 * 10);
             codeTimerTracker.put(email, timer);
 
         } catch (MessagingException | IOException e) {
