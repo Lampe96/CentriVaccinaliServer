@@ -41,7 +41,7 @@ public class Statements {
                     "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON DELETE SET NULL ON UPDATE CASCADE," +
                     "data_vaccino date NOT NULL," +
                     "tipo_vaccino VARCHAR(20) NOT NULL," +
-                    "immagine SMALLINT DEFAULT 0" +
+                    "immagine SMALLINT DEFAULT 1" +
                     ");";
 
     @Language("POSTGRES-SQL")
