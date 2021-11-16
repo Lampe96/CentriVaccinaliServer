@@ -48,8 +48,8 @@ public class DbHelper {
     public static PreparedStatement getPStmtInsertDataHub() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CENTRO_VACCINALE " +
-                        "(NOME_CENTRO, TIPOLOGIA, PASSWORD, QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        "(NOME_CENTRO, TIPOLOGIA, PASSWORD, QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA, IMMAGINE) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, DEAFAULT)");
     }
 
     public static PreparedStatement getEmailAndPwdU() throws SQLException {
@@ -72,4 +72,11 @@ public class DbHelper {
                         "FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?");
     }
+
+   /* public static PreparedStatement getImage() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT IMMAGINE " +
+                        "FROM CENTRO_VACCINALE " +
+                        "WHERE NOME_CENTRO = ?");
+    } */
 }

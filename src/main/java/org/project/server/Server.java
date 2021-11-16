@@ -24,6 +24,8 @@ public interface Server extends Remote {
 
     Address getAddress(String hubName) throws RemoteException;
 
+//    int getImage(String hubName) throws RemoteException;
+
     boolean checkDuplicateNickname(String nick) throws RemoteException;
 
     boolean checkDuplicateEmail(String email) throws RemoteException;
@@ -45,4 +47,6 @@ public interface Server extends Remote {
     void deleteReferenceVerifyEmail(String email) throws RemoteException;
 
     ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException;
+
+
 }

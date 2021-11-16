@@ -28,7 +28,8 @@ public class Statements {
                     "numero VARCHAR(10) NOT NULL," +
                     "citta VARCHAR(30) NOT NULL," +
                     "cap CHAR(5) NOT NULL," +
-                    "provincia CHAR(2) NOT NULL" +
+                    "provincia CHAR(2) NOT NULL," +
+                    "immagine SMALLINT DEFAULT 1" +
                     ");";
 
     @Language("POSTGRES-SQL")
@@ -40,8 +41,7 @@ public class Statements {
                     "codice_fiscale CHAR(16) references Cittadino_Registrato (codice_fiscale) ON DELETE CASCADE ON UPDATE CASCADE," +
                     "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON DELETE SET NULL ON UPDATE CASCADE," +
                     "data_vaccino date NOT NULL," +
-                    "tipo_vaccino VARCHAR(20) NOT NULL," +
-                    "immagine SMALLINT DEFAULT 1" +
+                    "tipo_vaccino VARCHAR(20) NOT NULL" +
                     ");";
 
     @Language("POSTGRES-SQL")
@@ -245,4 +245,14 @@ public class Statements {
 
         return avu;
     }
+
+   /* public static int getImage(String hubName) throws SQLException {
+        PreparedStatement pStat = DbHelper.getImage();
+        pStat.setString(1, hubName);
+
+        ResultSet rs = pStat.executeQuery();
+        rs.next();
+
+        return rs.getInt(1);
+    } */
 }

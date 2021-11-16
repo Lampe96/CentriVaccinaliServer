@@ -63,6 +63,16 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         return null;
     }
 
+    /* @Override
+    public int getImage(String hubName) throws RemoteException {
+        try {
+            return Statements.getImage(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    } */
+
     @Override
     public synchronized boolean checkDuplicateNickname(String nick) throws RemoteException {
         try {
