@@ -14,7 +14,7 @@ public class DbHelper {
     private static Connection connection = null;
     private static Statement statement = null;
 
-    public static Connection getConnection() throws SQLException {
+    private static Connection getConnection() throws SQLException {
         if (connection == null) {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         }
@@ -26,7 +26,7 @@ public class DbHelper {
         connection = null;
     }
 
-    public static Statement getStatement() throws SQLException {
+    static Statement getStatement() throws SQLException {
         if (statement == null) {
             statement = getConnection().createStatement();
         }
@@ -38,45 +38,52 @@ public class DbHelper {
         statement = null;
     }
 
-    public static PreparedStatement getPStmtInsertDataUser() throws SQLException {
+    static PreparedStatement getPStmtInsertDataUser() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CITTADINO_REGISTRATO " +
                         "(NICKNAME, EMAIL, NOME, COGNOME, CODICE_FISCALE, PASSWORD) " +
                         "VALUES (?, ?, ?, ?, ?, ?)");
     }
 
-    public static PreparedStatement getPStmtInsertDataHub() throws SQLException {
+    static PreparedStatement getPStmtInsertDataHub() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CENTRO_VACCINALE " +
-                        "(NOME_CENTRO, TIPOLOGIA, PASSWORD, QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA, IMMAGINE) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, DEAFAULT)");
+                        "(NOME_CENTRO, TIPOLOGIA, PASSWORD, QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     }
 
-    public static PreparedStatement getEmailAndPwdU() throws SQLException {
+    static PreparedStatement getEmailAndPwdU() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT PASSWORD " +
                         "FROM CITTADINO_REGISTRATO " +
                         "WHERE EMAIL = ?");
     }
 
-    public static PreparedStatement getEmailAndPwdH() throws SQLException {
+    static PreparedStatement getEmailAndPwdH() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT PASSWORD " +
                         "FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?");
     }
 
-    public static PreparedStatement getAddress() throws SQLException {
+    static PreparedStatement getAddress() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA " +
                         "FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?");
     }
 
-   /* public static PreparedStatement getImage() throws SQLException {
+    static PreparedStatement changeImageHub() throws SQLException {
+        return getConnection().prepareStatement(
+                "UPDATE CENTRO_VACCINALE " +
+                        "SET IMMAGINE = ? " +
+                        "WHERE NOME_CENTRO = ?");
+    }
+
+    static PreparedStatement getImage() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT IMMAGINE " +
                         "FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?");
-    } */
+    }
 }

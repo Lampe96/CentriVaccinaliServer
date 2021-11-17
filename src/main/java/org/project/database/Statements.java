@@ -246,7 +246,7 @@ public class Statements {
         return avu;
     }
 
-   /* public static int getImage(String hubName) throws SQLException {
+    public static int getImage(String hubName) throws SQLException {
         PreparedStatement pStat = DbHelper.getImage();
         pStat.setString(1, hubName);
 
@@ -254,5 +254,12 @@ public class Statements {
         rs.next();
 
         return rs.getInt(1);
-    } */
+    }
+
+    public static void changeImageHub(int selectedImage, String hubName) throws SQLException {
+        PreparedStatement pStats = DbHelper.changeImageHub();
+        pStats.setInt(1, selectedImage);
+        pStats.setString(2, hubName);
+        pStats.executeUpdate();
+    }
 }
