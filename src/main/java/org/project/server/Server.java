@@ -20,7 +20,7 @@ public interface Server extends Remote {
 
     void insertDataHub(Hub hub) throws RemoteException;
 
-    void insertNewVaccinated(User user) throws RemoteException;
+    void insertNewVaccinated(VaccinatedUser vaccinatedUser) throws RemoteException;
 
     Address getAddress(String hubName) throws RemoteException;
 
@@ -41,6 +41,12 @@ public interface Server extends Remote {
     boolean checkDuplicateAddress(String address) throws RemoteException;
 
     UserType checkCredential(String email, String pwd) throws RemoteException;
+
+    boolean checkPasswordHub(String hubName, String pwd) throws RemoteException;
+
+    void changePwd(String hubName, String newPwd) throws RemoteException;
+
+    void deleteHub(String hubName) throws RemoteException;
 
     void sendVerifyEmail(String email, String nickname) throws RemoteException;
 

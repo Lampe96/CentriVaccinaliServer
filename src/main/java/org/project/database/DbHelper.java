@@ -52,6 +52,13 @@ public class DbHelper {
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     }
 
+    static PreparedStatement getPStmtInsertNewVaccinated(String tableName) throws SQLException {
+            return getConnection().prepareStatement(
+                    "INSERT INTO VACCINATO_" + tableName +
+                            "(ID_UNIVOCO, NOME, COGNOME, CODICE_FISCALE, NOME_CENTRO, DATA_VACCINO, TIPO_VACCINO) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?)");
+        }
+
     static PreparedStatement getEmailAndPwdU() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT PASSWORD " +
@@ -84,6 +91,19 @@ public class DbHelper {
         return getConnection().prepareStatement(
                 "SELECT IMMAGINE " +
                         "FROM CENTRO_VACCINALE " +
+                        "WHERE NOME_CENTRO = ?");
+    }
+
+    static PreparedStatement changePwd() throws SQLException{
+        return getConnection().prepareStatement(
+                "UPDATE CENTRO_VACCINALE " +
+                        "SET PASSWORD = ? " +
+                        "WHERE NOME_CENTRO = ?");
+    }
+
+    static PreparedStatement deleteHub() throws SQLException {
+        return getConnection().prepareStatement(
+                "DELETE FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?");
     }
 }

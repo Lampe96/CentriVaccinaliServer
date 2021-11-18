@@ -9,13 +9,17 @@ public class VaccinatedUser implements Serializable {
     private String nickname;
     private String event;
     private String id;
+    private String hubName;
+    private String fiscalCode;
 
-    public VaccinatedUser(String name, String surname, String nickname, String event, String id) {
+    public VaccinatedUser(String name, String surname, String nickname, String event, String id, String hubName, String fiscalCode) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
         this.event = event;
         this.id = id;
+        this.hubName = hubName;
+        this.fiscalCode = fiscalCode;
     }
 
     public String getName() {
@@ -58,6 +62,14 @@ public class VaccinatedUser implements Serializable {
         this.id = id;
     }
 
+    public String getHubName() {
+        return hubName;
+    }
+
+    public void setHubName(String hubName) {
+        this.hubName = hubName;
+    }
+
     @Override
     public String toString() {
         return "VaccinatedUser{" +
@@ -66,6 +78,8 @@ public class VaccinatedUser implements Serializable {
                 ", nickname='" + nickname + '\'' +
                 ", event='" + event + '\'' +
                 ", id='" + id + '\'' +
+                ", hubName='" + hubName + '\'' +
+                ", fiscalCode='" + fiscalCode + '\'' +
                 '}';
     }
 }

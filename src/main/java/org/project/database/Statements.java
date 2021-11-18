@@ -103,6 +103,18 @@ public class Statements {
         DbHelper.getStatement().executeUpdate(CR_TB_VAC_NOMCV.replace("NomeCentroVaccinale", hub.getNameHub().replaceAll("\\s+", "_")));
     }
 
+     public static void insertNewVaccinated(VaccinatedUser vaccinatedUser) throws SQLException {
+            PreparedStatement pStat = DbHelper.getPStmtInsertNewVaccinated(vaccinatedUser.getHubName().replaceAll("\\s+", "_"));
+            pStat.setString(1, vaccinatedUser.getId();
+            pStat.setString(2, vaccinatedUser.getName());
+            pStat.setString(3, vaccinatedUser.getSurname());
+            pStat.setString(4, vaccinatedUser.get());
+            pStat.setString(5, vaccinatedUser.());
+            pStat.executeUpdate();
+            pStat.closeOnCompletion();
+
+        }
+
     public static Address getAddress(String hubName) throws SQLException {
         PreparedStatement pStat = DbHelper.getAddress();
         pStat.setString(1, hubName);
@@ -224,7 +236,7 @@ public class Statements {
         ArrayList<VaccinatedUser> avu = new ArrayList<>();
 
         while (rsAll.next()) {
-            avu.add(new VaccinatedUser(rsAll.getString(1), rsAll.getString(2), rsAll.getString(3), null, rsAll.getString(4)));
+            avu.add(new VaccinatedUser(rsAll.getString(1), rsAll.getString(2), rsAll.getString(3), null, rsAll.getString(4), null));
         }
 
         ResultSet rsEvent = DbHelper.getStatement().executeQuery(
@@ -260,6 +272,31 @@ public class Statements {
         PreparedStatement pStats = DbHelper.changeImageHub();
         pStats.setInt(1, selectedImage);
         pStats.setString(2, hubName);
+        pStats.executeUpdate();
+    }
+
+    public static boolean checkPasswordHub(String hubName, String pwd) throws SQLException {
+        PreparedStatement psU = DbHelper.getEmailAndPwdH();
+        psU.setString(1, hubName);
+        ResultSet rsU = psU.executeQuery();
+
+        if (rsU.next()) {
+            return Password.check(pwd, rsU.getString(1)).withArgon2();
+        }
+
+        return false;
+    }
+
+    public static void changePwd(String hubName, String newPwd) throws SQLException {
+        PreparedStatement pStats = DbHelper.changePwd();
+        pStats.setString(1, newPwd);
+        pStats.setString(2, hubName);
+        pStats.executeUpdate();
+    }
+
+    public static void deleteHub(String hubName) throws SQLException {
+        PreparedStatement pStats = DbHelper.deleteHub();
+        pStats.setString(1, hubName);
         pStats.executeUpdate();
     }
 }
