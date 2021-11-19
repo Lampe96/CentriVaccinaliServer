@@ -103,17 +103,19 @@ public class Statements {
         DbHelper.getStatement().executeUpdate(CR_TB_VAC_NOMCV.replace("NomeCentroVaccinale", hub.getNameHub().replaceAll("\\s+", "_")));
     }
 
-     public static void insertNewVaccinated(VaccinatedUser vaccinatedUser) throws SQLException {
-            PreparedStatement pStat = DbHelper.getPStmtInsertNewVaccinated(vaccinatedUser.getHubName().replaceAll("\\s+", "_"));
-            pStat.setString(1, vaccinatedUser.getId();
-            pStat.setString(2, vaccinatedUser.getName());
-            pStat.setString(3, vaccinatedUser.getSurname());
-            pStat.setString(4, vaccinatedUser.get());
-            pStat.setString(5, vaccinatedUser.());
-            pStat.executeUpdate();
-            pStat.closeOnCompletion();
+    public static void insertNewVaccinated(VaccinatedUser vaccinatedUser) throws SQLException {
+        PreparedStatement pStat = DbHelper.getPStmtInsertNewVaccinated(vaccinatedUser.getHubName().replaceAll("\\s+", "_"));
+        pStat.setString(1, vaccinatedUser.getId());
+        pStat.setString(2, vaccinatedUser.getName());
+        pStat.setString(3, vaccinatedUser.getSurname());
+        pStat.setString(4, vaccinatedUser.getFiscalCode());
+        pStat.setString(5, vaccinatedUser.getHubName());
+        pStat.setDate(6, vaccinatedUser.getVaccineDate());
+        pStat.setString(7, vaccinatedUser.getVaccineType());
+        pStat.executeUpdate();
+        pStat.closeOnCompletion();
 
-        }
+    }
 
     public static Address getAddress(String hubName) throws SQLException {
         PreparedStatement pStat = DbHelper.getAddress();
@@ -236,7 +238,7 @@ public class Statements {
         ArrayList<VaccinatedUser> avu = new ArrayList<>();
 
         while (rsAll.next()) {
-            avu.add(new VaccinatedUser(rsAll.getString(1), rsAll.getString(2), rsAll.getString(3), null, rsAll.getString(4), null));
+            avu.add(new VaccinatedUser(rsAll.getString(1), rsAll.getString(2), rsAll.getString(3), null, rsAll.getString(4), null, rsAll.getString(5), null, null));
         }
 
         ResultSet rsEvent = DbHelper.getStatement().executeQuery(
@@ -287,6 +289,23 @@ public class Statements {
         return false;
     }
 
+    public static Boolean checkIfUserExist(String name, String surname, String fiscalCode) throws SQLException {
+        ResultSet rsAll = DbHelper.getStatement().executeQuery(
+                "SELECT NOME, " +
+                        "COGNOME, " +
+                        "CODICE_FISCALE " +
+                        "FROM CITTADINO_REGISTRATO"
+        );
+
+        while (rsAll.next()) {
+            if (rsAll.getString(1).equals(name) && rsAll.getString(2).equals(surname) && rsAll.getString(3).equals(fiscalCode)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     public static void changePwd(String hubName, String newPwd) throws SQLException {
         PreparedStatement pStats = DbHelper.changePwd();
         pStats.setString(1, newPwd);
@@ -298,5 +317,18 @@ public class Statements {
         PreparedStatement pStats = DbHelper.deleteHub();
         pStats.setString(1, hubName);
         pStats.executeUpdate();
+    }
+
+
+    public static boolean checkIfFirstDose(String fiscalCode) throws SQLException {
+        PreparedStatement pStat = DbHelper.prpSTmtcheckIfFirstDose();
+        pStat.setString(1, fiscalCode);
+
+        ResultSet rs = pStat.executeQuery();
+
+        if(rs.next()){
+            return rs.getInt(1) == 0;
+        }
+        return false;
     }
 }

@@ -53,11 +53,11 @@ public class DbHelper {
     }
 
     static PreparedStatement getPStmtInsertNewVaccinated(String tableName) throws SQLException {
-            return getConnection().prepareStatement(
-                    "INSERT INTO VACCINATO_" + tableName +
-                            "(ID_UNIVOCO, NOME, COGNOME, CODICE_FISCALE, NOME_CENTRO, DATA_VACCINO, TIPO_VACCINO) " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?)");
-        }
+        return getConnection().prepareStatement(
+                "INSERT INTO VACCINATO_" + tableName +
+                        "(ID_UNIVOCO, NOME, COGNOME, CODICE_FISCALE, NOME_CENTRO, DATA_VACCINO, TIPO_VACCINO) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)");
+    }
 
     static PreparedStatement getEmailAndPwdU() throws SQLException {
         return getConnection().prepareStatement(
@@ -94,7 +94,7 @@ public class DbHelper {
                         "WHERE NOME_CENTRO = ?");
     }
 
-    static PreparedStatement changePwd() throws SQLException{
+    static PreparedStatement changePwd() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CENTRO_VACCINALE " +
                         "SET PASSWORD = ? " +
@@ -105,5 +105,13 @@ public class DbHelper {
         return getConnection().prepareStatement(
                 "DELETE FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?");
+    }
+
+    public static PreparedStatement prpSTmtcheckIfFirstDose() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT ID_UNIVOCO " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE CODICE_FISCALE = ?"
+        );
     }
 }

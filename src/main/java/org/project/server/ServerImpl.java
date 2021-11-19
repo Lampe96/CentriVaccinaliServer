@@ -52,7 +52,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     public synchronized void insertNewVaccinated(VaccinatedUser vaccinatedUser) throws RemoteException {
         try {
             Statements.insertNewVaccinated(vaccinatedUser);
-            System.out.println("INSERITO NUOVO HUB: " + vaccinatedUser);
+            System.out.println("INSERITO NUOVO VACCINATO: " + vaccinatedUser);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -156,6 +156,25 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     public synchronized boolean checkPasswordHub(String hubName, String pwd) throws RemoteException {
         try {
             return Statements.checkPasswordHub(hubName, pwd);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public synchronized boolean checkIfUserExist(String name, String surname, String fiscalCode) throws RemoteException{
+        try {
+            return Statements.checkIfUserExist(name, surname, fiscalCode);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkIfFirstDose(String fiscalCode) throws RemoteException {
+        try {
+            return Statements.checkIfFirstDose(fiscalCode);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
 package org.project.models;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class VaccinatedUser implements Serializable {
 
@@ -11,8 +12,10 @@ public class VaccinatedUser implements Serializable {
     private String id;
     private String hubName;
     private String fiscalCode;
+    private Date vaccineDate;
+    private String vaccineType;
 
-    public VaccinatedUser(String name, String surname, String nickname, String event, String id, String hubName, String fiscalCode) {
+    public VaccinatedUser(String name, String surname, String nickname, String event, String id, String hubName, String fiscalCode, Date vaccineDate, String vaccineType) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
@@ -20,6 +23,8 @@ public class VaccinatedUser implements Serializable {
         this.id = id;
         this.hubName = hubName;
         this.fiscalCode = fiscalCode;
+        this.vaccineDate = vaccineDate;
+        this.vaccineType = vaccineType;
     }
 
     public String getName() {
@@ -70,6 +75,30 @@ public class VaccinatedUser implements Serializable {
         this.hubName = hubName;
     }
 
+    public String getFiscalCode() {
+        return fiscalCode;
+    }
+
+    public void setFiscalCode(String fiscalCode) {
+        this.fiscalCode = fiscalCode;
+    }
+
+    public Date getVaccineDate() {
+        return vaccineDate;
+    }
+
+    public void setVaccineDate(Date vaccineDate) {
+        this.vaccineDate = vaccineDate;
+    }
+
+    public String getVaccineType() {
+        return vaccineType;
+    }
+
+    public void setVaccineType(String vaccineType) {
+        this.vaccineType = vaccineType;
+    }
+
     @Override
     public String toString() {
         return "VaccinatedUser{" +
@@ -80,6 +109,8 @@ public class VaccinatedUser implements Serializable {
                 ", id='" + id + '\'' +
                 ", hubName='" + hubName + '\'' +
                 ", fiscalCode='" + fiscalCode + '\'' +
+                ", vaccineDate=" + vaccineDate +
+                ", vaccineType='" + vaccineType + '\'' +
                 '}';
     }
 }

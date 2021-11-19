@@ -44,6 +44,10 @@ public interface Server extends Remote {
 
     boolean checkPasswordHub(String hubName, String pwd) throws RemoteException;
 
+    boolean checkIfUserExist(String name, String surname, String fiscalCode) throws RemoteException;
+
+    boolean checkIfFirstDose(String fiscalCode) throws RemoteException;
+
     void changePwd(String hubName, String newPwd) throws RemoteException;
 
     void deleteHub(String hubName) throws RemoteException;
