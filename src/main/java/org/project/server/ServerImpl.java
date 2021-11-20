@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -162,7 +163,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         return false;
     }
 
-    public synchronized boolean checkIfUserExist(String name, String surname, String fiscalCode) throws RemoteException{
+    public synchronized boolean checkIfUserExist(String name, String surname, String fiscalCode) throws RemoteException {
         try {
             return Statements.checkIfUserExist(name, surname, fiscalCode);
         } catch (SQLException e) {
@@ -172,13 +173,23 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public boolean checkIfFirstDose(String fiscalCode) throws RemoteException {
+    public synchronized boolean checkIfFirstDose(String fiscalCode) throws RemoteException {
         try {
             return Statements.checkIfFirstDose(fiscalCode);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public synchronized VaccinatedUser fetchHubVaccinatedInfo(short idUnivoco, String hubName) throws RemoteException {
+        try {
+            return Statements.fetchHubVaccinatedInfo(idUnivoco, hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -251,10 +262,19 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public synchronized ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException {
         try {
-            return (ArrayList<VaccinatedUser>) Statements.fetchAllVaccinatedUser(hubName).stream().sorted(Comparator.comparing(VaccinatedUser::getSurname, String.CASE_INSENSITIVE_ORDER).thenComparing(VaccinatedUser::getName, String.CASE_INSENSITIVE_ORDER).thenComparing(VaccinatedUser::getNickname, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+            return (ArrayList<VaccinatedUser>) Statements.fetchHubVaccinatedUser(hubName).stream().sorted(Comparator.comparing(VaccinatedUser::getSurname, String.CASE_INSENSITIVE_ORDER).thenComparing(VaccinatedUser::getName, String.CASE_INSENSITIVE_ORDER).thenComparing(VaccinatedUser::getNickname, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode) throws RemoteException {
+        try {
+            Statements.updateVaccinatedUser(idUnivoco, hubName, vaccineType, newDate, fiscalCode);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

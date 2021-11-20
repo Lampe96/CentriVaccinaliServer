@@ -8,6 +8,7 @@ import org.project.models.VaccinatedUser;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.ArrayList;
 
 @SuppressWarnings("unused")
@@ -48,6 +49,8 @@ public interface Server extends Remote {
 
     boolean checkIfFirstDose(String fiscalCode) throws RemoteException;
 
+    VaccinatedUser fetchHubVaccinatedInfo(short idUnivoco, String hubName) throws RemoteException;
+
     void changePwd(String hubName, String newPwd) throws RemoteException;
 
     void deleteHub(String hubName) throws RemoteException;
@@ -60,5 +63,5 @@ public interface Server extends Remote {
 
     ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException;
 
-
+    void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode) throws RemoteException;
 }

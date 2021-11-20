@@ -9,13 +9,17 @@ public class VaccinatedUser implements Serializable {
     private String surname;
     private String nickname;
     private String event;
-    private String id;
+    private short id;
     private String hubName;
     private String fiscalCode;
     private Date vaccineDate;
     private String vaccineType;
 
-    public VaccinatedUser(String name, String surname, String nickname, String event, String id, String hubName, String fiscalCode, Date vaccineDate, String vaccineType) {
+    public VaccinatedUser() {
+
+    }
+
+    public VaccinatedUser(String name, String surname, String nickname, String event, short id, String hubName, String fiscalCode, Date vaccineDate, String vaccineType) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
@@ -59,11 +63,11 @@ public class VaccinatedUser implements Serializable {
         this.event = event;
     }
 
-    public String getId() {
+    public short getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(short id) {
         this.id = id;
     }
 
