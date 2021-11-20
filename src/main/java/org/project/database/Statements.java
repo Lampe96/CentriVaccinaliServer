@@ -4,10 +4,7 @@ import com.password4j.Password;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.project.UserType;
-import org.project.models.Address;
-import org.project.models.Hub;
-import org.project.models.User;
-import org.project.models.VaccinatedUser;
+import org.project.models.*;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -16,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class Statements {
+public class Statements<retrun> {
 
     @Language("POSTGRES-SQL")
     private final static String CR_TB_CV =
@@ -36,13 +33,14 @@ public class Statements {
     @Language("POSTGRES-SQL")
     private static final String CR_TB_VAC_NOMCV =
             "CREATE TABLE IF NOT EXISTS Vaccinato_NomeCentroVaccinale(" +
-                    "id_univoco bigint PRIMARY KEY," +
+                    "id_univoco SMALLINT PRIMARY KEY," +
                     "nome VARCHAR(25) NOT NULL," +
                     "cognome VARCHAR(25) NOT NULL," +
                     "codice_fiscale CHAR(16) references Cittadino_Registrato (codice_fiscale) ON DELETE CASCADE ON UPDATE CASCADE," +
                     "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON DELETE SET NULL ON UPDATE CASCADE," +
                     "data_vaccino DATE NOT NULL," +
-                    "tipo_vaccino VARCHAR(20) NOT NULL" +
+                    "tipo_vaccino VARCHAR(20) NOT NULL," +
+                    "numero_dose SMALLINT DEFAULT 1" +
                     ");";
 
     @Language("POSTGRES-SQL")
@@ -54,7 +52,8 @@ public class Statements {
                     "cognome VARCHAR(25) NOT NULL," +
                     "codice_fiscale CHAR(16) UNIQUE," +
                     "password VARCHAR(500) NOT NULL," +
-                    "id_univoco bigint DEFAULT NULL," +
+                    "id_univoco SMALLINT DEFAULT NULL," +
+                    "numero_dose SMALLINT DEFAULT 0," +
                     "PRIMARY KEY(codice_fiscale, nickname)" +
                     ");";
 
@@ -113,12 +112,15 @@ public class Statements {
         pStat.setString(5, vaccinatedUser.getHubName());
         pStat.setDate(6, vaccinatedUser.getVaccineDate());
         pStat.setString(7, vaccinatedUser.getVaccineType());
+        pStat.setInt(8, vaccinatedUser.getDose());
         pStat.executeUpdate();
         pStat.closeOnCompletion();
 
         PreparedStatement pStat2 = DbHelper.getUpdateIdUser();
         pStat2.setShort(1, vaccinatedUser.getId());
-        pStat2.setString(2, vaccinatedUser.getFiscalCode());
+        pStat2.setShort(2, vaccinatedUser.getDose());
+        pStat2.setString(3, vaccinatedUser.getFiscalCode());
+
         pStat2.executeUpdate();
         pStat2.closeOnCompletion();
     }
@@ -338,7 +340,7 @@ public class Statements {
         ResultSet rs = pStat.executeQuery();
 
         if (rs.next()) {
-            return rs.getInt(1) == 0;
+            return rs.getShort(1) == 0;
         }
         return false;
     }
@@ -362,7 +364,65 @@ public class Statements {
         return null;
     }
 
-    public static void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode) throws SQLException {
+    public static ArrayList<Hub> fetchAllHub() throws SQLException {
+        ResultSet rsAll = DbHelper.getStatement().executeQuery(
+                "SELECT * " +
+                        "FROM CENTRO_VACCINALE"
+        );
+
+        ArrayList<Hub> allHub = new ArrayList<>();
+        Hub hub;
+        Address address;
+
+        if (rsAll.next()) {
+            while (rsAll.next()) {
+                hub = new Hub();
+                address = new Address();
+                hub.setNameHub(rsAll.getString(1));
+                hub.setType(rsAll.getString(3));
+                address.setQualificator(rsAll.getString(4));
+                address.setAddress(rsAll.getString(5));
+                address.setNumber(rsAll.getString(6));
+                address.setCity(rsAll.getString(7));
+                address.setCap(rsAll.getString(8));
+                address.setProvince(rsAll.getString(9));
+                hub.setImage(rsAll.getInt(10));
+                hub.setAddress(address);
+                allHub.add(hub);
+            }
+            return allHub;
+        }
+
+        return null;
+    }
+
+
+    public static ArrayList<AdverseEvent> fetchAllAdverseEvent() throws SQLException {
+        ResultSet rsAll = DbHelper.getStatement().executeQuery(
+                "SELECT * " +
+                        "FROM EVENTO_AVVERSO"
+        );
+
+        ArrayList<AdverseEvent> allAdverseEvent = new ArrayList<>();
+        AdverseEvent adverseEvent;
+        if (rsAll.next()) {
+            while (rsAll.next()) {
+                adverseEvent = new AdverseEvent();
+                adverseEvent.setEventType(rsAll.getString(1));
+                adverseEvent.setNickname(rsAll.getString(2));
+                adverseEvent.setGravity(rsAll.getInt(3));
+                adverseEvent.setText(rsAll.getString(4));
+                adverseEvent.setHubName(rsAll.getString(5));
+                allAdverseEvent.add(adverseEvent);
+
+            }
+            return allAdverseEvent;
+        }
+
+        return null;
+    }
+
+    public static void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, int newDose) throws SQLException {
         String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
         PreparedStatement pStats = DbHelper.updateVaccinatedUser(tableName);
         pStats.setShort(1, idUnivoco);
@@ -370,6 +430,16 @@ public class Statements {
         pStats.setDate(3, newDate);
         pStats.setString(4, vaccineType);
         pStats.setString(5, fiscalCode);
+        pStats.setInt(6, newDose);
         pStats.executeUpdate();
+
+        PreparedStatement pStats2 = DbHelper.updateVaccinatedCitizen();
+        pStats2.setShort(1, idUnivoco);
+        pStats2.setString(2, fiscalCode);
+        pStats2.setInt(3, newDose);
+        pStats2.executeUpdate();
+
     }
+
+
 }

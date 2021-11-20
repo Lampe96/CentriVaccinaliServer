@@ -1,10 +1,7 @@
 package org.project.server;
 
 import org.project.UserType;
-import org.project.models.Address;
-import org.project.models.Hub;
-import org.project.models.User;
-import org.project.models.VaccinatedUser;
+import org.project.models.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -63,5 +60,10 @@ public interface Server extends Remote {
 
     ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException;
 
-    void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode) throws RemoteException;
+    ArrayList<Hub> fetchAllHub() throws RemoteException;
+
+    ArrayList<AdverseEvent> fetchAllAdverseEvent() throws RemoteException;
+
+    void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, int newDose) throws RemoteException;
+
 }

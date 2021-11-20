@@ -2,10 +2,7 @@ package org.project.server;
 
 import org.project.UserType;
 import org.project.database.Statements;
-import org.project.models.Address;
-import org.project.models.Hub;
-import org.project.models.User;
-import org.project.models.VaccinatedUser;
+import org.project.models.*;
 import org.project.utils.EmailUtil;
 
 import javax.mail.MessagingException;
@@ -269,10 +266,31 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         return null;
     }
 
+       @Override
+    public synchronized ArrayList<Hub> fetchAllHub() throws RemoteException {
+         try {
+            return (ArrayList<Hub>) Statements.fetchAllHub().stream().sorted(Comparator.comparing(Hub::getNameHub, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
-    public void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode) throws RemoteException {
+    public synchronized ArrayList<AdverseEvent> fetchAllAdverseEvent() throws RemoteException {
         try {
-            Statements.updateVaccinatedUser(idUnivoco, hubName, vaccineType, newDate, fiscalCode);
+            return (ArrayList<AdverseEvent>) Statements.fetchAllAdverseEvent();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @Override
+    public synchronized void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, int newDose) throws RemoteException {
+        try {
+            Statements.updateVaccinatedUser(idUnivoco, hubName, vaccineType, newDate, fiscalCode, newDose);
         } catch (SQLException e) {
             e.printStackTrace();
         }

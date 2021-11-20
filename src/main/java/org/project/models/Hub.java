@@ -8,12 +8,26 @@ public class Hub implements Serializable {
     private String password;
     private Address address;
     private String type;
+    private int image;
 
-    public Hub(String nameHub, String password, Address address, String type) {
+    public Hub() {
+        
+    }
+
+    public Hub(String nameHub, String password, Address address, String type, int image) {
         this.nameHub = nameHub;
         this.password = password;
         this.address = address;
         this.type = type;
+        this.image = image;
+    }
+
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
     }
 
     public String getNameHub() {
@@ -53,8 +67,9 @@ public class Hub implements Serializable {
         return "Hub{" +
                 "nameHub='" + nameHub + '\'' +
                 ", password='" + password + '\'' +
-                ", address='" + address + '\'' +
+                ", address=" + address +
                 ", type='" + type + '\'' +
+                ", image=" + image +
                 '}';
     }
 }

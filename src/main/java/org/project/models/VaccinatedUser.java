@@ -14,12 +14,13 @@ public class VaccinatedUser implements Serializable {
     private String fiscalCode;
     private Date vaccineDate;
     private String vaccineType;
+    private short dose;
 
     public VaccinatedUser() {
 
     }
 
-    public VaccinatedUser(String name, String surname, String nickname, String event, short id, String hubName, String fiscalCode, Date vaccineDate, String vaccineType) {
+    public VaccinatedUser(String name, String surname, String nickname, String event, short id, String hubName, String fiscalCode, Date vaccineDate, String vaccineType, short dose) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
@@ -29,6 +30,7 @@ public class VaccinatedUser implements Serializable {
         this.fiscalCode = fiscalCode;
         this.vaccineDate = vaccineDate;
         this.vaccineType = vaccineType;
+        this.dose = dose;
     }
 
     public String getName() {
@@ -103,6 +105,14 @@ public class VaccinatedUser implements Serializable {
         this.vaccineType = vaccineType;
     }
 
+    public short getDose() {
+        return dose;
+    }
+
+    public void setDose(short dose) {
+        this.dose = dose;
+    }
+
     @Override
     public String toString() {
         return "VaccinatedUser{" +
@@ -110,11 +120,12 @@ public class VaccinatedUser implements Serializable {
                 ", surname='" + surname + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", event='" + event + '\'' +
-                ", id='" + id + '\'' +
+                ", id=" + id +
                 ", hubName='" + hubName + '\'' +
                 ", fiscalCode='" + fiscalCode + '\'' +
                 ", vaccineDate=" + vaccineDate +
                 ", vaccineType='" + vaccineType + '\'' +
+                ", dose=" + dose +
                 '}';
     }
 }

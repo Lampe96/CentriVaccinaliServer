@@ -55,14 +55,14 @@ public class DbHelper {
     static PreparedStatement getInsertNewVaccinated(String tableName) throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO VACCINATO_" + tableName +
-                        "(ID_UNIVOCO, NOME, COGNOME, CODICE_FISCALE, NOME_CENTRO, DATA_VACCINO, TIPO_VACCINO) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?)");
+                        "(ID_UNIVOCO, NOME, COGNOME, CODICE_FISCALE, NOME_CENTRO, DATA_VACCINO, TIPO_VACCINO, NUMERO_DOSE) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     }
 
     static PreparedStatement getUpdateIdUser() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO " +
-                        "SET ID_UNIVOCO = ? " +
+                        "SET ID_UNIVOCO = ?, NUMERO_DOSE = ? " +
                         "WHERE CODICE_FISCALE = ?");
     }
 
@@ -136,7 +136,15 @@ public class DbHelper {
     static PreparedStatement updateVaccinatedUser(String tableName) throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE VACCINATO_" + tableName +
-                        " SET ID_UNIVOCO = ?, NOME_CENTRO = ?, DATA_VACCINO = ?, TIPO_VACCINO = ? " +
+                        " SET ID_UNIVOCO = ?, NOME_CENTRO = ?, DATA_VACCINO = ?, TIPO_VACCINO = ?, NUMERO_DOSE = ? " +
+                        "WHERE CODICE_FISCALE = ?"
+        );
+    }
+
+    public static PreparedStatement updateVaccinatedCitizen() throws SQLException {
+        return getConnection().prepareStatement(
+                "UPDATE CITTADINO_REGISTRATO" +
+                        " SET ID_UNIVOCO = ?, NUMERO_DOSE = ? " +
                         "WHERE CODICE_FISCALE = ?"
         );
     }
