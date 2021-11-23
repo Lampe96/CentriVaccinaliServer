@@ -180,6 +180,16 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
+    public boolean checkIfHubExist(String hubName) throws RemoteException {
+        try {
+            return Statements.checkIfHubExist(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public synchronized VaccinatedUser fetchHubVaccinatedInfo(short idUnivoco, String hubName) throws RemoteException {
         try {
             return Statements.fetchHubVaccinatedInfo(idUnivoco, hubName);
@@ -279,7 +289,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public synchronized ArrayList<AdverseEvent> fetchAllAdverseEvent() throws RemoteException {
         try {
-            return (ArrayList<AdverseEvent>) Statements.fetchAllAdverseEvent();
+            return Statements.fetchAllAdverseEvent();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -288,7 +298,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
 
     @Override
-    public synchronized void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, int newDose) throws RemoteException {
+    public synchronized void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, short newDose) throws RemoteException {
         try {
             Statements.updateVaccinatedUser(idUnivoco, hubName, vaccineType, newDate, fiscalCode, newDose);
         } catch (SQLException e) {

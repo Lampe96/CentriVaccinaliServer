@@ -46,6 +46,8 @@ public interface Server extends Remote {
 
     boolean checkIfFirstDose(String fiscalCode) throws RemoteException;
 
+    boolean checkIfHubExist(String hubName) throws RemoteException;
+
     VaccinatedUser fetchHubVaccinatedInfo(short idUnivoco, String hubName) throws RemoteException;
 
     void changePwd(String hubName, String newPwd) throws RemoteException;
@@ -64,6 +66,7 @@ public interface Server extends Remote {
 
     ArrayList<AdverseEvent> fetchAllAdverseEvent() throws RemoteException;
 
-    void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, int newDose) throws RemoteException;
+    void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, short newDose) throws RemoteException;
+
 
 }

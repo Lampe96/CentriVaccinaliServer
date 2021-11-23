@@ -127,7 +127,8 @@ public class DbHelper {
                 "SELECT NOME_CENTRO," +
                         "DATA_VACCINO," +
                         "CODICE_FISCALE," +
-                        "TIPO_VACCINO " +
+                        "TIPO_VACCINO," +
+                        "NUMERO_DOSE " +
                         "FROM VACCINATO_" + tableName +
                         " WHERE ID_UNIVOCO = ?"
         );
