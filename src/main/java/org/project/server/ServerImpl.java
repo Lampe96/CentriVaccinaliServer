@@ -76,32 +76,12 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized Address getAddress(String hubName) throws RemoteException {
-        try {
-            return Statements.getAddress(hubName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
     public synchronized void changeImageHub(int selectedImage, String hubName) throws RemoteException {
         try {
             Statements.changeImageHub(selectedImage, hubName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public synchronized int getImage(String hubName) throws RemoteException {
-        try {
-            return Statements.getImage(hubName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     @Override
@@ -185,7 +165,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-       return new Object[] {-1};
+        return new Object[]{-1};
     }
 
     @Override
@@ -288,17 +268,17 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public synchronized ArrayList<User> fetchHubVaccinatedUser(String hubName) throws RemoteException {
         try {
-            return (ArrayList<User>) Statements.fetchHubVaccinatedUser(hubName).stream().sorted(Comparator.comparing(User::getSurname, String.CASE_INSENSITIVE_ORDER).thenComparing(User::getName, String.CASE_INSENSITIVE_ORDER).thenComparing(User::getNickname, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+            return Statements.fetchHubVaccinatedUser(hubName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-       @Override
+    @Override
     public synchronized ArrayList<Hub> fetchAllHub() throws RemoteException {
-         try {
-            return (ArrayList<Hub>) Objects.requireNonNull(Statements.fetchAllHub()).stream().sorted(Comparator.comparing(Hub::getNameHub, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+        try {
+            return Statements.fetchAllHub();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -324,4 +304,54 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public int[] getNumberVaccinated(String hubName) throws RemoteException {
+        try {
+            return Statements.getNumberVaccinated(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public float getAvgAdverseEvent(String hubName) throws RemoteException {
+        try {
+            return Statements.getAvgAdverseEvent(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public ArrayList<AdverseEvent> getAllAdverseEvent() throws RemoteException {
+        try {
+            return Statements.getAllAdverseEvent();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public User getUser(String email) throws RemoteException {
+        try {
+            return Statements.getUser(email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+        public Hub getHub(String hubName) throws RemoteException {
+            try {
+                return Statements.getHub(hubName);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
 }

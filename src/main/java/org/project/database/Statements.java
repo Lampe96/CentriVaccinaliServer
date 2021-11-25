@@ -9,12 +9,10 @@ import org.project.models.AdverseEvent;
 import org.project.models.Hub;
 import org.project.models.User;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
 
 public class Statements {
@@ -58,6 +56,7 @@ public class Statements {
                     "password VARCHAR(500)  DEFAULT NULL," +
                     "id_univoco SMALLINT DEFAULT 0," +
                     "numero_dose SMALLINT DEFAULT 0," +
+                    "immagine SMALLINT DEFAULT 1," +
                     "PRIMARY KEY(codice_fiscale, nickname)" +
                     ");";
 
@@ -188,19 +187,6 @@ public class Statements {
         pStat.closeOnCompletion();
     }
 
-    public static Address getAddress(String hubName) throws SQLException {
-        PreparedStatement pStat = DbHelper.getAddress();
-        pStat.setString(1, hubName);
-
-        ResultSet rs = pStat.executeQuery();
-
-        pStat.closeOnCompletion();
-
-        rs.next();
-
-        return new Address(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
-    }
-
     public static boolean checkDuplicateNickname(String nick) throws SQLException {
         ResultSet rs = DbHelper.getStatement().executeQuery(
                 "SELECT NICKNAME " +
@@ -224,7 +210,7 @@ public class Statements {
         );
 
         while (rs.next()) {
-            if (rs.getString(1) != null){
+            if (rs.getString(1) != null) {
                 if (rs.getString(1).equals(email)) {
                     return false;
                 }
@@ -313,7 +299,8 @@ public class Statements {
                         "NUMERO_DOSE " +
                         "FROM CITTADINO_REGISTRATO " +
                         "WHERE CODICE_FISCALE IN (SELECT CODICE_FISCALE " +
-                        "FROM VACCINATO_" + tableName + ")"
+                        "FROM VACCINATO_" + tableName + ")" +
+                        "ORDER BY COGNOME, NOME, NICKNAME ASC"
         );
 
         ArrayList<User> avu = new ArrayList<>();
@@ -346,17 +333,6 @@ public class Statements {
         }
 
         return avu;
-    }
-
-    public static int getImage(String hubName) throws SQLException {
-        PreparedStatement pStat = DbHelper.getImage();
-        pStat.setString(1, hubName);
-
-        ResultSet rs = pStat.executeQuery();
-        pStat.closeOnCompletion();
-        rs.next();
-
-        return rs.getInt(1);
     }
 
     public static void changeImageHub(int selectedImage, String hubName) throws SQLException {
@@ -421,7 +397,7 @@ public class Statements {
 
 
     public static int checkIfFirstDose(String fiscalCode) throws SQLException {
-        if(checkIfUserExist(fiscalCode)){
+        if (checkIfUserExist(fiscalCode)) {
             PreparedStatement pStat = DbHelper.getCheckIfFirstDose();
             pStat.setString(1, fiscalCode);
             pStat.closeOnCompletion();
@@ -437,7 +413,7 @@ public class Statements {
             } else {
                 return 2;
             }
-        }else{
+        } else {
             return 0;
         }
         return -1;
@@ -467,33 +443,30 @@ public class Statements {
     public static ArrayList<Hub> fetchAllHub() throws SQLException {
         ResultSet rsAll = DbHelper.getStatement().executeQuery(
                 "SELECT * " +
-                        "FROM CENTRO_VACCINALE"
+                        "FROM CENTRO_VACCINALE " +
+                        "ORDER BY NOME_CENTRO ASC"
         );
 
         ArrayList<Hub> allHub = new ArrayList<>();
         Hub hub;
         Address address;
 
-        if (rsAll.next()) {
-            while (rsAll.next()) {
-                hub = new Hub();
-                address = new Address();
-                hub.setNameHub(rsAll.getString(1));
-                hub.setType(rsAll.getString(3));
-                address.setQualificator(rsAll.getString(4));
-                address.setAddress(rsAll.getString(5));
-                address.setNumber(rsAll.getString(6));
-                address.setCity(rsAll.getString(7));
-                address.setCap(rsAll.getString(8));
-                address.setProvince(rsAll.getString(9));
-                hub.setImage(rsAll.getInt(10));
-                hub.setAddress(address);
-                allHub.add(hub);
-            }
-            return allHub;
+        while (rsAll.next()) {
+            hub = new Hub();
+            address = new Address();
+            hub.setNameHub(rsAll.getString(1));
+            hub.setType(rsAll.getString(2));
+            address.setQualificator(rsAll.getString(4));
+            address.setAddress(rsAll.getString(5));
+            address.setNumber(rsAll.getString(6));
+            address.setCity(rsAll.getString(7));
+            address.setCap(rsAll.getString(8));
+            address.setProvince(rsAll.getString(9));
+            hub.setAddress(address);
+            allHub.add(hub);
         }
 
-        return null;
+        return allHub;
     }
 
 
@@ -542,7 +515,7 @@ public class Statements {
         updateCitizen(vaccinatedUser);
     }
 
-    private static void updateCitizen(User vaccinatedUser) throws SQLException{
+    private static void updateCitizen(User vaccinatedUser) throws SQLException {
         PreparedStatement pStats = DbHelper.updateVaccinatedCitizen();
         pStats.setShort(1, vaccinatedUser.getId());
         pStats.setInt(2, vaccinatedUser.getDose());
@@ -563,4 +536,146 @@ public class Statements {
     }
 
 
+    public static int[] getNumberVaccinated(String hubName) throws SQLException {
+        int[] vcn = new int[4];
+        if (!hubName.equals("CITTADINO")) {
+            String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+
+            ResultSet rsAllHub = DbHelper.getStatement().executeQuery(
+                    "SELECT COUNT(*) " +
+                            "FROM VACCINATO_" + tableName
+            );
+
+            if (rsAllHub.next()) {
+                vcn[3] = rsAllHub.getInt(1);
+            } else {
+                vcn[3] = 0;
+            }
+        }
+
+        ResultSet rsAll = DbHelper.getStatement().executeQuery(
+                "SELECT COUNT(ID_UNIVOCO) " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE ID_UNIVOCO != 0"
+        );
+
+        if (rsAll.next()) {
+            vcn[0] = rsAll.getInt(1);
+        } else {
+            vcn[0] = 0;
+        }
+
+        ResultSet rsDose1 = DbHelper.getStatement().executeQuery(
+                "SELECT COUNT(NUMERO_DOSE) " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE NUMERO_DOSE = 1"
+        );
+
+        if (rsDose1.next()) {
+            vcn[1] = rsDose1.getInt(1);
+        } else {
+            vcn[1] = 0;
+        }
+
+        ResultSet rsDose2 = DbHelper.getStatement().executeQuery(
+                "SELECT COUNT(NUMERO_DOSE) " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE NUMERO_DOSE = 2"
+        );
+
+        if (rsDose2.next()) {
+            vcn[2] = rsDose2.getInt(1);
+        } else {
+            vcn[2] = 0;
+        }
+
+        return vcn;
+    }
+
+    public static float getAvgAdverseEvent(String hubName) throws SQLException {
+        PreparedStatement pStats = DbHelper.getAvgAdverseEvent();
+        pStats.setString(1, hubName);
+
+        ResultSet rs = pStats.executeQuery();
+
+        pStats.closeOnCompletion();
+
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+        return 0;
+    }
+
+    public static ArrayList<AdverseEvent> getAllAdverseEvent() throws SQLException {
+        ResultSet rsAll = DbHelper.getStatement().executeQuery(
+                "SELECT TIPO," +
+                        "NICKNAME," +
+                        "SEVERITA," +
+                        "TESTO," +
+                        "NOME_CENTRO " +
+                        "FROM EVENTO_AVVERSO"
+        );
+
+        ArrayList<AdverseEvent> adverseEvent = new ArrayList<>();
+
+        while (rsAll.next()) {
+            AdverseEvent event = new AdverseEvent();
+            event.setEventType(rsAll.getString(1));
+            event.setNickname(rsAll.getString(2));
+            event.setGravity(rsAll.getInt(3));
+            event.setText((rsAll.getString(4)));
+            event.setHubName((rsAll.getString(5)));
+            adverseEvent.add(event);
+        }
+
+        return adverseEvent;
+    }
+
+    public static User getUser(String email) throws SQLException {
+        PreparedStatement pStats = DbHelper.getUser();
+        pStats.setString(1, email);
+
+        ResultSet rs = pStats.executeQuery();
+        pStats.closeOnCompletion();
+
+        if (rs.next()) {
+            User us = new User();
+            us.setNickname(rs.getString(1));
+            us.setEmail(rs.getString(2));
+            us.setName(rs.getString(3));
+            us.setSurname(rs.getString(4));
+            us.setFiscalCode(rs.getString(5));
+            us.setId(rs.getShort(7));
+            us.setDose(rs.getShort(8));
+            return us;
+        }
+        return null;
+    }
+
+    public static Hub getHub(String hubName) throws SQLException {
+        PreparedStatement pStats = DbHelper.getHub();
+        pStats.setString(1, hubName);
+
+        ResultSet rs = pStats.executeQuery();
+        pStats.closeOnCompletion();
+
+        if (rs.next()) {
+            Hub hub = new Hub();
+            Address address = new Address();
+            hub.setNameHub(rs.getString(1));
+            hub.setType(rs.getString(2));
+            address.setQualificator(rs.getString(4));
+            address.setAddress(rs.getString(5));
+            address.setNumber(rs.getString(6));
+            address.setCity(rs.getString(7));
+            address.setCap(rs.getString(8));
+            address.setProvince(rs.getString(9));
+            hub.setAddress(address);
+            hub.setImage(rs.getShort(10));
+
+            return hub;
+        }
+
+        return null;
+    }
 }

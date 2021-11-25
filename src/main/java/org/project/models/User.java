@@ -17,6 +17,7 @@ public class User implements Serializable {
     private Date vaccineDate;
     private String vaccineType;
     private short dose;
+    private short image;
 
     public User() {
     }
@@ -117,6 +118,14 @@ public class User implements Serializable {
         this.dose = dose;
     }
 
+    public short getImage() {
+        return image;
+    }
+
+    public void setImage(short image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -132,6 +141,7 @@ public class User implements Serializable {
                 ", vaccineDate=" + vaccineDate +
                 ", vaccineType='" + vaccineType + '\'' +
                 ", dose=" + dose +
+                ", image=" + image +
                 '}';
     }
 }

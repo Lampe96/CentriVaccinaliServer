@@ -27,11 +27,7 @@ public interface Server extends Remote {
 
     void insertVaccinatedUserInNewHub(User vaccinatedUser)  throws RemoteException;
 
-    Address getAddress(String hubName) throws RemoteException;
-
     void changeImageHub(int selectedImage, String hubName) throws RemoteException;
-
-    int getImage(String hubName) throws RemoteException;
 
     boolean checkDuplicateNickname(String nick) throws RemoteException;
 
@@ -75,5 +71,14 @@ public interface Server extends Remote {
 
     void updateVaccinatedUser(User vaccinatedUser) throws RemoteException;
 
+    int[] getNumberVaccinated(String hubName) throws RemoteException;
+
+    float getAvgAdverseEvent(String hubName) throws RemoteException;
+
+    ArrayList<AdverseEvent> getAllAdverseEvent() throws RemoteException;
+
+    User getUser(String email) throws RemoteException;
+
+    Hub getHub(String hubName) throws RemoteException;
 
 }

@@ -87,24 +87,10 @@ public class DbHelper {
                         "WHERE NOME_CENTRO = ?");
     }
 
-    static PreparedStatement getAddress() throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA " +
-                        "FROM CENTRO_VACCINALE " +
-                        "WHERE NOME_CENTRO = ?");
-    }
-
     static PreparedStatement getChangeImageHub() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CENTRO_VACCINALE " +
                         "SET IMMAGINE = ? " +
-                        "WHERE NOME_CENTRO = ?");
-    }
-
-    static PreparedStatement getImage() throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT IMMAGINE " +
-                        "FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?");
     }
 
@@ -189,5 +175,29 @@ public class DbHelper {
                         "FROM CITTADINO_REGISTRATO " +
                         "WHERE CODICE_FISCALE = ?"
         );
+    }
+
+    public static PreparedStatement getAvgAdverseEvent() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT AVG(SEVERITA) " +
+                        "FROM EVENTO_AVVERSO " +
+                        "WHERE NOME_CENTRO = ?"
+        );
+    }
+
+    public static PreparedStatement getUser() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT * " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE EMAIL = ?"
+        );
+    }
+
+    public static PreparedStatement getHub() throws SQLException {
+         return getConnection().prepareStatement(
+                        "SELECT * " +
+                                "FROM CENTRO_VACCINALE " +
+                                "WHERE NOME_CENTRO = ?"
+                );
     }
 }
