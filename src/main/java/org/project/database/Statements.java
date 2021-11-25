@@ -4,13 +4,17 @@ import com.password4j.Password;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.project.UserType;
-import org.project.models.*;
+import org.project.models.Address;
+import org.project.models.AdverseEvent;
+import org.project.models.Hub;
+import org.project.models.User;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class Statements {
@@ -47,11 +51,11 @@ public class Statements {
     private final static String CR_TB_CITT_REG =
             "CREATE TABLE IF NOT EXISTS Cittadino_Registrato(" +
                     "nickname VARCHAR(25) UNIQUE," +
-                    "email VARCHAR(50) NOT NULL," +
+                    "email VARCHAR(50) DEFAULT NULL," +
                     "nome VARCHAR(25) NOT NULL," +
                     "cognome VARCHAR(25) NOT NULL," +
                     "codice_fiscale CHAR(16) UNIQUE," +
-                    "password VARCHAR(500) NOT NULL," +
+                    "password VARCHAR(500)  DEFAULT NULL," +
                     "id_univoco SMALLINT DEFAULT 0," +
                     "numero_dose SMALLINT DEFAULT 0," +
                     "PRIMARY KEY(codice_fiscale, nickname)" +
@@ -80,7 +84,7 @@ public class Statements {
         pStat.setString(2, user.getEmail());
         pStat.setString(3, user.getName());
         pStat.setString(4, user.getSurname());
-        pStat.setString(5, user.getCode());
+        pStat.setString(5, user.getFiscalCode());
         pStat.setString(6, user.getPassword());
         pStat.executeUpdate();
         pStat.closeOnCompletion();
@@ -103,7 +107,50 @@ public class Statements {
         DbHelper.getStatement().executeUpdate(CR_TB_VAC_NOMCV.replace("NomeCentroVaccinale", hub.getNameHub().replaceAll("\\s+", "_")));
     }
 
-    public static void insertNewVaccinated(VaccinatedUser vaccinatedUser) throws SQLException {
+    public static void insertNewVaccinated(User vaccinatedUser) throws SQLException {
+        System.out.println(vaccinatedUser);
+        if (checkIfUserExist(vaccinatedUser.getFiscalCode())) {
+
+            insertVaccinatedTableVaccinatedHospital(vaccinatedUser);
+
+            PreparedStatement pStat2 = DbHelper.getUpdateIdUser();
+            pStat2.setShort(1, vaccinatedUser.getId());
+            pStat2.setShort(2, vaccinatedUser.getDose());
+            pStat2.setString(3, vaccinatedUser.getFiscalCode());
+
+            pStat2.executeUpdate();
+            pStat2.closeOnCompletion();
+
+        } else {
+            insertCitizenNotRegistered(vaccinatedUser);
+
+            insertVaccinatedTableVaccinatedHospital(vaccinatedUser);
+        }
+    }
+
+    private static boolean checkIfUserExist(String fiscalCode) throws SQLException {
+        PreparedStatement pStat = DbHelper.checkIfUserExist();
+        pStat.setString(1, fiscalCode);
+
+        ResultSet rs = pStat.executeQuery();
+
+        pStat.closeOnCompletion();
+        return rs.next();
+        /*try {
+            ResultSet rsAll = DbHelper.getStatement().executeQuery(
+                    "SELECT CODICE_FISCALE " +
+                            "FROM CITTADINO_REGISTRATO " +
+                            "WHERE CODICE_FISCALE = " + fiscalCode
+            );
+
+            return rsAll.next();
+        } catch (SQLException e) {
+
+            return false;
+        }*/
+    }
+
+    private static void insertVaccinatedTableVaccinatedHospital(User vaccinatedUser) throws SQLException {
         PreparedStatement pStat = DbHelper.getInsertNewVaccinated(vaccinatedUser.getHubName().replaceAll("\\s+", "_"));
         pStat.setShort(1, vaccinatedUser.getId());
         pStat.setString(2, vaccinatedUser.getName());
@@ -115,14 +162,30 @@ public class Statements {
         pStat.setInt(8, vaccinatedUser.getDose());
         pStat.executeUpdate();
         pStat.closeOnCompletion();
+    }
 
-        PreparedStatement pStat2 = DbHelper.getUpdateIdUser();
-        pStat2.setShort(1, vaccinatedUser.getId());
-        pStat2.setShort(2, vaccinatedUser.getDose());
-        pStat2.setString(3, vaccinatedUser.getFiscalCode());
+    private static void insertCitizenNotRegistered(User vaccinatedUser) throws SQLException {
+        PreparedStatement pStat = DbHelper.insertNewVaccinatedUserNotRegistered();
+        pStat.setString(1, vaccinatedUser.getName());
+        pStat.setString(2, vaccinatedUser.getSurname());
+        pStat.setString(3, vaccinatedUser.getFiscalCode());
+        pStat.setShort(4, vaccinatedUser.getId());
+        pStat.setShort(5, vaccinatedUser.getDose());
+        pStat.setString(6, "Guest " + vaccinatedUser.getId());
+        pStat.executeUpdate();
+        pStat.closeOnCompletion();
+    }
 
-        pStat2.executeUpdate();
-        pStat2.closeOnCompletion();
+    public static void changeDataUser(User vaccinatedUser) throws SQLException {
+        System.out.println(vaccinatedUser);
+        PreparedStatement pStat = DbHelper.changeDataUser();
+        pStat.setString(1, vaccinatedUser.getEmail());
+        pStat.setString(2, vaccinatedUser.getNickname());
+        pStat.setString(3, vaccinatedUser.getPassword());
+        pStat.setString(4, vaccinatedUser.getFiscalCode());
+
+        pStat.executeUpdate();
+        pStat.closeOnCompletion();
     }
 
     public static Address getAddress(String hubName) throws SQLException {
@@ -130,6 +193,9 @@ public class Statements {
         pStat.setString(1, hubName);
 
         ResultSet rs = pStat.executeQuery();
+
+        pStat.closeOnCompletion();
+
         rs.next();
 
         return new Address(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
@@ -142,8 +208,10 @@ public class Statements {
         );
 
         while (rs.next()) {
-            if (rs.getString(1).equals(nick)) {
-                return false;
+            if (rs.getString(1) != null) {
+                if (rs.getString(1).equals(nick)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -156,8 +224,10 @@ public class Statements {
         );
 
         while (rs.next()) {
-            if (rs.getString(1).equals(email)) {
-                return false;
+            if (rs.getString(1) != null){
+                if (rs.getString(1).equals(email)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -211,6 +281,7 @@ public class Statements {
         PreparedStatement psU = DbHelper.getEmailAndPwdU();
         psU.setString(1, email);
         ResultSet rsU = psU.executeQuery();
+        psU.closeOnCompletion();
 
         if (rsU.next()) {
             if (Password.check(pwd, rsU.getString(1)).withArgon2()) {
@@ -221,6 +292,7 @@ public class Statements {
         PreparedStatement psH = DbHelper.getEmailAndPwdH();
         psH.setString(1, email);
         ResultSet rsH = psH.executeQuery();
+        psH.closeOnCompletion();
 
         if (rsH.next()) {
             if (Password.check(pwd, rsH.getString(1)).withArgon2()) {
@@ -231,7 +303,7 @@ public class Statements {
         return null;
     }
 
-    public static ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws SQLException {
+    public static ArrayList<User> fetchHubVaccinatedUser(String hubName) throws SQLException {
         String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
         ResultSet rsAll = DbHelper.getStatement().executeQuery(
                 "SELECT NOME," +
@@ -244,11 +316,11 @@ public class Statements {
                         "FROM VACCINATO_" + tableName + ")"
         );
 
-        ArrayList<VaccinatedUser> avu = new ArrayList<>();
-        VaccinatedUser vu;
+        ArrayList<User> avu = new ArrayList<>();
+        User vu;
 
         while (rsAll.next()) {
-            vu = new VaccinatedUser();
+            vu = new User();
             vu.setName(rsAll.getString(1));
             vu.setSurname(rsAll.getString(2));
             vu.setNickname(rsAll.getString(3));
@@ -266,7 +338,7 @@ public class Statements {
         );
 
         while (rsEvent.next()) {
-            for (VaccinatedUser vue : avu) {
+            for (User vue : avu) {
                 if (vue.getNickname().equals(rsEvent.getString(1))) {
                     vue.setEvent(rsEvent.getString(1));
                 }
@@ -281,6 +353,7 @@ public class Statements {
         pStat.setString(1, hubName);
 
         ResultSet rs = pStat.executeQuery();
+        pStat.closeOnCompletion();
         rs.next();
 
         return rs.getInt(1);
@@ -291,12 +364,14 @@ public class Statements {
         pStats.setInt(1, selectedImage);
         pStats.setString(2, hubName);
         pStats.executeUpdate();
+        pStats.closeOnCompletion();
     }
 
     public static boolean checkPasswordHub(String hubName, String pwd) throws SQLException {
         PreparedStatement psU = DbHelper.getEmailAndPwdH();
         psU.setString(1, hubName);
         ResultSet rsU = psU.executeQuery();
+        psU.closeOnCompletion();
 
         if (rsU.next()) {
             return Password.check(pwd, rsU.getString(1)).withArgon2();
@@ -305,19 +380,28 @@ public class Statements {
         return false;
     }
 
-    public static boolean checkIfUserExist(String name, String surname, String fiscalCode) throws SQLException {
-        ResultSet rsAll = DbHelper.getStatement().executeQuery(
-                "SELECT NOME, " +
-                        "COGNOME, " +
-                        "CODICE_FISCALE " +
-                        "FROM CITTADINO_REGISTRATO " +
-                        "WHERE NOME = " + name +
-                        " AND COGNOME = " + surname +
-                        " AND CODICE_FISCALE = " + fiscalCode
-        );
+    public static Object[] checkIfUserIsVaccinated(String hubName, String fiscalCode) throws SQLException {
+        if (checkIfHubExist(hubName)) {
+            String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+            PreparedStatement pStats = DbHelper.checkIfUserIsVaccinated(tableName);
+            pStats.setString(1, fiscalCode);
+            pStats.executeQuery();
+            pStats.closeOnCompletion();
 
-        return rsAll.next();
+            ResultSet rs = pStats.executeQuery();
+            if (rs.next()) {
+                User vu = new User();
+                vu.setId(rs.getShort(1));
+                vu.setName(rs.getString(2));
+                vu.setSurname(rs.getString(3));
 
+                return new Object[]{1, vu};
+            } else {
+                return new Object[]{0};
+            }
+        }
+
+        return new Object[]{2};
     }
 
     public static void changePwd(String hubName, String newPwd) throws SQLException {
@@ -325,42 +409,56 @@ public class Statements {
         pStats.setString(1, newPwd);
         pStats.setString(2, hubName);
         pStats.executeUpdate();
+        pStats.closeOnCompletion();
     }
 
     public static void deleteHub(String hubName) throws SQLException {
         PreparedStatement pStats = DbHelper.getDeleteHub();
         pStats.setString(1, hubName);
         pStats.executeUpdate();
+        pStats.closeOnCompletion();
     }
 
 
-    public static boolean checkIfFirstDose(String fiscalCode) throws SQLException {
-        PreparedStatement pStat = DbHelper.getCheckIfFirstDose();
-        pStat.setString(1, fiscalCode);
+    public static int checkIfFirstDose(String fiscalCode) throws SQLException {
+        if(checkIfUserExist(fiscalCode)){
+            PreparedStatement pStat = DbHelper.getCheckIfFirstDose();
+            pStat.setString(1, fiscalCode);
+            pStat.closeOnCompletion();
 
-        ResultSet rs = pStat.executeQuery();
+            ResultSet rs = pStat.executeQuery();
 
-        if (rs.next()) {
-            return rs.getShort(1) == 0;
+            if (rs.next()) {
+                if (rs.getShort(1) == 0) {
+                    return 0;
+                } else if (rs.getShort(1) == 1 || rs.getShort(1) == 2) {
+                    return 1;
+                }
+            } else {
+                return 2;
+            }
+        }else{
+            return 0;
         }
-        return false;
+        return -1;
     }
 
-    public static VaccinatedUser fetchHubVaccinatedInfo(short idUnivoco, String hubName) throws SQLException {
+    public static User fetchHubVaccinatedInfo(short UId, String hubName) throws SQLException {
         String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
         PreparedStatement pStat = DbHelper.getFetchHubVaccinatedInfo(tableName);
-        pStat.setShort(1, idUnivoco);
+        pStat.setShort(1, UId);
 
         ResultSet rs = pStat.executeQuery();
+        pStat.closeOnCompletion();
 
         if (rs.next()) {
-            VaccinatedUser vu = new VaccinatedUser();
+            User vu = new User();
             vu.setHubName(rs.getString(1));
             vu.setVaccineDate(rs.getDate(2));
             vu.setFiscalCode(rs.getString(3));
             vu.setVaccineType(rs.getString(4));
             vu.setDose(rs.getShort(5));
-            vu.setId(idUnivoco);
+            vu.setId(UId);
             return vu;
         }
         return null;
@@ -424,32 +522,45 @@ public class Statements {
         return null;
     }
 
-    public static void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, short newDose) throws SQLException {
-        String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+    public static void updateVaccinatedUser(User vaccinatedUser) throws SQLException {
+        String tableName = vaccinatedUser.getHubName().toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
         PreparedStatement pStats = DbHelper.updateVaccinatedUser(tableName);
-        pStats.setShort(1, idUnivoco);
-        pStats.setString(2, hubName);
-        pStats.setDate(3, newDate);
-        pStats.setString(4, vaccineType);
-        pStats.setShort(5, newDose);
-        pStats.setString(6, fiscalCode);
+        pStats.setShort(1, vaccinatedUser.getId());
+        pStats.setString(2, vaccinatedUser.getHubName());
+        pStats.setDate(3, vaccinatedUser.getVaccineDate());
+        pStats.setString(4, vaccinatedUser.getVaccineType());
+        pStats.setShort(5, vaccinatedUser.getDose());
+        pStats.setString(6, vaccinatedUser.getFiscalCode());
         pStats.executeUpdate();
+        pStats.closeOnCompletion();
 
-        PreparedStatement pStats2 = DbHelper.updateVaccinatedCitizen();
-        pStats2.setShort(1, idUnivoco);
-        pStats2.setInt(2, newDose);
-        pStats2.setString(3, fiscalCode);
-        pStats2.executeUpdate();
+        updateCitizen(vaccinatedUser);
+    }
 
+    public static void insertVaccinatedUserInNewHub(User vaccinatedUser) throws SQLException {
+        insertVaccinatedTableVaccinatedHospital(vaccinatedUser);
+        updateCitizen(vaccinatedUser);
+    }
+
+    private static void updateCitizen(User vaccinatedUser) throws SQLException{
+        PreparedStatement pStats = DbHelper.updateVaccinatedCitizen();
+        pStats.setShort(1, vaccinatedUser.getId());
+        pStats.setInt(2, vaccinatedUser.getDose());
+        pStats.setString(3, vaccinatedUser.getFiscalCode());
+
+        pStats.executeUpdate();
+        pStats.closeOnCompletion();
     }
 
     public static boolean checkIfHubExist(String hubName) throws SQLException {
-        ResultSet rsAll = DbHelper.getStatement().executeQuery(
-                "SELECT NOME_CENTRO " +
-                        "FROM CENTRO_VACCINALE " +
-                        "WHERE NOME_CENTRO = " + hubName
-        );
+        PreparedStatement pStats = DbHelper.checkIfHubExist();
+        pStats.setString(1, hubName);
 
-        return rsAll.next();
+        ResultSet rs = pStats.executeQuery();
+        pStats.closeOnCompletion();
+
+        return rs.next();
     }
+
+
 }

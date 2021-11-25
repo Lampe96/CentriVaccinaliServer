@@ -45,6 +45,13 @@ public class DbHelper {
                         "VALUES (?, ?, ?, ?, ?, ?)");
     }
 
+    static PreparedStatement insertNewVaccinatedUserNotRegistered() throws SQLException {
+        return getConnection().prepareStatement(
+                "INSERT INTO CITTADINO_REGISTRATO " +
+                        "(NOME, COGNOME, CODICE_FISCALE, ID_UNIVOCO, NUMERO_DOSE, NICKNAME) " +
+                        "VALUES (?, ?, ?, ?, ?, ?)");
+    }
+
     static PreparedStatement getInsertDataHub() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CENTRO_VACCINALE " +
@@ -142,10 +149,44 @@ public class DbHelper {
         );
     }
 
-    public static PreparedStatement updateVaccinatedCitizen() throws SQLException {
+    static PreparedStatement updateVaccinatedCitizen() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO" +
                         " SET ID_UNIVOCO = ?, NUMERO_DOSE = ? " +
+                        "WHERE CODICE_FISCALE = ?"
+        );
+    }
+
+    static PreparedStatement changeDataUser() throws SQLException {
+        return getConnection().prepareStatement(
+                "UPDATE CITTADINO_REGISTRATO" +
+                        " SET EMAIL = ?, NICKNAME = ?, PASSWORD = ? " +
+                        "WHERE CODICE_FISCALE = ?"
+        );
+    }
+
+    static PreparedStatement checkIfHubExist() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT NOME_CENTRO " +
+                        "FROM CENTRO_VACCINALE " +
+                        "WHERE NOME_CENTRO = ?"
+        );
+    }
+
+    static PreparedStatement checkIfUserIsVaccinated(String tableName) throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT ID_UNIVOCO, " +
+                        " NOME, " +
+                        "COGNOME " +
+                        "FROM VACCINATO_" + tableName +
+                        " WHERE CODICE_FISCALE = ?"
+        );
+    }
+
+    static PreparedStatement checkIfUserExist() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT CODICE_FISCALE " +
+                        "FROM CITTADINO_REGISTRATO " +
                         "WHERE CODICE_FISCALE = ?"
         );
     }

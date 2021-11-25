@@ -1,7 +1,10 @@
 package org.project.server;
 
 import org.project.UserType;
-import org.project.models.*;
+import org.project.models.Address;
+import org.project.models.AdverseEvent;
+import org.project.models.Hub;
+import org.project.models.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -18,7 +21,11 @@ public interface Server extends Remote {
 
     void insertDataHub(Hub hub) throws RemoteException;
 
-    void insertNewVaccinated(VaccinatedUser vaccinatedUser) throws RemoteException;
+    void insertNewVaccinated(User vaccinatedUser) throws RemoteException;
+
+    void changeDataUser(User vaccinatedUser) throws RemoteException;
+
+    void insertVaccinatedUserInNewHub(User vaccinatedUser)  throws RemoteException;
 
     Address getAddress(String hubName) throws RemoteException;
 
@@ -42,13 +49,13 @@ public interface Server extends Remote {
 
     boolean checkPasswordHub(String hubName, String pwd) throws RemoteException;
 
-    boolean checkIfUserExist(String name, String surname, String fiscalCode) throws RemoteException;
+    Object[] checkIfUserIsVaccinated(String hubName, String fiscalCode) throws RemoteException;
 
-    boolean checkIfFirstDose(String fiscalCode) throws RemoteException;
+    int checkIfFirstDose(String fiscalCode) throws RemoteException;
 
     boolean checkIfHubExist(String hubName) throws RemoteException;
 
-    VaccinatedUser fetchHubVaccinatedInfo(short idUnivoco, String hubName) throws RemoteException;
+    User fetchHubVaccinatedInfo(short UId, String hubName) throws RemoteException;
 
     void changePwd(String hubName, String newPwd) throws RemoteException;
 
@@ -60,13 +67,13 @@ public interface Server extends Remote {
 
     void deleteReferenceVerifyEmail(String email) throws RemoteException;
 
-    ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException;
+    ArrayList<User> fetchHubVaccinatedUser(String hubName) throws RemoteException;
 
     ArrayList<Hub> fetchAllHub() throws RemoteException;
 
     ArrayList<AdverseEvent> fetchAllAdverseEvent() throws RemoteException;
 
-    void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, short newDose) throws RemoteException;
+    void updateVaccinatedUser(User vaccinatedUser) throws RemoteException;
 
 
 }

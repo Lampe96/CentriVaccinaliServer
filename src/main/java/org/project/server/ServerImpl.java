@@ -47,10 +47,29 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized void insertNewVaccinated(VaccinatedUser vaccinatedUser) throws RemoteException {
+    public synchronized void insertNewVaccinated(User vaccinatedUser) throws RemoteException {
         try {
             Statements.insertNewVaccinated(vaccinatedUser);
             System.out.println("INSERITO NUOVO VACCINATO: " + vaccinatedUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void changeDataUser(User vaccinatedUser) throws RemoteException {
+        try {
+            Statements.changeDataUser(vaccinatedUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void insertVaccinatedUserInNewHub(User vaccinatedUser) throws RemoteException {
+        try {
+            Statements.insertVaccinatedUserInNewHub(vaccinatedUser);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -160,23 +179,23 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         return false;
     }
 
-    public synchronized boolean checkIfUserExist(String name, String surname, String fiscalCode) throws RemoteException {
+    public synchronized Object[] checkIfUserIsVaccinated(String hubName, String fiscalCode) throws RemoteException {
         try {
-            return Statements.checkIfUserExist(name, surname, fiscalCode);
+            return Statements.checkIfUserIsVaccinated(hubName, fiscalCode);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+       return new Object[] {-1};
     }
 
     @Override
-    public synchronized boolean checkIfFirstDose(String fiscalCode) throws RemoteException {
+    public synchronized int checkIfFirstDose(String fiscalCode) throws RemoteException {
         try {
             return Statements.checkIfFirstDose(fiscalCode);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
     @Override
@@ -190,7 +209,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized VaccinatedUser fetchHubVaccinatedInfo(short idUnivoco, String hubName) throws RemoteException {
+    public synchronized User fetchHubVaccinatedInfo(short idUnivoco, String hubName) throws RemoteException {
         try {
             return Statements.fetchHubVaccinatedInfo(idUnivoco, hubName);
         } catch (SQLException e) {
@@ -267,9 +286,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized ArrayList<VaccinatedUser> fetchHubVaccinatedUser(String hubName) throws RemoteException {
+    public synchronized ArrayList<User> fetchHubVaccinatedUser(String hubName) throws RemoteException {
         try {
-            return (ArrayList<VaccinatedUser>) Statements.fetchHubVaccinatedUser(hubName).stream().sorted(Comparator.comparing(VaccinatedUser::getSurname, String.CASE_INSENSITIVE_ORDER).thenComparing(VaccinatedUser::getName, String.CASE_INSENSITIVE_ORDER).thenComparing(VaccinatedUser::getNickname, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+            return (ArrayList<User>) Statements.fetchHubVaccinatedUser(hubName).stream().sorted(Comparator.comparing(User::getSurname, String.CASE_INSENSITIVE_ORDER).thenComparing(User::getName, String.CASE_INSENSITIVE_ORDER).thenComparing(User::getNickname, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -279,7 +298,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
        @Override
     public synchronized ArrayList<Hub> fetchAllHub() throws RemoteException {
          try {
-            return (ArrayList<Hub>) Statements.fetchAllHub().stream().sorted(Comparator.comparing(Hub::getNameHub, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+            return (ArrayList<Hub>) Objects.requireNonNull(Statements.fetchAllHub()).stream().sorted(Comparator.comparing(Hub::getNameHub, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -298,9 +317,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
 
     @Override
-    public synchronized void updateVaccinatedUser(short idUnivoco, String hubName, String vaccineType, Date newDate, String fiscalCode, short newDose) throws RemoteException {
+    public synchronized void updateVaccinatedUser(User vaccinatedUser) throws RemoteException {
         try {
-            Statements.updateVaccinatedUser(idUnivoco, hubName, vaccineType, newDate, fiscalCode, newDose);
+            Statements.updateVaccinatedUser(vaccinatedUser);
         } catch (SQLException e) {
             e.printStackTrace();
         }
