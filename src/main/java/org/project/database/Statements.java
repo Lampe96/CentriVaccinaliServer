@@ -135,18 +135,6 @@ public class Statements {
 
         pStat.closeOnCompletion();
         return rs.next();
-        /*try {
-            ResultSet rsAll = DbHelper.getStatement().executeQuery(
-                    "SELECT CODICE_FISCALE " +
-                            "FROM CITTADINO_REGISTRATO " +
-                            "WHERE CODICE_FISCALE = " + fiscalCode
-            );
-
-            return rsAll.next();
-        } catch (SQLException e) {
-
-            return false;
-        }*/
     }
 
     private static void insertVaccinatedTableVaccinatedHospital(User vaccinatedUser) throws SQLException {
@@ -335,24 +323,42 @@ public class Statements {
         return avu;
     }
 
-    public static void changeImageHub(int selectedImage, String hubName) throws SQLException {
-        PreparedStatement pStats = DbHelper.getChangeImageHub();
-        pStats.setInt(1, selectedImage);
-        pStats.setString(2, hubName);
+    public static void changeImage(int selectedImage, String hubName, String fiscalCode) throws SQLException {
+        PreparedStatement pStats;
+        if (!hubName.equals("")) {
+            pStats = DbHelper.getChangeImageHub();
+            pStats.setInt(1, selectedImage);
+            pStats.setString(2, hubName);
+        } else {
+            pStats = DbHelper.getChangeImageUser();
+            pStats.setInt(1, selectedImage);
+            pStats.setString(2, fiscalCode);
+        }
         pStats.executeUpdate();
         pStats.closeOnCompletion();
     }
 
-    public static boolean checkPasswordHub(String hubName, String pwd) throws SQLException {
-        PreparedStatement psU = DbHelper.getEmailAndPwdH();
-        psU.setString(1, hubName);
-        ResultSet rsU = psU.executeQuery();
-        psU.closeOnCompletion();
+    public static boolean checkPassword(String hubName, String email, String pwd) throws SQLException {
+        if (!hubName.equals("")) {
+            PreparedStatement psH = DbHelper.getEmailAndPwdH();
+            psH.setString(1, hubName);
+            ResultSet rsH = psH.executeQuery();
+            psH.closeOnCompletion();
 
-        if (rsU.next()) {
-            return Password.check(pwd, rsU.getString(1)).withArgon2();
+            if (rsH.next()) {
+                return Password.check(pwd, rsH.getString(1)).withArgon2();
+            }
+
+        } else {
+            PreparedStatement psU = DbHelper.getEmailAndPwdU();
+            psU.setString(1, email);
+            ResultSet rsU = psU.executeQuery();
+            psU.closeOnCompletion();
+
+            if (rsU.next()) {
+                return Password.check(pwd, rsU.getString(1)).withArgon2();
+            }
         }
-
         return false;
     }
 
@@ -380,17 +386,31 @@ public class Statements {
         return new Object[]{2};
     }
 
-    public static void changePwd(String hubName, String newPwd) throws SQLException {
-        PreparedStatement pStats = DbHelper.getChangePwd();
-        pStats.setString(1, newPwd);
-        pStats.setString(2, hubName);
+    public static void changePwd(String hubName, String email, String newPwd) throws SQLException {
+        PreparedStatement pStats;
+        if (!hubName.equals("")) {
+            pStats = DbHelper.getChangePwdHub();
+            pStats.setString(1, newPwd);
+            pStats.setString(2, hubName);
+        } else {
+            pStats = DbHelper.getChangePwdCitizen();
+            pStats.setString(1, newPwd);
+            pStats.setString(2, email);
+        }
         pStats.executeUpdate();
         pStats.closeOnCompletion();
     }
 
-    public static void deleteHub(String hubName) throws SQLException {
-        PreparedStatement pStats = DbHelper.getDeleteHub();
-        pStats.setString(1, hubName);
+    public static void deleteAccount(String hubName, String email) throws SQLException {
+        PreparedStatement pStats;
+        if (!hubName.equals("")) {
+            pStats = DbHelper.getDeleteHub();
+            pStats.setString(1, hubName);
+        } else {
+            pStats = DbHelper.getDeleteUser();
+            pStats.setString(1, email);
+        }
+
         pStats.executeUpdate();
         pStats.closeOnCompletion();
     }
@@ -469,30 +489,26 @@ public class Statements {
         return allHub;
     }
 
-
-    public static ArrayList<AdverseEvent> fetchAllAdverseEvent() throws SQLException {
-        ResultSet rsAll = DbHelper.getStatement().executeQuery(
-                "SELECT * " +
-                        "FROM EVENTO_AVVERSO"
-        );
+    public static ArrayList<AdverseEvent> fetchAllAdverseEvent(String hubName) throws SQLException {
+        PreparedStatement pStat = DbHelper.fetchAllAdverseEvent();
+        pStat.setString(1, hubName);
+        ResultSet rsAll = pStat.executeQuery();
+        pStat.closeOnCompletion();
 
         ArrayList<AdverseEvent> allAdverseEvent = new ArrayList<>();
         AdverseEvent adverseEvent;
-        if (rsAll.next()) {
-            while (rsAll.next()) {
-                adverseEvent = new AdverseEvent();
-                adverseEvent.setEventType(rsAll.getString(1));
-                adverseEvent.setNickname(rsAll.getString(2));
-                adverseEvent.setGravity(rsAll.getInt(3));
-                adverseEvent.setText(rsAll.getString(4));
-                adverseEvent.setHubName(rsAll.getString(5));
-                allAdverseEvent.add(adverseEvent);
 
-            }
-            return allAdverseEvent;
+        while (rsAll.next()) {
+            adverseEvent = new AdverseEvent();
+            adverseEvent.setEventType(rsAll.getString(1));
+            adverseEvent.setNickname(rsAll.getString(2));
+            adverseEvent.setGravity(rsAll.getInt(3));
+            adverseEvent.setText(rsAll.getString(4));
+            adverseEvent.setHubName(rsAll.getString(5));
+            allAdverseEvent.add(adverseEvent);
         }
 
-        return null;
+        return allAdverseEvent;
     }
 
     public static void updateVaccinatedUser(User vaccinatedUser) throws SQLException {
@@ -604,31 +620,6 @@ public class Statements {
             return rs.getInt(1);
         }
         return 0;
-    }
-
-    public static ArrayList<AdverseEvent> getAllAdverseEvent() throws SQLException {
-        ResultSet rsAll = DbHelper.getStatement().executeQuery(
-                "SELECT TIPO," +
-                        "NICKNAME," +
-                        "SEVERITA," +
-                        "TESTO," +
-                        "NOME_CENTRO " +
-                        "FROM EVENTO_AVVERSO"
-        );
-
-        ArrayList<AdverseEvent> adverseEvent = new ArrayList<>();
-
-        while (rsAll.next()) {
-            AdverseEvent event = new AdverseEvent();
-            event.setEventType(rsAll.getString(1));
-            event.setNickname(rsAll.getString(2));
-            event.setGravity(rsAll.getInt(3));
-            event.setText((rsAll.getString(4)));
-            event.setHubName((rsAll.getString(5)));
-            adverseEvent.add(event);
-        }
-
-        return adverseEvent;
     }
 
     public static User getUser(String email) throws SQLException {

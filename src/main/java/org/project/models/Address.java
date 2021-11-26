@@ -12,7 +12,7 @@ public class Address implements Serializable {
     private String province;
 
     public Address() {
-        
+
     }
 
     public Address(String qualificator, String address, String number, String city, String cap, String province) {

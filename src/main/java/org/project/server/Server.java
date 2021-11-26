@@ -1,14 +1,12 @@
 package org.project.server;
 
 import org.project.UserType;
-import org.project.models.Address;
 import org.project.models.AdverseEvent;
 import org.project.models.Hub;
 import org.project.models.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.sql.Date;
 import java.util.ArrayList;
 
 @SuppressWarnings("unused")
@@ -25,9 +23,9 @@ public interface Server extends Remote {
 
     void changeDataUser(User vaccinatedUser) throws RemoteException;
 
-    void insertVaccinatedUserInNewHub(User vaccinatedUser)  throws RemoteException;
+    void insertVaccinatedUserInNewHub(User vaccinatedUser) throws RemoteException;
 
-    void changeImageHub(int selectedImage, String hubName) throws RemoteException;
+    void changeImage(int selectedImage, String hubName, String fiscalCode) throws RemoteException;
 
     boolean checkDuplicateNickname(String nick) throws RemoteException;
 
@@ -43,7 +41,7 @@ public interface Server extends Remote {
 
     UserType checkCredential(String email, String pwd) throws RemoteException;
 
-    boolean checkPasswordHub(String hubName, String pwd) throws RemoteException;
+    boolean checkPassword(String hubName, String email, String pwd) throws RemoteException;
 
     Object[] checkIfUserIsVaccinated(String hubName, String fiscalCode) throws RemoteException;
 
@@ -53,9 +51,9 @@ public interface Server extends Remote {
 
     User fetchHubVaccinatedInfo(short UId, String hubName) throws RemoteException;
 
-    void changePwd(String hubName, String newPwd) throws RemoteException;
+    void changePwd(String hubName, String email, String newPwd) throws RemoteException;
 
-    void deleteHub(String hubName) throws RemoteException;
+    void deleteAccount(String hubName, String email) throws RemoteException;
 
     void sendVerifyEmail(String email, String nickname) throws RemoteException;
 
@@ -67,7 +65,7 @@ public interface Server extends Remote {
 
     ArrayList<Hub> fetchAllHub() throws RemoteException;
 
-    ArrayList<AdverseEvent> fetchAllAdverseEvent() throws RemoteException;
+    ArrayList<AdverseEvent> fetchAllAdverseEvent(String hubName) throws RemoteException;
 
     void updateVaccinatedUser(User vaccinatedUser) throws RemoteException;
 
@@ -80,5 +78,4 @@ public interface Server extends Remote {
     User getUser(String email) throws RemoteException;
 
     Hub getHub(String hubName) throws RemoteException;
-
 }

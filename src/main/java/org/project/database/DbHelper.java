@@ -94,17 +94,37 @@ public class DbHelper {
                         "WHERE NOME_CENTRO = ?");
     }
 
-    static PreparedStatement getChangePwd() throws SQLException {
+    static PreparedStatement getChangeImageUser() throws SQLException {
+        return getConnection().prepareStatement(
+                "UPDATE CITTADINO_REGISTRATO " +
+                        "SET IMMAGINE = ? " +
+                        "WHERE CODICE_FISCALE = ?");
+    }
+
+    static PreparedStatement getChangePwdHub() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CENTRO_VACCINALE " +
                         "SET PASSWORD = ? " +
                         "WHERE NOME_CENTRO = ?");
     }
 
+    public static PreparedStatement getChangePwdCitizen() throws SQLException {
+        return getConnection().prepareStatement(
+                "UPDATE CITTADINO_REGISTRATO " +
+                        "SET PASSWORD = ? " +
+                        "WHERE EMAIL = ?");
+    }
+
     static PreparedStatement getDeleteHub() throws SQLException {
         return getConnection().prepareStatement(
                 "DELETE FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?");
+    }
+
+    static PreparedStatement getDeleteUser() throws SQLException {
+        return getConnection().prepareStatement(
+                "DELETE FROM CITTADINO_REGISTRATO " +
+                        "WHERE EMAIL = ?");
     }
 
     static PreparedStatement getCheckIfFirstDose() throws SQLException {
@@ -194,10 +214,18 @@ public class DbHelper {
     }
 
     public static PreparedStatement getHub() throws SQLException {
-         return getConnection().prepareStatement(
-                        "SELECT * " +
-                                "FROM CENTRO_VACCINALE " +
-                                "WHERE NOME_CENTRO = ?"
-                );
+        return getConnection().prepareStatement(
+                "SELECT * " +
+                        "FROM CENTRO_VACCINALE " +
+                        "WHERE NOME_CENTRO = ?"
+        );
+    }
+
+    public static PreparedStatement fetchAllAdverseEvent() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT * " +
+                        "FROM ADVERSE_EVENT " +
+                        "WHERE NOME_CENTRO = ?"
+        );
     }
 }

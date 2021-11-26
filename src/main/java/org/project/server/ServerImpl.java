@@ -2,18 +2,21 @@ package org.project.server;
 
 import org.project.UserType;
 import org.project.database.Statements;
-import org.project.models.*;
+import org.project.models.AdverseEvent;
+import org.project.models.Hub;
+import org.project.models.User;
 import org.project.utils.EmailUtil;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 public class ServerImpl extends UnicastRemoteObject implements Server {
 
@@ -76,9 +79,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized void changeImageHub(int selectedImage, String hubName) throws RemoteException {
+    public synchronized void changeImage(int selectedImage, String hubName, String fiscalCode) throws RemoteException {
         try {
-            Statements.changeImageHub(selectedImage, hubName);
+            Statements.changeImage(selectedImage, hubName, fiscalCode);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -150,9 +153,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized boolean checkPasswordHub(String hubName, String pwd) throws RemoteException {
+    public synchronized boolean checkPassword(String hubName, String email, String pwd) throws RemoteException {
         try {
-            return Statements.checkPasswordHub(hubName, pwd);
+            return Statements.checkPassword(hubName, email, pwd);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -199,18 +202,18 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized void changePwd(String hubName, String newPwd) throws RemoteException {
+    public synchronized void changePwd(String hubName, String email, String newPwd) throws RemoteException {
         try {
-            Statements.changePwd(hubName, newPwd);
+            Statements.changePwd(hubName, email, newPwd);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public synchronized void deleteHub(String hubName) throws RemoteException {
+    public synchronized void deleteAccount(String hubName, String email) throws RemoteException {
         try {
-            Statements.deleteHub(hubName);
+            Statements.deleteAccount(hubName, email);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -286,9 +289,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized ArrayList<AdverseEvent> fetchAllAdverseEvent() throws RemoteException {
+    public synchronized ArrayList<AdverseEvent> fetchAllAdverseEvent(String hubName) throws RemoteException {
         try {
-            return Statements.fetchAllAdverseEvent();
+            return Statements.fetchAllAdverseEvent(hubName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -346,12 +349,12 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-        public Hub getHub(String hubName) throws RemoteException {
-            try {
-                return Statements.getHub(hubName);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return null;
+    public Hub getHub(String hubName) throws RemoteException {
+        try {
+            return Statements.getHub(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
 }
