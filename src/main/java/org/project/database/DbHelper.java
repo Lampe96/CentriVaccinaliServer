@@ -205,6 +205,14 @@ public class DbHelper {
         );
     }
 
+
+    public static PreparedStatement addAdverseEvent() throws SQLException {
+        return getConnection().prepareStatement(
+                "INSERT INTO EVENTO_AVVERSO " +
+                        "(TIPO, NICKNAME, SEVERITA, TESTO, NOME_CENTRO) " +
+                        "VALUES (?, ?, ?, ?, ?)");
+    }
+
     public static PreparedStatement getUser() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
@@ -224,8 +232,16 @@ public class DbHelper {
     public static PreparedStatement fetchAllAdverseEvent() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
-                        "FROM ADVERSE_EVENT " +
+                        "FROM EVENTO_AVVERSO " +
                         "WHERE NOME_CENTRO = ?"
+        );
+    }
+
+    public static PreparedStatement checkIfAdverseEventExist() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT * " +
+                        "FROM EVENTO_AVVERSO " +
+                        "WHERE TIPO = ? AND NICKNAME = ? AND NOME_CENTRO = ?"
         );
     }
 }

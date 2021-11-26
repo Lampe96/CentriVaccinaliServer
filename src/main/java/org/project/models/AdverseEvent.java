@@ -6,20 +6,12 @@ public class AdverseEvent implements Serializable {
 
     private String eventType;
     private String nickname;
-    private int gravity;
+    private Short gravity;
     private String text;
     private String hubName;
 
     public AdverseEvent() {
 
-    }
-
-    public AdverseEvent(String eventType, String nickname, int gravity, String text, String hubName) {
-        this.eventType = eventType;
-        this.nickname = nickname;
-        this.gravity = gravity;
-        this.text = text;
-        this.hubName = hubName;
     }
 
     public String getEventType() {
@@ -38,11 +30,11 @@ public class AdverseEvent implements Serializable {
         this.nickname = nickname;
     }
 
-    public int getGravity() {
+    public Short getGravity() {
         return gravity;
     }
 
-    public void setGravity(int gravity) {
+    public void setGravity(Short gravity) {
         this.gravity = gravity;
     }
 

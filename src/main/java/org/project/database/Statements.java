@@ -68,7 +68,7 @@ public class Statements {
                     "severita SMALLINT NOT NULL," +
                     "testo VARCHAR(256)," +
                     "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON UPDATE CASCADE ON DELETE CASCADE," +
-                    "PRIMARY KEY(tipo, nickname)" +
+                    "PRIMARY KEY(tipo, nickname, nome_centro)" +
                     ");";
 
     public static void initializeDb() throws SQLException {
@@ -483,6 +483,7 @@ public class Statements {
             address.setCap(rsAll.getString(8));
             address.setProvince(rsAll.getString(9));
             hub.setAddress(address);
+            hub.setImage(rsAll.getShort(10));
             allHub.add(hub);
         }
 
@@ -502,13 +503,54 @@ public class Statements {
             adverseEvent = new AdverseEvent();
             adverseEvent.setEventType(rsAll.getString(1));
             adverseEvent.setNickname(rsAll.getString(2));
-            adverseEvent.setGravity(rsAll.getInt(3));
+            adverseEvent.setGravity(rsAll.getShort(3));
             adverseEvent.setText(rsAll.getString(4));
             adverseEvent.setHubName(rsAll.getString(5));
             allAdverseEvent.add(adverseEvent);
         }
 
         return allAdverseEvent;
+    }
+
+    public static float getAvgAdverseEvent(String hubName) throws SQLException {
+        PreparedStatement pStats = DbHelper.getAvgAdverseEvent();
+        pStats.setString(1, hubName);
+
+        ResultSet rs = pStats.executeQuery();
+
+        pStats.closeOnCompletion();
+
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+        return 0;
+    }
+
+    public static boolean addAdverseEvent(AdverseEvent adverseEvent) throws SQLException {
+
+        PreparedStatement pStats = DbHelper.checkIfAdverseEventExist();
+        pStats.setString(1, adverseEvent.getEventType());
+        pStats.setString(2, adverseEvent.getNickname());
+        pStats.setString(3, adverseEvent.getHubName());
+
+        ResultSet rs = pStats.executeQuery();
+        pStats.closeOnCompletion();
+
+        if (!rs.next()) {
+            PreparedStatement pStats1 = DbHelper.addAdverseEvent();
+            pStats1.setString(1, adverseEvent.getEventType());
+            pStats1.setString(2, adverseEvent.getNickname());
+            pStats1.setShort(3, adverseEvent.getGravity());
+            pStats1.setString(4, adverseEvent.getText());
+            pStats1.setString(5, adverseEvent.getHubName());
+
+            pStats1.executeUpdate();
+            pStats1.closeOnCompletion();
+
+            return true;
+        }
+
+        return false;
     }
 
     public static void updateVaccinatedUser(User vaccinatedUser) throws SQLException {
@@ -606,20 +648,6 @@ public class Statements {
         }
 
         return vcn;
-    }
-
-    public static float getAvgAdverseEvent(String hubName) throws SQLException {
-        PreparedStatement pStats = DbHelper.getAvgAdverseEvent();
-        pStats.setString(1, hubName);
-
-        ResultSet rs = pStats.executeQuery();
-
-        pStats.closeOnCompletion();
-
-        if (rs.next()) {
-            return rs.getInt(1);
-        }
-        return 0;
     }
 
     public static User getUser(String email) throws SQLException {

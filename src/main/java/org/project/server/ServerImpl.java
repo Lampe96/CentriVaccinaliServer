@@ -329,13 +329,13 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public ArrayList<AdverseEvent> getAllAdverseEvent() throws RemoteException {
+    public boolean addAdverseEvent(AdverseEvent adverseEvent) throws RemoteException {
         try {
-            return Statements.getAllAdverseEvent();
+           return Statements.addAdverseEvent(adverseEvent);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
 
     @Override
