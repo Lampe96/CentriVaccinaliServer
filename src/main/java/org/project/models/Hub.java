@@ -11,15 +11,6 @@ public class Hub implements Serializable {
     private int image;
 
     public Hub() {
-
-    }
-
-    public Hub(String nameHub, String password, Address address, String type, int image) {
-        this.nameHub = nameHub;
-        this.password = password;
-        this.address = address;
-        this.type = type;
-        this.image = image;
     }
 
     public int getImage() {

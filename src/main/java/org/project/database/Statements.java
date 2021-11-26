@@ -515,12 +515,11 @@ public class Statements {
     public static float getAvgAdverseEvent(String hubName) throws SQLException {
         PreparedStatement pStats = DbHelper.getAvgAdverseEvent();
         pStats.setString(1, hubName);
-
         ResultSet rs = pStats.executeQuery();
-
         pStats.closeOnCompletion();
 
         if (rs.next()) {
+            //todo sistemare float
             return rs.getInt(1);
         }
         return 0;

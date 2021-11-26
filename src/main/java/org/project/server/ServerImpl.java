@@ -60,7 +60,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public void changeDataUser(User vaccinatedUser) throws RemoteException {
+    public synchronized void changeDataUser(User vaccinatedUser) throws RemoteException {
         try {
             Statements.changeDataUser(vaccinatedUser);
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
 
     @Override
-    public void insertVaccinatedUserInNewHub(User vaccinatedUser) throws RemoteException {
+    public synchronized void insertVaccinatedUserInNewHub(User vaccinatedUser) throws RemoteException {
         try {
             Statements.insertVaccinatedUserInNewHub(vaccinatedUser);
         } catch (SQLException e) {
@@ -182,7 +182,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public boolean checkIfHubExist(String hubName) throws RemoteException {
+    public synchronized boolean checkIfHubExist(String hubName) throws RemoteException {
         try {
             return Statements.checkIfHubExist(hubName);
         } catch (SQLException e) {
@@ -309,7 +309,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public int[] getNumberVaccinated(String hubName) throws RemoteException {
+    public synchronized int[] getNumberVaccinated(String hubName) throws RemoteException {
         try {
             return Statements.getNumberVaccinated(hubName);
         } catch (SQLException e) {
@@ -319,7 +319,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public float getAvgAdverseEvent(String hubName) throws RemoteException {
+    public synchronized float getAvgAdverseEvent(String hubName) throws RemoteException {
         try {
             return Statements.getAvgAdverseEvent(hubName);
         } catch (SQLException e) {
@@ -329,9 +329,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public boolean addAdverseEvent(AdverseEvent adverseEvent) throws RemoteException {
+    public synchronized boolean addAdverseEvent(AdverseEvent adverseEvent) throws RemoteException {
         try {
-           return Statements.addAdverseEvent(adverseEvent);
+            return Statements.addAdverseEvent(adverseEvent);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -339,7 +339,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public User getUser(String email) throws RemoteException {
+    public synchronized User getUser(String email) throws RemoteException {
         try {
             return Statements.getUser(email);
         } catch (SQLException e) {
@@ -349,7 +349,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public Hub getHub(String hubName) throws RemoteException {
+    public synchronized Hub getHub(String hubName) throws RemoteException {
         try {
             return Statements.getHub(hubName);
         } catch (SQLException e) {

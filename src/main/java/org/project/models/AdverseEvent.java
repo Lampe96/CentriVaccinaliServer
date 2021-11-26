@@ -11,7 +11,6 @@ public class AdverseEvent implements Serializable {
     private String hubName;
 
     public AdverseEvent() {
-
     }
 
     public String getEventType() {

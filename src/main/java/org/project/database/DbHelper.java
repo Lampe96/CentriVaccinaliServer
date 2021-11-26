@@ -42,89 +42,102 @@ public class DbHelper {
         return getConnection().prepareStatement(
                 "INSERT INTO CITTADINO_REGISTRATO " +
                         "(NICKNAME, EMAIL, NOME, COGNOME, CODICE_FISCALE, PASSWORD) " +
-                        "VALUES (?, ?, ?, ?, ?, ?)");
+                        "VALUES (?, ?, ?, ?, ?, ?)"
+        );
     }
 
     static PreparedStatement insertNewVaccinatedUserNotRegistered() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CITTADINO_REGISTRATO " +
                         "(NOME, COGNOME, CODICE_FISCALE, ID_UNIVOCO, NUMERO_DOSE, NICKNAME) " +
-                        "VALUES (?, ?, ?, ?, ?, ?)");
+                        "VALUES (?, ?, ?, ?, ?, ?)"
+        );
     }
 
     static PreparedStatement getInsertDataHub() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CENTRO_VACCINALE " +
                         "(NOME_CENTRO, TIPOLOGIA, PASSWORD, QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        );
     }
 
     static PreparedStatement getInsertNewVaccinated(String tableName) throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO VACCINATO_" + tableName +
                         "(ID_UNIVOCO, NOME, COGNOME, CODICE_FISCALE, NOME_CENTRO, DATA_VACCINO, TIPO_VACCINO, NUMERO_DOSE) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        );
     }
 
     static PreparedStatement getUpdateIdUser() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO " +
                         "SET ID_UNIVOCO = ?, NUMERO_DOSE = ? " +
-                        "WHERE CODICE_FISCALE = ?");
+                        "WHERE CODICE_FISCALE = ?"
+        );
     }
 
     static PreparedStatement getEmailAndPwdU() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT PASSWORD " +
                         "FROM CITTADINO_REGISTRATO " +
-                        "WHERE EMAIL = ?");
+                        "WHERE EMAIL = ?"
+        );
     }
 
     static PreparedStatement getEmailAndPwdH() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT PASSWORD " +
                         "FROM CENTRO_VACCINALE " +
-                        "WHERE NOME_CENTRO = ?");
+                        "WHERE NOME_CENTRO = ?"
+        );
     }
 
     static PreparedStatement getChangeImageHub() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CENTRO_VACCINALE " +
                         "SET IMMAGINE = ? " +
-                        "WHERE NOME_CENTRO = ?");
+                        "WHERE NOME_CENTRO = ?"
+        );
     }
 
     static PreparedStatement getChangeImageUser() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO " +
                         "SET IMMAGINE = ? " +
-                        "WHERE CODICE_FISCALE = ?");
+                        "WHERE CODICE_FISCALE = ?"
+        );
     }
 
     static PreparedStatement getChangePwdHub() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CENTRO_VACCINALE " +
                         "SET PASSWORD = ? " +
-                        "WHERE NOME_CENTRO = ?");
+                        "WHERE NOME_CENTRO = ?"
+        );
     }
 
     public static PreparedStatement getChangePwdCitizen() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO " +
                         "SET PASSWORD = ? " +
-                        "WHERE EMAIL = ?");
+                        "WHERE EMAIL = ?"
+        );
     }
 
     static PreparedStatement getDeleteHub() throws SQLException {
         return getConnection().prepareStatement(
                 "DELETE FROM CENTRO_VACCINALE " +
-                        "WHERE NOME_CENTRO = ?");
+                        "WHERE NOME_CENTRO = ?"
+        );
     }
 
     static PreparedStatement getDeleteUser() throws SQLException {
         return getConnection().prepareStatement(
                 "DELETE FROM CITTADINO_REGISTRATO " +
-                        "WHERE EMAIL = ?");
+                        "WHERE EMAIL = ?"
+        );
     }
 
     static PreparedStatement getCheckIfFirstDose() throws SQLException {
@@ -210,7 +223,8 @@ public class DbHelper {
         return getConnection().prepareStatement(
                 "INSERT INTO EVENTO_AVVERSO " +
                         "(TIPO, NICKNAME, SEVERITA, TESTO, NOME_CENTRO) " +
-                        "VALUES (?, ?, ?, ?, ?)");
+                        "VALUES (?, ?, ?, ?, ?)"
+        );
     }
 
     public static PreparedStatement getUser() throws SQLException {
