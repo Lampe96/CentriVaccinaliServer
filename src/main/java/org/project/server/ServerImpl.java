@@ -143,9 +143,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized UserType checkCredential(String email, String pwd) throws RemoteException {
+    public synchronized UserType checkCredential(String key, String pwd) throws RemoteException {
         try {
-            return Statements.checkCredential(email, pwd);
+            return Statements.checkCredential(key, pwd);
         } catch (SQLException e) {
             e.printStackTrace();
         }

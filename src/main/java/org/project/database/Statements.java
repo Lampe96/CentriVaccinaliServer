@@ -251,9 +251,9 @@ public class Statements {
         return true;
     }
 
-    public static UserType checkCredential(String email, String pwd) throws SQLException {
+    public static UserType checkCredential(String key, String pwd) throws SQLException {
         PreparedStatement psU = DbHelper.getEmailAndPwdU();
-        psU.setString(1, email);
+        psU.setString(1, key);
         ResultSet rsU = psU.executeQuery();
         psU.closeOnCompletion();
 
@@ -264,7 +264,7 @@ public class Statements {
         }
 
         PreparedStatement psH = DbHelper.getEmailAndPwdH();
-        psH.setString(1, email);
+        psH.setString(1, key);
         ResultSet rsH = psH.executeQuery();
         psH.closeOnCompletion();
 
@@ -367,10 +367,9 @@ public class Statements {
             String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
             PreparedStatement pStats = DbHelper.checkIfUserIsVaccinated(tableName);
             pStats.setString(1, fiscalCode);
-            pStats.executeQuery();
+            ResultSet rs = pStats.executeQuery();
             pStats.closeOnCompletion();
 
-            ResultSet rs = pStats.executeQuery();
             if (rs.next()) {
                 User vu = new User();
                 vu.setId(rs.getShort(1));
