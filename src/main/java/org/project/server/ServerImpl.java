@@ -29,6 +29,10 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         codeTimerTracker = new HashMap<>();
     }
 
+    /**
+     * METODI LATO USER
+     */
+
     @Override
     public synchronized void insertDataUser(User user) throws RemoteException {
         try {
@@ -40,48 +44,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized void insertDataHub(Hub hub) throws RemoteException {
-        try {
-            Statements.insertDataHub(hub);
-            System.out.println("INSERITO NUOVO HUB: " + hub);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public synchronized void insertNewVaccinated(User vaccinatedUser) throws RemoteException {
-        try {
-            Statements.insertNewVaccinated(vaccinatedUser);
-            System.out.println("INSERITO NUOVO VACCINATO: " + vaccinatedUser);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public synchronized void changeDataUser(User vaccinatedUser) throws RemoteException {
         try {
             Statements.changeDataUser(vaccinatedUser);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
-    public synchronized void insertVaccinatedUserInNewHub(User vaccinatedUser) throws RemoteException {
-        try {
-            Statements.insertVaccinatedUserInNewHub(vaccinatedUser);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public synchronized void changeImage(int selectedImage, String hubName, String fiscalCode) throws RemoteException {
-        try {
-            Statements.changeImage(selectedImage, hubName, fiscalCode);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -120,103 +85,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             e.printStackTrace();
         }
         return false;
-    }
-
-    @Override
-    public synchronized boolean checkDuplicateHubName(String name) throws RemoteException {
-        try {
-            return Statements.checkDuplicateHubName(name);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
-    public synchronized boolean checkDuplicateAddress(String address) throws RemoteException {
-        try {
-            return Statements.checkDuplicateAddress(address);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
-    public synchronized UserType checkCredential(String key, String pwd) throws RemoteException {
-        try {
-            return Statements.checkCredential(key, pwd);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public synchronized boolean checkPassword(String hubName, String email, String pwd) throws RemoteException {
-        try {
-            return Statements.checkPassword(hubName, email, pwd);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public synchronized Object[] checkIfUserIsVaccinated(String hubName, String fiscalCode) throws RemoteException {
-        try {
-            return Statements.checkIfUserIsVaccinated(hubName, fiscalCode);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return new Object[]{-1};
-    }
-
-    @Override
-    public synchronized int checkIfFirstDose(String fiscalCode) throws RemoteException {
-        try {
-            return Statements.checkIfFirstDose(fiscalCode);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    @Override
-    public synchronized boolean checkIfHubExist(String hubName) throws RemoteException {
-        try {
-            return Statements.checkIfHubExist(hubName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
-    public synchronized User fetchHubVaccinatedInfo(short idUnivoco, String hubName) throws RemoteException {
-        try {
-            return Statements.fetchHubVaccinatedInfo(idUnivoco, hubName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public synchronized void changePwd(String hubName, String email, String newPwd) throws RemoteException {
-        try {
-            Statements.changePwd(hubName, email, newPwd);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public synchronized void deleteAccount(String hubName, String email) throws RemoteException {
-        try {
-            Statements.deleteAccount(hubName, email);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -269,49 +137,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public synchronized ArrayList<User> fetchHubVaccinatedUser(String hubName) throws RemoteException {
-        try {
-            return Statements.fetchHubVaccinatedUser(hubName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
     public synchronized ArrayList<Hub> fetchAllHub() throws RemoteException {
         try {
             return Statements.fetchAllHub();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public synchronized ArrayList<AdverseEvent> fetchAllAdverseEvent(String hubName) throws RemoteException {
-        try {
-            return Statements.fetchAllAdverseEvent(hubName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-    @Override
-    public synchronized void updateVaccinatedUser(User vaccinatedUser) throws RemoteException {
-        try {
-            Statements.updateVaccinatedUser(vaccinatedUser);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public synchronized int[] getNumberVaccinated(String hubName) throws RemoteException {
-        try {
-            return Statements.getNumberVaccinated(hubName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -339,6 +167,129 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
+    public synchronized Hub getHub(String hubName) throws RemoteException {
+        try {
+            return Statements.getHub(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * METODI LATO HUB
+     */
+
+    @Override
+    public synchronized boolean checkDuplicateAddress(String address) throws RemoteException {
+        try {
+            return Statements.checkDuplicateAddress(address);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized void insertDataHub(Hub hub) throws RemoteException {
+        try {
+            Statements.insertDataHub(hub);
+            System.out.println("INSERITO NUOVO HUB: " + hub);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public synchronized void insertNewVaccinated(User vaccinatedUser) throws RemoteException {
+        try {
+            Statements.insertNewVaccinated(vaccinatedUser);
+            System.out.println("INSERITO NUOVO VACCINATO: " + vaccinatedUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public synchronized void insertVaccinatedUserInNewHub(User vaccinatedUser) throws RemoteException {
+        try {
+            Statements.insertVaccinatedUserInNewHub(vaccinatedUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public synchronized void updateVaccinatedUser(User vaccinatedUser) throws RemoteException {
+        try {
+            Statements.updateVaccinatedUser(vaccinatedUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public synchronized boolean checkDuplicateHubName(String name) throws RemoteException {
+        try {
+            return Statements.checkDuplicateHubName(name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized Object[] checkIfUserIsVaccinated(String hubName, String fiscalCode) throws RemoteException {
+        try {
+            return Statements.checkIfUserIsVaccinated(hubName, fiscalCode);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new Object[]{-1};
+    }
+
+    @Override
+    public synchronized boolean checkIfHubExist(String hubName) throws RemoteException {
+        try {
+            return Statements.checkIfHubExist(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized int checkIfFirstDose(String fiscalCode) throws RemoteException {
+        try {
+            return Statements.checkIfFirstDose(fiscalCode);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    @Override
+    public synchronized ArrayList<User> fetchHubVaccinatedUser(String hubName) throws RemoteException {
+        try {
+            return Statements.fetchHubVaccinatedUser(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public synchronized User fetchHubVaccinatedInfo(short UId, String hubName) throws RemoteException {
+        try {
+            return Statements.fetchHubVaccinatedInfo(UId, hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public synchronized User getUser(String email) throws RemoteException {
         try {
             return Statements.getUser(email);
@@ -348,10 +299,72 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         return null;
     }
 
+
+    /**
+     * METODI CONDIVISI
+     */
+
     @Override
-    public synchronized Hub getHub(String hubName) throws RemoteException {
+    public synchronized void changeImage(int selectedImage, String hubName, String fiscalCode) throws RemoteException {
         try {
-            return Statements.getHub(hubName);
+            Statements.changeImage(selectedImage, hubName, fiscalCode);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public synchronized UserType checkCredential(String key, String pwd) throws RemoteException {
+        try {
+            return Statements.checkCredential(key, pwd);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public synchronized void changePwd(String hubName, String email, String newPwd) throws RemoteException {
+        try {
+            Statements.changePwd(hubName, email, newPwd);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public synchronized boolean checkPassword(String hubName, String email, String pwd) throws RemoteException {
+        try {
+            return Statements.checkPassword(hubName, email, pwd);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized void deleteAccount(String hubName, String email) throws RemoteException {
+        try {
+            Statements.deleteAccount(hubName, email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public synchronized ArrayList<AdverseEvent> fetchAllAdverseEvent(String hubName) throws RemoteException {
+        try {
+            return Statements.fetchAllAdverseEvent(hubName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public synchronized int[] getNumberVaccinated(String hubName) throws RemoteException {
+        try {
+            return Statements.getNumberVaccinated(hubName);
         } catch (SQLException e) {
             e.printStackTrace();
         }

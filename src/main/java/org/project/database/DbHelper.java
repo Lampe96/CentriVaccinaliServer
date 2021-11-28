@@ -38,6 +38,10 @@ public class DbHelper {
         statement = null;
     }
 
+    /**
+     * QUERY LATO USER
+     */
+
     static PreparedStatement getInsertDataUser() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CITTADINO_REGISTRATO " +
@@ -46,19 +50,76 @@ public class DbHelper {
         );
     }
 
-    static PreparedStatement insertNewVaccinatedUserNotRegistered() throws SQLException {
+    static PreparedStatement changeDataUser() throws SQLException {
         return getConnection().prepareStatement(
-                "INSERT INTO CITTADINO_REGISTRATO " +
-                        "(NOME, COGNOME, CODICE_FISCALE, ID_UNIVOCO, NUMERO_DOSE, NICKNAME) " +
-                        "VALUES (?, ?, ?, ?, ?, ?)"
+                "UPDATE CITTADINO_REGISTRATO" +
+                        " SET EMAIL = ?, NICKNAME = ?, PASSWORD = ? " +
+                        "WHERE CODICE_FISCALE = ?"
         );
     }
+
+    public static PreparedStatement getAvgAdverseEvent() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT AVG(SEVERITA) " +
+                        "FROM EVENTO_AVVERSO " +
+                        "WHERE NOME_CENTRO = ?"
+        );
+    }
+
+
+    public static PreparedStatement addAdverseEvent() throws SQLException {
+        return getConnection().prepareStatement(
+                "INSERT INTO EVENTO_AVVERSO " +
+                        "(TIPO, NICKNAME, SEVERITA, TESTO, NOME_CENTRO) " +
+                        "VALUES (?, ?, ?, ?, ?)"
+        );
+    }
+
+    public static PreparedStatement checkIfAdverseEventExist() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT * " +
+                        "FROM EVENTO_AVVERSO " +
+                        "WHERE TIPO = ? AND NICKNAME = ? AND NOME_CENTRO = ?"
+        );
+    }
+
+    public static PreparedStatement getHub() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT * " +
+                        "FROM CENTRO_VACCINALE " +
+                        "WHERE NOME_CENTRO = ?"
+        );
+    }
+
+
+
+
+
+    /**
+     * QUERY LATO HUB
+     */
 
     static PreparedStatement getInsertDataHub() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CENTRO_VACCINALE " +
                         "(NOME_CENTRO, TIPOLOGIA, PASSWORD, QUALIFICATORE, VIA, NUMERO, CITTA, CAP, PROVINCIA) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        );
+    }
+
+    static PreparedStatement getUpdateIdUser() throws SQLException {
+        return getConnection().prepareStatement(
+                "UPDATE CITTADINO_REGISTRATO " +
+                        "SET ID_UNIVOCO = ?, NUMERO_DOSE = ? " +
+                        "WHERE CODICE_FISCALE = ?"
+        );
+    }
+
+    static PreparedStatement checkIfUserExist() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT CODICE_FISCALE " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE CODICE_FISCALE = ?"
         );
     }
 
@@ -70,10 +131,93 @@ public class DbHelper {
         );
     }
 
-    static PreparedStatement getUpdateIdUser() throws SQLException {
+    static PreparedStatement insertNewVaccinatedUserNotRegistered() throws SQLException {
+        return getConnection().prepareStatement(
+                "INSERT INTO CITTADINO_REGISTRATO " +
+                        "(NOME, COGNOME, CODICE_FISCALE, ID_UNIVOCO, NUMERO_DOSE, NICKNAME) " +
+                        "VALUES (?, ?, ?, ?, ?, ?)"
+        );
+    }
+
+    static PreparedStatement updateVaccinatedCitizen() throws SQLException {
+        return getConnection().prepareStatement(
+                "UPDATE CITTADINO_REGISTRATO" +
+                        " SET ID_UNIVOCO = ?, NUMERO_DOSE = ? " +
+                        "WHERE CODICE_FISCALE = ?"
+        );
+    }
+
+    static PreparedStatement updateVaccinatedUser(String tableName) throws SQLException {
+        return getConnection().prepareStatement(
+                "UPDATE VACCINATO_" + tableName +
+                        " SET ID_UNIVOCO = ?, NOME_CENTRO = ?, DATA_VACCINO = ?, TIPO_VACCINO = ?, NUMERO_DOSE = ? " +
+                        "WHERE CODICE_FISCALE = ?"
+        );
+    }
+
+    static PreparedStatement checkIfUserIsVaccinated(String tableName) throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT ID_UNIVOCO, " +
+                        " NOME, " +
+                        "COGNOME " +
+                        "FROM VACCINATO_" + tableName +
+                        " WHERE CODICE_FISCALE = ?"
+        );
+    }
+
+    static PreparedStatement checkIfHubExist() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT NOME_CENTRO " +
+                        "FROM CENTRO_VACCINALE " +
+                        "WHERE NOME_CENTRO = ?"
+        );
+    }
+
+    static PreparedStatement getCheckIfFirstDose() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT ID_UNIVOCO " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE CODICE_FISCALE = ?"
+        );
+    }
+
+    static PreparedStatement getFetchHubVaccinatedInfo(String tableName) throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT NOME_CENTRO," +
+                        "DATA_VACCINO," +
+                        "CODICE_FISCALE," +
+                        "TIPO_VACCINO," +
+                        "NUMERO_DOSE " +
+                        "FROM VACCINATO_" + tableName +
+                        " WHERE ID_UNIVOCO = ?"
+        );
+    }
+
+    public static PreparedStatement getUser() throws SQLException {
+        return getConnection().prepareStatement(
+                "SELECT * " +
+                        "FROM CITTADINO_REGISTRATO " +
+                        "WHERE EMAIL = ?"
+        );
+    }
+
+
+    /**
+     * QUERY CONDIVISE
+     */
+
+    static PreparedStatement getChangeImageHub() throws SQLException {
+        return getConnection().prepareStatement(
+                "UPDATE CENTRO_VACCINALE " +
+                        "SET IMMAGINE = ? " +
+                        "WHERE NOME_CENTRO = ?"
+        );
+    }
+
+    static PreparedStatement getChangeImageUser() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO " +
-                        "SET ID_UNIVOCO = ?, NUMERO_DOSE = ? " +
+                        "SET IMMAGINE = ? " +
                         "WHERE CODICE_FISCALE = ?"
         );
     }
@@ -91,22 +235,6 @@ public class DbHelper {
                 "SELECT PASSWORD " +
                         "FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?"
-        );
-    }
-
-    static PreparedStatement getChangeImageHub() throws SQLException {
-        return getConnection().prepareStatement(
-                "UPDATE CENTRO_VACCINALE " +
-                        "SET IMMAGINE = ? " +
-                        "WHERE NOME_CENTRO = ?"
-        );
-    }
-
-    static PreparedStatement getChangeImageUser() throws SQLException {
-        return getConnection().prepareStatement(
-                "UPDATE CITTADINO_REGISTRATO " +
-                        "SET IMMAGINE = ? " +
-                        "WHERE CODICE_FISCALE = ?"
         );
     }
 
@@ -140,109 +268,6 @@ public class DbHelper {
         );
     }
 
-    static PreparedStatement getCheckIfFirstDose() throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT ID_UNIVOCO " +
-                        "FROM CITTADINO_REGISTRATO " +
-                        "WHERE CODICE_FISCALE = ?"
-        );
-    }
-
-    static PreparedStatement getFetchHubVaccinatedInfo(String tableName) throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT NOME_CENTRO," +
-                        "DATA_VACCINO," +
-                        "CODICE_FISCALE," +
-                        "TIPO_VACCINO," +
-                        "NUMERO_DOSE " +
-                        "FROM VACCINATO_" + tableName +
-                        " WHERE ID_UNIVOCO = ?"
-        );
-    }
-
-    static PreparedStatement updateVaccinatedUser(String tableName) throws SQLException {
-        return getConnection().prepareStatement(
-                "UPDATE VACCINATO_" + tableName +
-                        " SET ID_UNIVOCO = ?, NOME_CENTRO = ?, DATA_VACCINO = ?, TIPO_VACCINO = ?, NUMERO_DOSE = ? " +
-                        "WHERE CODICE_FISCALE = ?"
-        );
-    }
-
-    static PreparedStatement updateVaccinatedCitizen() throws SQLException {
-        return getConnection().prepareStatement(
-                "UPDATE CITTADINO_REGISTRATO" +
-                        " SET ID_UNIVOCO = ?, NUMERO_DOSE = ? " +
-                        "WHERE CODICE_FISCALE = ?"
-        );
-    }
-
-    static PreparedStatement changeDataUser() throws SQLException {
-        return getConnection().prepareStatement(
-                "UPDATE CITTADINO_REGISTRATO" +
-                        " SET EMAIL = ?, NICKNAME = ?, PASSWORD = ? " +
-                        "WHERE CODICE_FISCALE = ?"
-        );
-    }
-
-    static PreparedStatement checkIfHubExist() throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT NOME_CENTRO " +
-                        "FROM CENTRO_VACCINALE " +
-                        "WHERE NOME_CENTRO = ?"
-        );
-    }
-
-    static PreparedStatement checkIfUserIsVaccinated(String tableName) throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT ID_UNIVOCO, " +
-                        " NOME, " +
-                        "COGNOME " +
-                        "FROM VACCINATO_" + tableName +
-                        " WHERE CODICE_FISCALE = ?"
-        );
-    }
-
-    static PreparedStatement checkIfUserExist() throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT CODICE_FISCALE " +
-                        "FROM CITTADINO_REGISTRATO " +
-                        "WHERE CODICE_FISCALE = ?"
-        );
-    }
-
-    public static PreparedStatement getAvgAdverseEvent() throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT AVG(SEVERITA) " +
-                        "FROM EVENTO_AVVERSO " +
-                        "WHERE NOME_CENTRO = ?"
-        );
-    }
-
-
-    public static PreparedStatement addAdverseEvent() throws SQLException {
-        return getConnection().prepareStatement(
-                "INSERT INTO EVENTO_AVVERSO " +
-                        "(TIPO, NICKNAME, SEVERITA, TESTO, NOME_CENTRO) " +
-                        "VALUES (?, ?, ?, ?, ?)"
-        );
-    }
-
-    public static PreparedStatement getUser() throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT * " +
-                        "FROM CITTADINO_REGISTRATO " +
-                        "WHERE EMAIL = ?"
-        );
-    }
-
-    public static PreparedStatement getHub() throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT * " +
-                        "FROM CENTRO_VACCINALE " +
-                        "WHERE NOME_CENTRO = ?"
-        );
-    }
-
     public static PreparedStatement fetchAllAdverseEvent() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
@@ -250,12 +275,62 @@ public class DbHelper {
                         "WHERE NOME_CENTRO = ?"
         );
     }
-
-    public static PreparedStatement checkIfAdverseEventExist() throws SQLException {
-        return getConnection().prepareStatement(
-                "SELECT * " +
-                        "FROM EVENTO_AVVERSO " +
-                        "WHERE TIPO = ? AND NICKNAME = ? AND NOME_CENTRO = ?"
-        );
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

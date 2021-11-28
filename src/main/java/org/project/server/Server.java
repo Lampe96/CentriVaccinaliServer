@@ -15,7 +15,9 @@ public interface Server extends Remote {
     String NAME = "SERVER";
     int PORT = 8000;
 
-    //METODI LATO USER
+    /**
+     * METODI LATO USER
+     */
 
     void insertDataUser(User user) throws RemoteException;
 
@@ -44,7 +46,11 @@ public interface Server extends Remote {
     Hub getHub(String hubName) throws RemoteException;
 
 
-    //METODI LATO HUB
+    /**
+     * METODI LATO HUB
+     */
+
+    boolean checkDuplicateAddress(String address) throws RemoteException;
 
     void insertDataHub(Hub hub) throws RemoteException;
 
@@ -52,26 +58,26 @@ public interface Server extends Remote {
 
     void insertVaccinatedUserInNewHub(User vaccinatedUser) throws RemoteException;
 
-    boolean checkDuplicateHubName(String name) throws RemoteException;
+    void updateVaccinatedUser(User vaccinatedUser) throws RemoteException;
 
-    boolean checkDuplicateAddress(String address) throws RemoteException;
+    boolean checkDuplicateHubName(String name) throws RemoteException;
 
     Object[] checkIfUserIsVaccinated(String hubName, String fiscalCode) throws RemoteException;
 
-    int checkIfFirstDose(String fiscalCode) throws RemoteException;
-
     boolean checkIfHubExist(String hubName) throws RemoteException;
 
-    User fetchHubVaccinatedInfo(short UId, String hubName) throws RemoteException;
+    int checkIfFirstDose(String fiscalCode) throws RemoteException;
 
     ArrayList<User> fetchHubVaccinatedUser(String hubName) throws RemoteException;
 
-    void updateVaccinatedUser(User vaccinatedUser) throws RemoteException;
+    User fetchHubVaccinatedInfo(short UId, String hubName) throws RemoteException;
 
     User getUser(String email) throws RemoteException;
 
 
-    //METODI CONDIVISI
+    /**
+     * METODI CONDIVISI
+     */
 
     void changeImage(int selectedImage, String hubName, String fiscalCode) throws RemoteException;
 
