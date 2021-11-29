@@ -157,6 +157,16 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
+    public boolean checkBeforeAddEvent(String hubName, String fiscalCode) throws RemoteException {
+        try {
+            return Statements.checkBeforeAddEvent(hubName, fiscalCode);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public synchronized boolean addAdverseEvent(AdverseEvent adverseEvent) throws RemoteException {
         try {
             return Statements.addAdverseEvent(adverseEvent);

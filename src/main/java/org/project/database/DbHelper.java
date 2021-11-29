@@ -66,6 +66,13 @@ public class DbHelper {
         );
     }
 
+    public static PreparedStatement checkBeforeAddEvent(String tableName) throws SQLException{
+        return getConnection().prepareStatement(
+                "SELECT CODICE_FISCALE " +
+                        "FROM VACCINATO_" + tableName +
+                        " WHERE CODICE_FISCALE = ?"
+        );
+    }
 
     public static PreparedStatement addAdverseEvent() throws SQLException {
         return getConnection().prepareStatement(

@@ -41,6 +41,8 @@ public interface Server extends Remote {
 
     float getAvgAdverseEvent(String hubName) throws RemoteException;
 
+    boolean checkBeforeAddEvent(String hubName, String fiscalCode) throws RemoteException;
+
     boolean addAdverseEvent(AdverseEvent adverseEvent) throws RemoteException;
 
     Hub getHub(String hubName) throws RemoteException;

@@ -18,10 +18,6 @@ import java.util.Locale;
 public class Statements {
 
     /**
-     * Classe dedicata a tutte le query utilizzate per lavorare sul DB.
-     */
-
-    /**
      * CREAZIONE TABELLE
      */
 
@@ -201,8 +197,17 @@ public class Statements {
         return 0;
     }
 
-    public static boolean addAdverseEvent(AdverseEvent adverseEvent) throws SQLException {
+    public static boolean checkBeforeAddEvent(String hubName, String fiscalCode) throws SQLException {
+        String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+        PreparedStatement pStats = DbHelper.checkBeforeAddEvent(tableName);
+        pStats.setString(1, fiscalCode);
+        ResultSet rs = pStats.executeQuery();
+        pStats.closeOnCompletion();
 
+        return rs.next();
+    }
+
+    public static boolean addAdverseEvent(AdverseEvent adverseEvent) throws SQLException {
         PreparedStatement pStats = DbHelper.checkIfAdverseEventExist();
         pStats.setString(1, adverseEvent.getEventType());
         pStats.setString(2, adverseEvent.getNickname());
@@ -714,8 +719,4 @@ public class Statements {
 
         return vcn;
     }
-
-
-
-
 }
