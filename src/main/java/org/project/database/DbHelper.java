@@ -38,6 +38,7 @@ public class DbHelper {
         statement = null;
     }
 
+
     /**
      * QUERY LATO USER
      */
@@ -58,7 +59,7 @@ public class DbHelper {
         );
     }
 
-    public static PreparedStatement getAvgAdverseEvent() throws SQLException {
+    static PreparedStatement getAvgAdverseEvent() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT AVG(SEVERITA) " +
                         "FROM EVENTO_AVVERSO " +
@@ -66,7 +67,7 @@ public class DbHelper {
         );
     }
 
-    public static PreparedStatement checkBeforeAddEvent(String tableName) throws SQLException{
+    static PreparedStatement checkBeforeAddEvent(String tableName) throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT CODICE_FISCALE " +
                         "FROM VACCINATO_" + tableName +
@@ -74,7 +75,7 @@ public class DbHelper {
         );
     }
 
-    public static PreparedStatement addAdverseEvent() throws SQLException {
+    static PreparedStatement addAdverseEvent() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO EVENTO_AVVERSO " +
                         "(TIPO, NICKNAME, SEVERITA, TESTO, NOME_CENTRO) " +
@@ -82,7 +83,7 @@ public class DbHelper {
         );
     }
 
-    public static PreparedStatement checkIfAdverseEventExist() throws SQLException {
+    static PreparedStatement checkIfAdverseEventExist() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
                         "FROM EVENTO_AVVERSO " +
@@ -90,16 +91,13 @@ public class DbHelper {
         );
     }
 
-    public static PreparedStatement getHub() throws SQLException {
+    static PreparedStatement getHub() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
                         "FROM CENTRO_VACCINALE " +
                         "WHERE NOME_CENTRO = ?"
         );
     }
-
-
-
 
 
     /**
@@ -200,7 +198,7 @@ public class DbHelper {
         );
     }
 
-    public static PreparedStatement getUser() throws SQLException {
+    static PreparedStatement getUser() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
                         "FROM CITTADINO_REGISTRATO " +
@@ -253,7 +251,7 @@ public class DbHelper {
         );
     }
 
-    public static PreparedStatement getChangePwdCitizen() throws SQLException {
+    static PreparedStatement getChangePwdCitizen() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO " +
                         "SET PASSWORD = ? " +
@@ -275,7 +273,7 @@ public class DbHelper {
         );
     }
 
-    public static PreparedStatement fetchAllAdverseEvent() throws SQLException {
+    static PreparedStatement fetchAllAdverseEvent() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
                         "FROM EVENTO_AVVERSO " +
@@ -283,61 +281,3 @@ public class DbHelper {
         );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

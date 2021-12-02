@@ -123,7 +123,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
             }
             return codeOk;
         }
-
         return false;
     }
 
@@ -157,7 +156,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     @Override
-    public boolean checkBeforeAddEvent(String hubName, String fiscalCode) throws RemoteException {
+    public synchronized boolean checkBeforeAddEvent(String hubName, String fiscalCode) throws RemoteException {
         try {
             return Statements.checkBeforeAddEvent(hubName, fiscalCode);
         } catch (SQLException e) {

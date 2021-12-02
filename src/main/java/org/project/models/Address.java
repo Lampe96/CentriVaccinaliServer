@@ -14,15 +14,6 @@ public class Address implements Serializable {
     public Address() {
     }
 
-    public Address(String qualificator, String address, String number, String city, String cap, String province) {
-        this.qualificator = qualificator;
-        this.address = address;
-        this.number = number;
-        this.city = city;
-        this.cap = cap;
-        this.province = province;
-    }
-
     public String getQualificator() {
         return qualificator;
     }

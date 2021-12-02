@@ -81,9 +81,11 @@ public class Statements {
         );
     }
 
+
     /**
      * METODI LATO USER
      */
+
     public static void insertDataUser(@NotNull User user) throws SQLException {
         PreparedStatement pStat = DbHelper.getInsertDataUser();
         pStat.setString(1, user.getNickname());
@@ -191,8 +193,7 @@ public class Statements {
         pStats.closeOnCompletion();
 
         if (rs.next()) {
-            //todo sistemare float
-            return rs.getInt(1);
+            return rs.getFloat(1);
         }
         return 0;
     }
@@ -538,6 +539,7 @@ public class Statements {
             us.setFiscalCode(rs.getString(5));
             us.setId(rs.getShort(7));
             us.setDose(rs.getShort(8));
+            us.setImage(rs.getShort(9));
             return us;
         }
         return null;
