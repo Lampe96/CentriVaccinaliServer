@@ -12,21 +12,31 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ServerImpl extends UnicastRemoteObject implements Server {
 
     private final HashMap<String, Integer> codeTracker;
     private final HashMap<String, Timer> codeTimerTracker;
+    private int[] numberVaccinated;
 
     protected ServerImpl() throws RemoteException {
         super();
         codeTracker = new HashMap<>();
         codeTimerTracker = new HashMap<>();
+        numberVaccinated = new int[3];
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    numberVaccinated = Arrays.copyOf(Statements.getNumberVaccinated(), 3);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 0, 1000*20);
     }
 
     /**
@@ -373,7 +383,13 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     @Override
     public synchronized int[] getNumberVaccinated(String hubName) throws RemoteException {
         try {
-            return Statements.getNumberVaccinated(hubName);
+            if (hubName.equals("CITTADINO")) {
+                return numberVaccinated;
+            } else {
+                int[] nv = Arrays.copyOf(numberVaccinated, 4);
+                nv[3] = Statements.getHubVaccinated(hubName);
+                return nv;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

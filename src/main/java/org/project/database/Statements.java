@@ -666,22 +666,8 @@ public class Statements {
         return allAdverseEvent;
     }
 
-    public static int[] getNumberVaccinated(String hubName) throws SQLException {
-        int[] vcn = new int[4];
-        if (!hubName.equals("CITTADINO")) {
-            String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
-
-            ResultSet rsAllHub = DbHelper.getStatement().executeQuery(
-                    "SELECT COUNT(*) " +
-                            "FROM VACCINATO_" + tableName
-            );
-
-            if (rsAllHub.next()) {
-                vcn[3] = rsAllHub.getInt(1);
-            } else {
-                vcn[3] = 0;
-            }
-        }
+    public static int[] getNumberVaccinated() throws SQLException {
+        int[] vcn = new int[3];
 
         ResultSet rsAll = DbHelper.getStatement().executeQuery(
                 "SELECT COUNT(ID_UNIVOCO) " +
@@ -691,8 +677,6 @@ public class Statements {
 
         if (rsAll.next()) {
             vcn[0] = rsAll.getInt(1);
-        } else {
-            vcn[0] = 0;
         }
 
         ResultSet rsDose1 = DbHelper.getStatement().executeQuery(
@@ -703,8 +687,6 @@ public class Statements {
 
         if (rsDose1.next()) {
             vcn[1] = rsDose1.getInt(1);
-        } else {
-            vcn[1] = 0;
         }
 
         ResultSet rsDose2 = DbHelper.getStatement().executeQuery(
@@ -715,10 +697,23 @@ public class Statements {
 
         if (rsDose2.next()) {
             vcn[2] = rsDose2.getInt(1);
-        } else {
-            vcn[2] = 0;
         }
 
         return vcn;
+    }
+
+    public static int getHubVaccinated(String hubName) throws SQLException {
+
+            String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+
+            ResultSet rsAllHub = DbHelper.getStatement().executeQuery(
+                    "SELECT COUNT(*) " +
+                            "FROM VACCINATO_" + tableName
+            );
+
+            if (rsAllHub.next()) {
+               return rsAllHub.getInt(1);
+        }
+            return 0;
     }
 }
