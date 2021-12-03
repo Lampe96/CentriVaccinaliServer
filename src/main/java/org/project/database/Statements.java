@@ -18,7 +18,7 @@ import java.util.Locale;
 /**
  * Questa classe contiene tutti i metodi utilizzati dal client,
  * i quali vanno a lavorare sul DB. In diversi
- * metodi verranno utilizzati metodi presenti nella classe {@Link DbHelper}
+ * metodi verranno utilizzati metodi presenti nella classe {@link DbHelper}
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico  739893 (VA)
@@ -229,7 +229,7 @@ public class Statements {
     /**
      * Vengono scaricati da DB tutti i centri vaccinali presenti e,
      * tramite un while, vengono inseriti in una lista di centri uno per uno.
-     * La creazione avviene tramite il metodo {@Link #createHub}
+     * La creazione avviene tramite il metodo {@link #createHub}
      *
      * @return un array contenente tutti i centri vaccinali
      * presenti nel DB
@@ -346,7 +346,7 @@ public class Statements {
     /**
      * Utilizzato per prendere tutti i dati di un hub in fase
      * di apertura della riga presente nella home dei cittadini.
-     * Utilizza il metodo {@Link #createHub} per la creazione del centro vaccinale
+     * Utilizza il metodo {@link #createHub} per la creazione del centro vaccinale
      *
      * @param hubName nome del centro vaccinale
      * @return un centro vaccinale se esiste, null in caso contrario
@@ -370,7 +370,7 @@ public class Statements {
     }
 
     /**
-     * Viene chiamato da {@Link #getHub} e {@Link #fetchAllHub},
+     * Viene chiamato da {@link #getHub} e {@link #fetchAllHub},
      * utilizzato per creare l'oggetto che verra' poi restituito
      *
      * @param rs      contiene tutti i campi del centro prelevati dal DB
@@ -442,13 +442,13 @@ public class Statements {
     }
 
     /**
-     * Tramite il metodo {@Link #checkIfUserExist} viene controllato se il
+     * Tramite il metodo {@link #checkIfUserExist} viene controllato se il
      * cittadino è gia' registrato. Nel caso in cui il cittadino sia gia' registrato
      * viene inserito nella tabella di riferimento del centro tramite
-     * {@Link #insertVaccinatedTableVaccinatedHospital}. In caso contrario viene prima inserito
-     * nella tabella dei cittadini registrati, tramite {@Link #insertCitizenNotRegistered} e
+     * {@link #insertVaccinatedTableVaccinatedHospital}. In caso contrario viene prima inserito
+     * nella tabella dei cittadini registrati, tramite {@l #insertCitizenNotRegistered} e
      * successivamente nella tabella di riferimento del centro tramite
-     * {@Link #insertVaccinatedTableVaccinatedHospital}. Questo avviene per rispettare i vincoli
+     * {@link #insertVaccinatedTableVaccinatedHospital}. Questo avviene per rispettare i vincoli
      * delle tabelle
      *
      * @param vaccinatedUser contiene tutti i dati del cittadino da inserire nel DB
@@ -477,7 +477,7 @@ public class Statements {
     }
 
     /**
-     * Utilizzato in {@Link #checkIfFirstDose} e {@Link #insertNewVaccinated},
+     * Utilizzato in {@link #checkIfFirstDose} e {@link #insertNewVaccinated},
      * verifica se il cittadino e già registrato nel DB o meno.
      *
      * @param fiscalCode codice fiscale da controllare
@@ -495,7 +495,7 @@ public class Statements {
     }
 
     /**
-     * Utilizzato in {@Link #insertNewVaccinated} e {@Link #insertVaccinatedUserInNewHub},
+     * Utilizzato in {@link #insertNewVaccinated} e {@link #insertVaccinatedUserInNewHub},
      * effettua l'operazione di inserimento del vaccinato nella corretta tabella.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
@@ -516,7 +516,7 @@ public class Statements {
     }
 
     /**
-     * Utilizzato in {@Link #insertNewVaccinated}, inserisce nella tabella dei
+     * Utilizzato in {@link #insertNewVaccinated}, inserisce nella tabella dei
      * cittadini i dati inseriti dagli operatori sanitari in fase di vaccinazione.
      * Nel caso in cui il cittadino in questione voglia registrarsi al programma, potra'
      * accedere ai dati precedentemente inseriti dall'operatore sanitario.
@@ -537,8 +537,8 @@ public class Statements {
     }
 
     /**
-     * Si avvale dei metodi {@Link #insertVaccinatedTableVaccinatedHospital} e
-     * {@Link #updateCitizen}. Si occupa della registrazione dei cittadini
+     * Si avvale dei metodi {@link #insertVaccinatedTableVaccinatedHospital} e
+     * {@link #updateCitizen}. Si occupa della registrazione dei cittadini
      * precedentemente vaccinati in un altro centro vaccinale
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
@@ -550,7 +550,7 @@ public class Statements {
     }
 
     /**
-     * Utilizzato in {@Link #insertVaccinatedUserInNewHub} e {@Link #updateVaccinatedUser},
+     * Utilizzato in {@link #insertVaccinatedUserInNewHub} e {@link #updateVaccinatedUser},
      * viene utilizzato per aggiornare il numero della dose e l'id univoco nel DB
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
@@ -567,7 +567,7 @@ public class Statements {
     }
 
     /**
-     * Utilizza {@Link #updateCitizen} per aggiornare la tabella dei cittadini registrati,
+     * Utilizza {@link #updateCitizen} per aggiornare la tabella dei cittadini registrati,
      * dopo aver aggiornato la tabella dei vaccinati
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
@@ -611,7 +611,7 @@ public class Statements {
     }
 
     /**
-     * Utilizza il metodo {@Link #checkIfHubExist} per verificare se il centro vaccinale
+     * Utilizza il metodo {@link #checkIfHubExist} per verificare se il centro vaccinale
      * esiste nel DB, successivamente si effettua il controllo per verificare se l'utente e' gia'
      * vaccinato. In caso positivo, verra' restituito un array di Object con il cittadino all'interno
      *
@@ -645,7 +645,7 @@ public class Statements {
     }
 
     /**
-     * Viene utilizzato in {@Link #checkIfUserIsVaccinated}, controlla se il centro
+     * Viene utilizzato in {@link #checkIfUserIsVaccinated}, controlla se il centro
      * vaccinale passato come parametro esiste nel DB
      *
      * @param hubName nome del centro
@@ -663,7 +663,7 @@ public class Statements {
     }
 
     /**
-     * Si avvale del metodo {@Link #checkIfUserExist} per verificar se il cittadino
+     * Si avvale del metodo {@link #checkIfUserExist} per verificar se il cittadino
      * e' gia' registrato. In caso affermativo si verifica che sia effettivamente la prima volta
      * che viene vaccinato, in caso contrario deve esser utilizzato un altro metodo.
      *

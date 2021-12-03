@@ -17,8 +17,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Contiene l'implementazione dei metodi dichiarati nell'interfaccia
- * {@Link Server} qui i vari metodi vanno ad utilizzare
- * i metodi di {@Link Statements} per svolgere le loro funzioni
+ * {@link Server} qui i vari metodi vanno ad utilizzare
+ * i metodi di {@link Statements} per svolgere le loro funzioni
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)
@@ -158,7 +158,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     /**
      * @param email    email
      * @param nickname nickname
-     * @throws RemoteException
+     * @throws RemoteException RemoteException
      */
     @Override
     public synchronized void sendVerifyEmail(String email, String nickname) throws RemoteException {
@@ -187,7 +187,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      * @param email email
      * @param code  codice di verifica
      * @return
-     * @throws RemoteException
+     * @throws RemoteException RemoteException
      */
     @Override
     public synchronized boolean verifyCodeEmail(String email, int code) throws RemoteException {
@@ -207,7 +207,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * @param email email
-     * @throws RemoteException
+     * @throws RemoteException RemoteException
      */
     @Override
     public synchronized void deleteReferenceVerifyEmail(String email) throws RemoteException {
@@ -375,7 +375,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * per aggiornare la tabella dei cittadini registrati
+     * Per aggiornare la tabella dei cittadini registrati
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
      * @throws RemoteException RemoteException
