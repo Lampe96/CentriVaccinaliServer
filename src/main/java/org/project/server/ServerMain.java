@@ -8,8 +8,25 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.SQLException;
 
+/**
+ * In questa classe e' contenuto il main del server
+ *
+ * @author Federico Mainini 740691 (VA)
+ * @author Gianluca Latronico 739893 (VA)
+ * @author Marc Alexander Orlando 741473 (VA)
+ * @author Enrico Luigi Lamperti 740612 (VA)
+ */
 public class ServerMain {
 
+    /**
+     * Nel main del server viene creato l'oggetto server per poi, essere
+     * messo a disposizione dei client attraverso il registro RMI.
+     * Altre funzioni sono quelle di: inizializzare il DB creando le tabelle
+     * vuote necessarie e inserendo un Thread che rileva quando il programma viene
+     * fermato chiudendo tutte le connessioni aperte.
+     *
+     * @param args args
+     */
     public static void main(String[] args) {
         try {
             ServerImpl server = new ServerImpl();
@@ -39,15 +56,5 @@ public class ServerMain {
             e.printStackTrace();
             System.exit(-1);
         }
-
-        /*try {
-            EmailUtil.sendVerifyEmail("fedemai22@gmail.com", "Fede", 999999);
-            //EmailUtil.sendVerifyEmail("kuka621@gmail.com", "Kuka", 999999);
-            //EmailUtil.sendVerifyEmail("lampe96@hotmail.it", "Lampe96", 999999);
-            //EmailUtil.sendVerifyEmail("melania.lazzarin98@libero.it", "Mela" 999999);
-            //EmailUtil.sendVerifyEmail("lampefede92@gmail.com", "Lampe", 999999);
-        } catch (MessagingException | IOException e) {
-            e.printStackTrace();
-        }*/
     }
 }

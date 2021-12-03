@@ -2,13 +2,41 @@ package org.project.database;
 
 import java.sql.*;
 
+/**
+ * Classe utilizzata per stabilire la connessione con il DB
+ * e per effettuare le query pre-compilate
+ *
+ * @author Federico Mainini 740691 (VA)
+ * @author Gianluca Latronico 739893 (VA)
+ * @author Marc Alexander Orlando 741473 (VA)
+ * @author Enrico Luigi Lamperti 740612 (VA)
+ */
+
 public class DbHelper {
 
+    /**
+     * Protocollo utilizzato per accedere al DB
+     */
     private final static String PROTOCOL = "jdbc:postgresql://";
+    /**
+     * Host del DB
+     */
     private final static String HOST = "localhost/";
+    /**
+     * Nome del database
+     */
     private final static String RESOURCE = "ProgettoCentriVaccinali";
+    /**
+     * Url per connessione composto da protocollo + host + risorsa
+     */
     private final static String URL = PROTOCOL + HOST + RESOURCE;
+    /**
+     * Username del database
+     */
     private final static String USERNAME = "postgres";
+    /**
+     * Password del database
+     */
     private final static String PASSWORD = "ProgettoLabB";
 
     private static Connection connection = null;
@@ -39,10 +67,14 @@ public class DbHelper {
     }
 
 
-    /**
-     * QUERY LATO USER
-     */
+    //QUERY LATO USER
 
+    /**
+     * Viene utilizzata per inserire i cittadini
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getInsertDataUser() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CITTADINO_REGISTRATO " +
@@ -51,6 +83,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Va a modificare la tupla corrispondente al codice fiscale inserito
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement changeDataUser() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO" +
@@ -59,6 +97,13 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Utilizzato per calcolare la media degli eventi avversi di un certo
+     * evento
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getAvgAdverseEvent() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT AVG(SEVERITA) " +
@@ -67,6 +112,14 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Seleziona la tupla dove il codice fiscale e' uguale a
+     * quello inserito
+     *
+     * @param tableName nome del centro
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement checkBeforeAddEvent(String tableName) throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT CODICE_FISCALE " +
@@ -75,6 +128,13 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Inserisce un nuovo evento avverso creando la tupla con tutti i
+     * campi passati
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement addAdverseEvent() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO EVENTO_AVVERSO " +
@@ -83,6 +143,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Seleziona le eventuali tuple corrispondenti alla ricerca effettuata
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement checkIfAdverseEventExist() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
@@ -91,6 +157,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Seleziona il centro vaccinale indicato
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getHub() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
@@ -100,10 +172,15 @@ public class DbHelper {
     }
 
 
-    /**
-     * QUERY LATO HUB
-     */
+    //QUERY LATO HUB
 
+    /**
+     * Inserisce nella tabella dei centri vaccinali il centro
+     * passato
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getInsertDataHub() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CENTRO_VACCINALE " +
@@ -112,6 +189,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Aggiorna il cittadino con i dati passati
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getUpdateIdUser() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO " +
@@ -120,6 +203,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Seleziona la tupla con il cittadino identificato col codice fiscale
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement checkIfUserExist() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT CODICE_FISCALE " +
@@ -128,6 +217,14 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Inserisce nella tabella dei vaccinati riferita al centro
+     * specifico i dati passati
+     *
+     * @param tableName nome del centro
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getInsertNewVaccinated(String tableName) throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO VACCINATO_" + tableName +
@@ -136,6 +233,13 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Inserisce nella tabella dei cittadini un nuovo vaccinato non
+     * ancora registrato nel DB
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement insertNewVaccinatedUserNotRegistered() throws SQLException {
         return getConnection().prepareStatement(
                 "INSERT INTO CITTADINO_REGISTRATO " +
@@ -144,6 +248,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Aggiorna il cittadino registrato con una nuova dose e id univoco
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement updateVaccinatedCitizen() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO" +
@@ -152,6 +262,14 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Aggiorna la tabella dei vaccinati riferita al centro in questione
+     *
+     *
+     * @param tableName nome del centro
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement updateVaccinatedUser(String tableName) throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE VACCINATO_" + tableName +
@@ -160,6 +278,14 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Seleziona l'eventuale tupla corrispondente al cittadino ricercato,
+     * per verificare se egli ha effettuato la vaccinazione
+     *
+     * @param tableName nome del centro
+     * @return  restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement checkIfUserIsVaccinated(String tableName) throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT ID_UNIVOCO, " +
@@ -170,6 +296,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Seleziona la tupla riferita al centro vaccinale
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement checkIfHubExist() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT NOME_CENTRO " +
@@ -178,6 +310,13 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Restituisce la tupla con l'id univoco, per verificare se il cittadino
+     * ha effettuato almeno una dose
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getCheckIfFirstDose() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT ID_UNIVOCO " +
@@ -186,6 +325,13 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Restituisce la tupla con le info del cittadino vaccinato cercato
+     *
+     * @param tableName nome centro
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getFetchHubVaccinatedInfo(String tableName) throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT NOME_CENTRO," +
@@ -198,6 +344,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Restituisce la tupla con tutti i dati del cittadino cercato
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getUser() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
@@ -207,10 +359,14 @@ public class DbHelper {
     }
 
 
-    /**
-     * QUERY CONDIVISE
-     */
+    //QUERY CONDIVISE
 
+    /**
+     * Aggiorna l'immagine del centro vaccinale con la nuova passata
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getChangeImageHub() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CENTRO_VACCINALE " +
@@ -219,6 +375,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Aggiorna l'immagine del cittadino con la nuova passata
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getChangeImageUser() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO " +
@@ -227,6 +389,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Restituisce la tupla con la password del cittadino selezionato
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getEmailAndPwdU() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT PASSWORD " +
@@ -235,6 +403,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Restituisce la tupla con la password del centro vaccinale selezionato
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getEmailAndPwdH() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT PASSWORD " +
@@ -243,6 +417,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Aggiorna la password del centro vaccinale selezionato
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getChangePwdHub() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CENTRO_VACCINALE " +
@@ -251,6 +431,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Aggiorna la password del cittadino selezionato
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getChangePwdCitizen() throws SQLException {
         return getConnection().prepareStatement(
                 "UPDATE CITTADINO_REGISTRATO " +
@@ -259,6 +445,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Elimina il centro vaccinale indicato
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getDeleteHub() throws SQLException {
         return getConnection().prepareStatement(
                 "DELETE FROM CENTRO_VACCINALE " +
@@ -266,6 +458,12 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Elimina il cittadino indicato
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement getDeleteUser() throws SQLException {
         return getConnection().prepareStatement(
                 "DELETE FROM CITTADINO_REGISTRATO " +
@@ -273,6 +471,13 @@ public class DbHelper {
         );
     }
 
+    /**
+     * Restituisce la tabella con tutti gli eventi avversi riferiti a
+     * quel centro
+     *
+     * @return restituisce una preparedStatement impostata come indicato
+     * @throws SQLException SQLException
+     */
     static PreparedStatement fetchAllAdverseEvent() throws SQLException {
         return getConnection().prepareStatement(
                 "SELECT * " +
