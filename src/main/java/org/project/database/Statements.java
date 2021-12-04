@@ -446,7 +446,7 @@ public class Statements {
      * cittadino è gia' registrato. Nel caso in cui il cittadino sia gia' registrato
      * viene inserito nella tabella di riferimento del centro tramite
      * {@link #insertVaccinatedTableVaccinatedHospital}. In caso contrario viene prima inserito
-     * nella tabella dei cittadini registrati, tramite {@l #insertCitizenNotRegistered} e
+     * nella tabella dei cittadini registrati, tramite {@link #insertCitizenNotRegistered} e
      * successivamente nella tabella di riferimento del centro tramite
      * {@link #insertVaccinatedTableVaccinatedHospital}. Questo avviene per rispettare i vincoli
      * delle tabelle
@@ -590,7 +590,7 @@ public class Statements {
 
     /**
      * Utilizzato per controllare se esiste gia' un centro vaccinale registrato
-     * con questa nome
+     * con questo nome
      *
      * @param name nome del centro vaccinale
      * @return true se il nome &egrave; disponibile, false in caso contrario
@@ -993,7 +993,7 @@ public class Statements {
      * @return restuisce un array di 3 posizioni con, in prima posizione
      * il numero totale di vaccinati; in seconda il numero di vaccinati con una sola
      * dose; in terza il numero di vaccinati con due dosi
-     * @throws SQLException
+     * @throws SQLException SQLException
      */
     public static int[] getNumberVaccinated() throws SQLException {
         int[] vcn = new int[3];

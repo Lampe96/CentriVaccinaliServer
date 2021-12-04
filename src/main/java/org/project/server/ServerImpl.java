@@ -539,7 +539,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Controlla se le credenziali inserite in fase di login sono corrette,
-     * ndando a confrontarle con quelle presenti nel DB
+     * andando a confrontarle con quelle presenti nel DB
      *
      * @param key chiave per accedere alla tabella, puo' essere o il nome del
      *            centro vaccinale o il codice fiscale del cittadino
