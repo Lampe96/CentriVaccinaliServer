@@ -38,10 +38,22 @@ public class DbHelper {
      * Password del database
      */
     private final static String PASSWORD = "ProgettoLabB";
-
+    /**
+     * Connessione con il database
+     */
     private static Connection connection = null;
+    /**
+     * Statement aperto sul database
+     */
     private static Statement statement = null;
 
+    /**
+     * Utilizzato per stabilire la connessione con il database
+     * attraverso JDBC e driver necessari
+     *
+     * @return conessione con il database
+     * @throws SQLException SQLException
+     */
     private static Connection getConnection() throws SQLException {
         if (connection == null) {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -49,11 +61,22 @@ public class DbHelper {
         return connection;
     }
 
+    /**
+     * Utilizzato per chiudere la connessione al database
+     *
+     * @throws SQLException SQLException
+     */
     public static void closeConnection() throws SQLException {
         connection.close();
         connection = null;
     }
 
+    /**
+     * Utilizzato per aprire uno statement sul database
+     *
+     * @return statement
+     * @throws SQLException SQLException
+     */
     static Statement getStatement() throws SQLException {
         if (statement == null) {
             statement = getConnection().createStatement();
@@ -61,6 +84,11 @@ public class DbHelper {
         return statement;
     }
 
+    /**
+     * Utilizzato per chiudere lo statement
+     *
+     * @throws SQLException SQLException
+     */
     public static void closeStatement() throws SQLException {
         statement.close();
         statement = null;
@@ -265,7 +293,6 @@ public class DbHelper {
     /**
      * Aggiorna la tabella dei vaccinati riferita al centro in questione
      *
-     *
      * @param tableName nome del centro
      * @return restituisce una preparedStatement impostata come indicato
      * @throws SQLException SQLException
@@ -283,7 +310,7 @@ public class DbHelper {
      * per verificare se egli ha effettuato la vaccinazione
      *
      * @param tableName nome del centro
-     * @return  restituisce una preparedStatement impostata come indicato
+     * @return restituisce una preparedStatement impostata come indicato
      * @throws SQLException SQLException
      */
     static PreparedStatement checkIfUserIsVaccinated(String tableName) throws SQLException {

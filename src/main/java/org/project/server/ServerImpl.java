@@ -29,12 +29,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
-     *
+     * HashMap per controllare se l'email è già stata verificata
      */
     private final HashMap<String, Integer> codeTracker;
 
     /**
-     *
+     * HashMap per tenere i codice salvati per un determinato lasso temporale
      */
     private final HashMap<String, Timer> codeTimerTracker;
 
@@ -45,6 +45,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      */
     private int[] numberVaccinated;
 
+    /**
+     * Costruttore
+     *
+     * @throws RemoteException RemoteException
+     */
     protected ServerImpl() throws RemoteException {
         super();
         codeTracker = new HashMap<>();
@@ -132,6 +137,14 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         return false;
     }
 
+    /**
+     * Utilizzato per controllare se un altro utente sta effettuando la verifica
+     * della email, con la stessa email utilizzata dal secondo utente
+     *
+     * @param email email
+     * @return true se l'email e' contenuta nella hashmap delle email in attesa di verifica, false in caso contrario
+     * @throws RemoteException RemoteException
+     */
     @Override
     public synchronized boolean checkDuplicateTempEmail(String email) throws RemoteException {
         return codeTracker.containsKey(email);
@@ -156,6 +169,12 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
+     * Utilizzato per inviare un email contenete un codice
+     * all'indirizzo indicato per poterne verificare la validita'.
+     * Dopo l'invio si attiva un timer di 10 minuti dopo i quali l'email
+     * torna disponibile per gli altri utenti se non viene verificata in quel
+     * lasso di tempo
+     *
      * @param email    email
      * @param nickname nickname
      * @throws RemoteException RemoteException
@@ -184,9 +203,12 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
+     * Utilizzato per verificare il codice inserito dall'utente e confrontarlo
+     * con il codice presente all'interno della tabella codeTracker
+     *
      * @param email email
      * @param code  codice di verifica
-     * @return
+     * @return true se il codice corrisponde, false nel caso contrario
      * @throws RemoteException RemoteException
      */
     @Override
@@ -206,6 +228,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
+     * Utilizzato per eliminare tutte le referenze presenti di
+     * un utente, dopo l'annullamneto della verifica della email
+     *
      * @param email email
      * @throws RemoteException RemoteException
      */

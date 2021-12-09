@@ -205,8 +205,8 @@ public class Statements {
     }
 
     /**
-     *  Utilizzato per controllare se esiste gia' un utente registrato
-     *  con questo codice fiscale
+     * Utilizzato per controllare se esiste gia' un utente registrato
+     * con questo codice fiscale
      *
      * @param fiscalCode codice fiscale del cittadino
      * @return true se il codice fiscale &egrave; disponibile false in caso contrario
@@ -756,7 +756,7 @@ public class Statements {
      * Utilizzato per visualizzare le info del cittadino selezionato dalla riga della
      * home del centro
      *
-     * @param UId id univoco del cittadino vaccinato da cercare
+     * @param UId     id univoco del cittadino vaccinato da cercare
      * @param hubName nome del centro vaccinale
      * @return restituisce i dati del cittadino richiesto, in caso di errore restituisce null
      * @throws SQLException SQLException

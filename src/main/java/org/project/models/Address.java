@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * In questa classe viene creato l'oggetto indirizzo,
  * utilizzato per impostare il campo nell'oggetto
- * centro vaccinali, nella classe {@Link Hub}
+ * centro vaccinali, nella classe {@link Hub}
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)
