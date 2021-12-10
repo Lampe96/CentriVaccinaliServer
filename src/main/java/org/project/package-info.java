@@ -7,5 +7,12 @@
  * @author Gianluca Latronico 739893 (VA)
  * @author Marc Alexander Orlando 741473 (VA)
  * @author Enrico Luigi Lamperti 740612 (VA)
+ *
+ * @see org.project.database
+ * @see org.project.models
+ * @see org.project.server
+ * @see org.project.utils
+ * @see org.project.UserType
+ *
  */
 package org.project;
