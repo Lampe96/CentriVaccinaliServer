@@ -17,8 +17,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Contiene l'implementazione dei metodi dichiarati nell'interfaccia
- * {@link Server} qui i vari metodi vanno ad utilizzare
- * i metodi di {@link Statements} per svolgere le loro funzioni
+ * {@link Server}. Qui i vari metodi vanno ad utilizzare
+ * i metodi di {@link Statements} per svolgere le loro funzioni.
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)
@@ -29,24 +29,24 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
-     * HashMap per controllare se l'email è già stata verificata
+     * HashMap per controllare se l'email e' gia' stata verificata.
      */
     private final HashMap<String, Integer> codeTracker;
 
     /**
-     * HashMap per tenere i codice salvati per un determinato lasso temporale
+     * HashMap per tenere i codice salvati per un determinato lasso temporale.
      */
     private final HashMap<String, Timer> codeTimerTracker;
 
     /**
      * Array utilizzato per tener traccia dell'andamento vaccinale,
-     * ogni 20 secondi (riga 61) viene riempita con gli ultimi dati
-     * disponibili e passata ai client che richiedono i dati
+     * ogni 20 secondi viene riempita con gli ultimi dati
+     * disponibili e passata ai client che richiedono i dati.
      */
     private int[] numberVaccinated;
 
     /**
-     * Costruttore
+     * Costruttore.
      *
      * @throws RemoteException RemoteException
      */
@@ -72,9 +72,9 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     //METODI LATO USER
 
     /**
-     * Utilizzato in fase di registrazione per inserire i dati dei cittadini nel DB
+     * Utilizzato in fase di registrazione per inserire i dati dei cittadini nel DB.
      *
-     * @param user parametro contenente tutti i dati del cittadino da inserire nel DB.
+     * @param user contenente i dati del cittadino da inserire nel DB
      * @throws RemoteException RemoteException
      */
     @Override
@@ -89,7 +89,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Utilizzato in fase di registrazione, nel caso il cittadino abbia gia' ricevuto
-     * una dose o piu' presso un centro vaccinale
+     * una dose o piu' presso un centro vaccinale.
      *
      * @param vaccinatedUser parametro contenente tutti i dati del cittadino da inserire nel DB.
      * @throws RemoteException RemoteException
@@ -104,7 +104,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Utilizzato per controllare se il nickname esiste gia'
+     * Utilizzato per controllare se il nickname esiste gia'.
      *
      * @param nick nickname
      * @return true se il nickname &egrave; disponibile false in caso contrario
@@ -121,7 +121,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Utilizzato per controllare se la email esiste gia'
+     * Utilizzato per controllare se l'email esiste gia'.
      *
      * @param email email
      * @return true se la email &egrave; disponibile false in caso contrario
@@ -139,7 +139,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Utilizzato per controllare se un altro utente sta effettuando la verifica
-     * della email, con la stessa email utilizzata dal secondo utente
+     * della email, con la stessa email utilizzata dal secondo utente.
      *
      * @param email email
      * @return true se l'email e' contenuta nella hashmap delle email in attesa di verifica, false in caso contrario
@@ -152,7 +152,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Utilizzato per controllare se esiste gia' un utente registrato
-     * con questo codice fiscale
+     * con questo codice fiscale.
      *
      * @param fiscalCode codice fiscale
      * @return true se il codice fiscale &egrave; disponibile, false in caso contrario
@@ -169,11 +169,10 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Utilizzato per inviare un email contenete un codice
+     * Utilizzato per inviare un'email contenente un codice
      * all'indirizzo indicato per poterne verificare la validita'.
-     * Dopo l'invio si attiva un timer di 10 minuti dopo i quali l'email
-     * torna disponibile per gli altri utenti se non viene verificata in quel
-     * lasso di tempo
+     * Dopo l'invio si attiva un timer di 10 minuti, al termine dei quali l'email
+     * torna disponibile per gli altri utenti.
      *
      * @param email    email
      * @param nickname nickname
@@ -204,7 +203,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Utilizzato per verificare il codice inserito dall'utente e confrontarlo
-     * con il codice presente all'interno della tabella codeTracker
+     * con il codice presente all'interno della tabella codeTracker.
      *
      * @param email email
      * @param code  codice di verifica
@@ -229,7 +228,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Utilizzato per eliminare tutte le referenze presenti di
-     * un utente, dopo l'annullamneto della verifica della email
+     * un utente, dopo l'annullamneto della verifica della email.
      *
      * @param email email
      * @throws RemoteException RemoteException
@@ -244,7 +243,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Utilizzato per recuperare dal DB l'intera lista dei centri vaccinali
+     * Utilizzato per recuperare dal DB l'intera lista dei centri vaccinali.
      *
      * @return un array contenente tutti i centri vaccinali
      * @throws RemoteException RemoteException
@@ -260,10 +259,10 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Utilizzato per calcolare la media
+     * Utilizzato per calcolare la media degli eventi avversi.
      *
      * @param hubName nome centro vaccinale
-     * @return La media degli eventi avversi se ne esiste almeno uno,
+     * @return La media degli eventi avversi se ne esiste almeno uno
      * @throws RemoteException RemoteException
      */
     @Override
@@ -277,7 +276,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Utilizzato nella visualizzazione delle info del centro vaccinale
+     * Utilizzato nella visualizzazione delle info del centro vaccinale.
      *
      * @param hubName    nome centro vaccinale
      * @param fiscalCode codice fiscale
@@ -296,10 +295,10 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Utilizzato per aggiungere un evento avverso
+     * Utilizzato per aggiungere un'evento avverso.
      *
      * @param adverseEvent evento avverso
-     * @return true se l'aggiunta è avvenuta con successo, false in caso contrario
+     * @return true se l'aggiunta e' avvenuta con successo, false in caso contrario
      * @throws RemoteException RemoteException
      */
     @Override
@@ -333,7 +332,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     //METODI LATO HUB
 
     /**
-     * Utilizzato per controllare se l'indirizzo esiste gia'
+     * Utilizzato per controllare se l'indirizzo esiste gia'.
      *
      * @param address indirizzo da controllare
      * @return true se l'indirizzo &egrave; disponibile, false in caso contrario
@@ -351,7 +350,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Utilizzato in fase di registrazione per inserire i dati dei centri
-     * vaccinali nel DB
+     * vaccinali nel DB.
      *
      * @param hub centro vaccinale
      * @throws RemoteException RemoteException
@@ -367,7 +366,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Inserisce un nuovo vaccinato
+     * Inserisce un nuovo vaccinato.
      *
      * @param vaccinatedUser contiene tutti i dati del cittadino da inserire nel DB
      *                       come cittadino vaccinato
@@ -385,7 +384,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Si occupa della registrazione dei cittadini
-     * precedentemente vaccinati in un altro centro vaccinale
+     * precedentemente vaccinati in un altro centro vaccinale.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
      * @throws RemoteException RemoteException
@@ -400,7 +399,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Per aggiornare la tabella dei cittadini registrati
+     * Per modificare la tabella dei cittadini registrati.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
      * @throws RemoteException RemoteException
@@ -416,7 +415,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Utilizzato per controllare se esiste gia' un centro vaccinale registrato
-     * con questa nome
+     * con questa nome.
      *
      * @param name nome del centro vaccinale
      * @return true se il nome &egrave; disponibile, false in caso contrario
@@ -433,12 +432,16 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Controlla se il cittadino è già vaccinato
+     * Controlla se il cittadino e' gia' stato vaccinato.
      *
-     * @param hubName    nome del centro presso il quale effettuare la vaccinazione
+     * @param hubName    nome del centro
      * @param fiscalCode codice fiscale del cittadino
-     * @return un array con in prima posizione 2, se il centro non esiste, 0 se esiste il centro
-     * ma il cittadino non risulta vaccinato, 1 e i dati del cittadino in caso contrario
+     * @return un array con in prima posizione:
+     * <ol>
+     *    <li>2 se il centro non esiste</li>
+     *    <li>0 se esiste il centro ma il cittadino non risulta vaccinato</li>
+     *     <li>1 e in seconda posizione i dati del cittadino in caso di successo</li>
+     * </ol>
      * @throws RemoteException RemoteException
      */
     @Override
@@ -452,8 +455,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Controlla se il centro
-     * vaccinale passato come parametro esiste nel DB
+     * Controlla se il centro vaccinale passato come parametro esiste nel DB.
      *
      * @param hubName nome del centro
      * @return true se esiste, false in caso contrario
@@ -470,12 +472,16 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Controlla se e' o meno la prima dose
+     * Controlla se e' o meno la prima dose.
      *
      * @param fiscalCode codice fiscale del cittadino
-     * @return restituisce 0 se il cittadino non è stato vaccinato o non e' presente
-     * nel DB, 1 se ha effettuato la prima o la seconda dose, 2 se i dati non sono corretti,
-     * -1 in caso di errori
+     * @return restituisce:
+     * <ol>
+     *     <li>0 se il cittadino non e' stato vaccinato o non e' presente nel DB</li>
+     *     <li>1 se ha effettuato la prima o la seconda dose</li>
+     *     <li>2 se i dati non sono corretti</li>
+     *     <li>-1 in caso di errori</li>
+     * </ol>
      * @throws RemoteException RemoteException
      */
     @Override
@@ -489,7 +495,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Utilizzato dai centri vaccinali per riempire le righe della home
+     * Utilizzato dai centri vaccinali per riempire le righe della home.
      *
      * @param hubName nome del centro vaccinale
      * @return restituisce un array di cittadini che hanno ricevuto almeno una
@@ -508,7 +514,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Utilizzato per visualizzare le info del cittadino selezionato dalla riga della
-     * home del centro
+     * home del centro.
      *
      * @param UId     id univoco del cittadino vaccinato da cercare
      * @param hubName nome del centro vaccinale
@@ -526,7 +532,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Utilizzato per recuperare tutti i dati dello user lato centro vaccinale
+     * Utilizzato per recuperare tutti i dati dello user lato centro vaccinale.
      *
      * @param email email del cittadino da cercare
      * @return restituisce i dati del cittadino richiesto, in caso di errore restituisce null
@@ -546,11 +552,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Utilizzato nelle impostazioni, per cambiare immagine all'utente, sia cittadini
-     * sia centri vaccinali
+     * sia centri vaccinali.
      *
      * @param selectedImage nuovo riferimento dell'immagine da caricare sul DB
-     * @param hubName       nome del centro (se chiamato dal lato cittadino viene settato a "")
-     * @param fiscalCode    codice fiscale del cittadino(se chiamato dal lato centro viene settato a "")
+     * @param hubName       nome del centro (se chiamato dal lato cittadino viene impostato a "")
+     * @param fiscalCode    codice fiscale del cittadino (se chiamato dal lato centro viene impostato a "")
      * @throws RemoteException RemoteException
      */
     @Override
@@ -564,12 +570,12 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Controlla se le credenziali inserite in fase di login sono corrette,
-     * andando a confrontarle con quelle presenti nel DB
+     * andando a confrontarle con quelle presenti nel DB.
      *
      * @param key chiave per accedere alla tabella, puo' essere o il nome del
      *            centro vaccinale o il codice fiscale del cittadino
      * @param pwd password da confrontare
-     * @return restituisce il tipo dell'utente, in modo da caricare la home corretta.
+     * @return restituisce il tipo dell'utente, in modo da caricare la home corretta,
      * se non trova riscontro restituisce null
      * @throws RemoteException RemoteException
      */
@@ -585,11 +591,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
 
     /**
      * Va a modificare la password precedente, controllando prima su che tabella deve andare
-     * modificare
+     * modificare.
      *
-     * @param hubName nome del centro (se chiamato dal lato cittadino viene settato a "")
-     * @param email   email del cittadino(se chiamato dal lato centro vaccinale viene settato a "")
-     * @param newPwd  newPwd nuova password da inserire nel DB
+     * @param hubName nome del centro (se chiamato dal lato cittadino viene impostato a "")
+     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene impostato a "")
+     * @param newPwd nuova password da inserire nel DB
      * @throws RemoteException RemoteException
      */
     @Override
@@ -602,10 +608,10 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Controlla se la password inserita coincide con quella inserita dall'utente
+     * Controlla se la password inserita coincide con quella inserita dall'utente.
      *
-     * @param hubName nome del centro (se chiamato dal lato cittadino viene settato a "")
-     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene settato a "")
+     * @param hubName nome del centro (se chiamato dal lato cittadino viene impostato a "")
+     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene impostato a "")
      * @param pwd     password da controllare sul DB
      * @return restiuisce true se coincide con quelle presenti nel DB, sia lato centro
      * che lato cittadino, false se non coincidono o si verifica un errore
@@ -622,10 +628,10 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
     }
 
     /**
-     * Si occupa dell'eliminazione di tutti i riferimenti lato cittadino e centro
+     * Si occupa dell'eliminazione di tutti i riferimenti lato cittadino e centro.
      *
-     * @param hubName nome del centro (se chiamato dal lato cittadino viene settato a "")
-     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene settato a "")
+     * @param hubName nome del centro (se chiamato dal lato cittadino viene impostato a "")
+     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene impostato a "")
      * @throws RemoteException RemoteException
      */
     @Override
@@ -662,10 +668,15 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      * di 4 posizioni.
      *
      * @param hubName nome centro
-     * @return restuisce un array di 4 vposizioni con, in prima posizione
-     * il numero totale di vaccinati; in seconda il numero di vaccinati con una sola
-     * dose; in terza il numero di vaccinati con due dosi; in quarta i vaccinati presso
-     * il centro
+     *
+     * @return restuisce un array di 3 o 4 posizioni con:
+     * <ol>
+     *   <li>in prima posizione il numero totale di vaccinati</li>
+     *   <li>in seconda il numero di vaccinati con una sola dose</li>
+     *   <li>in terza il numero di vaccinati con due dosi</li>
+     *   <li>in quarta i vaccinati presso il centro</li>
+     *  </ol>
+     *
      * @throws RemoteException RemoteException
      */
     @Override

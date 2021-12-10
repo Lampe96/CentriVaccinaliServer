@@ -14,7 +14,8 @@ import java.util.Objects;
 import java.util.Properties;
 
 /**
- * Classe utilizzata per l'invio della email di verifica all'utente indicato
+ * Classe utilizzata per l'invio della email di verifica all'indirizzo email indicato.
+ * Viene utilizzata in {@link org.project.server.ServerImpl} e {@link org.project.server.Server}
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)
@@ -24,29 +25,29 @@ import java.util.Properties;
 public class EmailUtil {
 
     /**
-     * Account utilizzato per inviare le email
+     * Account utilizzato per inviare le email.
      */
     private final static String FROM = "centri.vaccinali.italiani@gmail.com";
     /**
-     * Password del account utilizzato
+     * Password del account utilizzato.
      */
     private final static String PASSWORD = "ProgettoCentriVaccinali";
     /**
-     * Host utilizzato per l'invio della email
+     * Host utilizzato per l'invio della email.
      */
     private final static String HOST = "smtp.gmail.com";
     /**
-     * Porta utilizzata per l'invio della email
+     * Porta utilizzata per l'invio della email.
      */
     private final static String PORT = "465";
     /**
-     * Sessione per l'invio dei messaggi
+     * Sessione per l'invio dei messaggi.
      */
     private static Session session = null;
 
     /**
      * Utilizzato per settare le proprieta' di sistema e reperire la sessione,
-     * effettuando l'autenticazione sull'account prestabilito, per l'invio dei messaggi
+     * effettuando l'autenticazione sull'account prestabilito, per l'invio dei messaggi.
      */
     private static void setSysPropertiesAndGetSession() {
         if (session == null) {
@@ -65,8 +66,8 @@ public class EmailUtil {
     }
 
     /**
-     * Utilizzato per settare in un messaggio di base la sessione da utilizzare
-     * e la email mittente
+     * Utilizzato per impostare in un messaggio di base la sessione da utilizzare
+     * e la email mittente.
      *
      * @return Restituisce un MineMessage di base
      * @throws MessagingException MessagingException
@@ -81,7 +82,7 @@ public class EmailUtil {
     }
 
     /**
-     * Utilizzato per inviare il messaggio
+     * Utilizzato per inviare il messaggio.
      *
      * @param message messaggio da inviare
      * @throws MessagingException MessagingException
@@ -91,8 +92,8 @@ public class EmailUtil {
     }
 
     /**
-     * Utilizzato per settare nel messaggio la email del destinatario e,
-     * inserire nel template html il nickname del utente e il codice di verifica
+     * Utilizzato per impostare nel messaggio la email del destinatario e
+     * inserire nel template html il nickname dell'utente e il codice di verifica.
      *
      * @param to       email destinatario
      * @param nickname nickname

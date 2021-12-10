@@ -1,6 +1,6 @@
 /**
  * Questo package include le classi necessarie per i diversi
- * controlli a livello dell'email per l'autenticazione
+ * controlli a livello dell'email per l'autenticazione.
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * In questa classe viene creato l'oggetto evento avverso, utilizzato
- * per il passaggio dei dati e per la scrittura su DB
+ * per il passaggio dei dati e per la scrittura su DB.
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)
@@ -15,38 +15,38 @@ import java.io.Serializable;
 public class AdverseEvent implements Serializable {
 
     /**
-     * Tipologia dell'evento avverso
+     * Tipologia dell'evento avverso.
      */
     private String eventType;
 
     /**
-     * nickname del cittadino che lo ha creato
+     * Nickname del cittadino che lo ha creato.
      */
     private String nickname;
 
     /**
-     * Severita' dell'evento avverso
+     * Severita' dell'evento avverso.
      */
     private Short gravity;
 
     /**
-     * Testo dell'evento avverso
+     * Testo dell'evento avverso.
      */
     private String text;
 
     /**
-     * Nome del centro vaccinale presso cui si e' verificato
+     * Nome del centro vaccinale presso cui si e' verificato.
      */
     private String hubName;
 
     /**
-     * Costruttore vuoto
+     * Costruttore vuoto.
      */
     public AdverseEvent() {
     }
 
     /**
-     * Utilizzato per prendere la tipologia dell'evento avverso
+     * Utilizzato per prendere la tipologia dell'evento avverso.
      *
      * @return tipologia dell'evento avverso
      */
@@ -55,7 +55,7 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare la tipologia dell'evento avverso
+     * Utilizzato per impostare la tipologia dell'evento avverso.
      *
      * @param eventType tipologia evento avverso
      */
@@ -64,7 +64,7 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il nickname del cittadino che lo ha creato
+     * Utilizzato per prendere il nickname del cittadino che lo ha creato.
      *
      * @return nickname del cittadino
      */
@@ -73,7 +73,7 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il nickname del cittadino che ha creato l'evento
+     * Utilizzato per impostare il nickname del cittadino che ha creato l'evento.
      *
      * @param nickname nickname da impostare
      */
@@ -82,7 +82,7 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere la severita'
+     * Utilizzato per prendere la severita'.
      *
      * @return severita' dell'evento avverso
      */
@@ -91,7 +91,7 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare la severita' dell'evento avverso
+     * Utilizzato per impostare la severita' dell'evento avverso.
      *
      * @param gravity severita' da impostare
      */
@@ -100,7 +100,7 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il testo
+     * Utilizzato per prendere il testo.
      *
      * @return testo dell'evento avverso
      */
@@ -109,7 +109,7 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il testo dell'evento avverso
+     * Utilizzato per impostare il testo dell'evento avverso.
      *
      * @param text testo da impostare
      */
@@ -118,7 +118,7 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il nome del centro
+     * Utilizzato per prendere il nome del centro.
      *
      * @return nome del centro vaccinale presso cui si e' verificato
      */
@@ -127,7 +127,7 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il nome del centro vaccinale
+     * Utilizzato per impostare il nome del centro vaccinale.
      *
      * @param hubName nome del centro da impostare
      */
@@ -136,9 +136,9 @@ public class AdverseEvent implements Serializable {
     }
 
     /**
-     * Utilizzato per effettuare la concatezione in string
+     * Utilizzato per effettuare la concatenazione in string.
      *
-     * @return concatezione di tutti i parametri
+     * @return concatenazione di tutti i parametri
      */
     @Override
     public String toString() {

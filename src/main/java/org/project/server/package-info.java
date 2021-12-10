@@ -1,6 +1,6 @@
 /**
  * Questo package include le classi necessarie per gestire
- * tutti i metodi che si interfacciano con il DB
+ * tutti i metodi che si interfacciano con il DB.
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)

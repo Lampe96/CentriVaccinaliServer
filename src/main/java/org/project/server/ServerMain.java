@@ -10,7 +10,7 @@ import java.rmi.registry.LocateRegistry;
 import java.sql.SQLException;
 
 /**
- * In questa classe e' contenuto il main del server
+ * In questa classe e' contenuto il main del server.
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)
@@ -20,12 +20,13 @@ import java.sql.SQLException;
 public class ServerMain {
 
     /**
-     * Nel main del server viene creato l'oggetto server per poi, essere
+     * Nel main del server viene creato l'oggetto server, il quale verraì poi
      * messo a disposizione dei client attraverso il registro RMI.
-     * Altre funzioni sono quelle di: inizializzare il DB creando le tabelle
-     * vuote necessarie e inserendo un Thread che rileva quando il programma viene
-     * fermato chiudendo tutte le connessioni aperte.
-     *
+     * Altre funzioni sono:
+     * <ol>
+     *   <li>inizializzare il DB creando le tabelle vuote necessarie</li>
+     *   <li>inserisce un Thread che rileva quando il programma viene fermato, chiudendo tutte le connessioni aperte.</li>
+     * </ol>
      * @param args args
      */
     public static void main(String[] args) {

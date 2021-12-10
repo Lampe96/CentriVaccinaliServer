@@ -22,11 +22,11 @@ import java.util.ArrayList;
 public interface Server extends Remote {
 
     /**
-     * Nome con cui viene caricato il server sul registro RMI
+     * Nome con cui viene caricato il server sul registro RMI.
      */
     String NAME = "SERVER";
     /**
-     * Porta di utilizzata dal server
+     * Porta di utilizzata dal server.
      */
     int PORT = 8000;
 
@@ -34,7 +34,7 @@ public interface Server extends Remote {
     //METODI LATO USER
 
     /**
-     * Utilizzato in fase di registrazione per inserire i dati dei cittadini nel DB
+     * Utilizzato in fase di registrazione per inserire i dati dei cittadini nel DB.
      *
      * @param user contiene tutti i dati del cittadino da inserire nel DB
      * @throws RemoteException RemoteException
@@ -43,7 +43,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato in fase di registrazione, nel caso il cittadino abbia gia' ricevuto
-     * una dose o piu' presso un centro vaccinale
+     * una dose o piu' presso un centro vaccinale.
      *
      * @param vaccinatedUser contiene tutti i dati del cittadino da inserire nel DB
      * @throws RemoteException RemoteException
@@ -52,7 +52,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato per controllare se esiste gia' un utente registrato
-     * con questo nickname
+     * con questo nickname.
      *
      * @param nick nickname
      * @return true se il nickname &egrave; disponibile, false in caso contrario
@@ -62,7 +62,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato per controllare se esiste gia' un utente registrato
-     * con questa email
+     * con questa email.
      *
      * @param email email
      * @return true se la email &egrave; disponibile, false in caso contrario
@@ -72,7 +72,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato per controllare se un altro utente sta effettuando la verifica
-     * della email, con la stessa email utilizzata dal secondo utente
+     * della email, con la stessa email utilizzata dal secondo utente.
      *
      * @param email email
      * @return true se l'email non è disponibile, false in caso contrario
@@ -82,16 +82,16 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato per controllare se esiste gia' un utente registrato
-     * con questo codice fiscale
+     * con questo codice fiscale.
      *
      * @param fiscalCode codice fiscale
-     * @return true se il codice fiscale &egrave; disponibile, false in caso contrario
+     * @return true se il codice fiscale e' disponibile, false in caso contrario
      * @throws RemoteException RemoteException
      */
     boolean checkDuplicateFiscalCode(String fiscalCode) throws RemoteException;
 
     /**
-     * Utilizzato per inviare una email al utente per verificare la validita' della stessa
+     * Utilizzato per inviare una email al utente per verificare la validita' della stessa.
      *
      * @param email    email
      * @param nickname nickname
@@ -101,7 +101,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato per verificare che il codice inviato via email e
-     * inserito dal utente, corrisponde con quello salvato sul server
+     * inserito dal utente, corrisponde con quello salvato sul server.
      *
      * @param email email
      * @param code  codice di verifica
@@ -112,7 +112,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato per eliminare la propria referenza dalla tabella presente sul server
-     * in caso di annullamento in fase di registrazione del utente
+     * in caso di annullamento in fase di registrazione del utente.
      *
      * @param email email
      * @throws RemoteException RemoteException
@@ -120,7 +120,7 @@ public interface Server extends Remote {
     void deleteReferenceVerifyEmail(String email) throws RemoteException;
 
     /**
-     * Utilizzato per recuperare dal DB l'intera lista dei centri vaccinali
+     * Utilizzato per recuperare dal DB l'intera lista dei centri vaccinali.
      *
      * @return un array contenente tutti i centri vaccinali
      * @throws RemoteException RemoteException
@@ -128,16 +128,16 @@ public interface Server extends Remote {
     ArrayList<Hub> fetchAllHub() throws RemoteException;
 
     /**
-     * Utilizzato per calcolare la media
+     * Utilizzato per calcolare la media.
      *
      * @param hubName nome centro vaccinale
-     * @return La media degli eventi avversi se ne esiste almeno uno,
+     * @return La media degli eventi avversi se ne esiste almeno uno
      * @throws RemoteException RemoteException
      */
     float getAvgAdverseEvent(String hubName) throws RemoteException;
 
     /**
-     * Utilizzato nella visualizzazione delle info del centro vaccinale
+     * Utilizzato nella visualizzazione delle info del centro vaccinale.
      *
      * @param hubName    nome centro vaccinale
      * @param fiscalCode codice fiscale
@@ -148,10 +148,10 @@ public interface Server extends Remote {
     boolean checkBeforeAddEvent(String hubName, String fiscalCode) throws RemoteException;
 
     /**
-     * Utilizzato per aggiungere un evento avverso
+     * Utilizzato per aggiungere un evento avverso.
      *
      * @param adverseEvent evento avverso
-     * @return true se l'aggiunta è avvenuta con successo, false in caso contrario
+     * @return true se l'aggiunta e' avvenuta con successo, false in caso contrario
      * @throws RemoteException RemoteException
      */
     boolean addAdverseEvent(AdverseEvent adverseEvent) throws RemoteException;
@@ -170,7 +170,7 @@ public interface Server extends Remote {
     //METODI LATO HUB
 
     /**
-     * Utilizzato per controllare se l'indirizzo esiste gia'
+     * Utilizzato per controllare se l'indirizzo esiste gia'.
      *
      * @param address indirizzo da controllare
      * @return true se l'indirizzo &egrave; disponibile, false in caso contrario
@@ -180,7 +180,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato in fase di registrazione per inserire i dati dei centri
-     * vaccinali nel DB
+     * vaccinali nel DB.
      *
      * @param hub centro vaccinale
      * @throws RemoteException RemoteException
@@ -188,7 +188,7 @@ public interface Server extends Remote {
     void insertDataHub(Hub hub) throws RemoteException;
 
     /**
-     * Inserisce un nuovo vaccinato
+     * Inserisce un nuovo vaccinato.
      *
      * @param vaccinatedUser contiene tutti i dati del cittadino da inserire nel DB
      *                       come cittadino vaccinato
@@ -198,7 +198,7 @@ public interface Server extends Remote {
 
     /**
      * Si occupa della registrazione dei cittadini
-     * precedentemente vaccinati in un altro centro vaccinale
+     * precedentemente vaccinati in un altro centro vaccinale.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
      * @throws RemoteException RemoteException
@@ -206,7 +206,7 @@ public interface Server extends Remote {
     void insertVaccinatedUserInNewHub(User vaccinatedUser) throws RemoteException;
 
     /**
-     * per aggiornare la tabella dei cittadini registrati
+     * Utilizzato per aggiornare la tabella dei cittadini registrati.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
      * @throws RemoteException RemoteException
@@ -215,7 +215,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato per controllare se esiste gia' un centro vaccinale registrato
-     * con questa nome
+     * con questa nome.
      *
      * @param name nome del centro vaccinale
      * @return true se il nome &egrave; disponibile, false in caso contrario
@@ -224,7 +224,7 @@ public interface Server extends Remote {
     boolean checkDuplicateHubName(String name) throws RemoteException;
 
     /**
-     * Controlla se il cittadino è già vaccinato
+     * Controlla se il cittadino e' gia' vaccinato.
      *
      * @param hubName    nome del centro presso il quale effettuare la vaccinazione
      * @param fiscalCode codice fiscale del cittadino
@@ -236,7 +236,7 @@ public interface Server extends Remote {
 
     /**
      * Controlla se il centro
-     * vaccinale passato come parametro esiste nel DB
+     * vaccinale passato come parametro esiste nel DB.
      *
      * @param hubName nome del centro
      * @return true se esiste, false in caso contrario
@@ -245,10 +245,10 @@ public interface Server extends Remote {
     boolean checkIfHubExist(String hubName) throws RemoteException;
 
     /**
-     * Controlla se e' o meno la prima dose
+     * Controlla se e' o meno la prima dose.
      *
      * @param fiscalCode codice fiscale del cittadino
-     * @return restituisce 0 se il cittadino non è stato vaccinato o non e' presente
+     * @return restituisce 0 se il cittadino non e' stato vaccinato o non e' presente
      * nel DB, 1 se ha effettuato la prima o la seconda dose, 2 se i dati non sono corretti,
      * -1 in caso di errori
      * @throws RemoteException RemoteException
@@ -256,7 +256,7 @@ public interface Server extends Remote {
     int checkIfFirstDose(String fiscalCode) throws RemoteException;
 
     /**
-     * Utilizzato dai centri vaccinali per riempire le righe della home
+     * Utilizzato dai centri vaccinali per riempire le righe della home.
      *
      * @param hubName nome del centro vaccinale
      * @return restituisce un array di cittadini che hanno ricevuto almeno una
@@ -267,7 +267,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato per visualizzare le info del cittadino selezionato dalla riga della
-     * home del centro
+     * home del centro.
      *
      * @param UId     id univoco del cittadino vaccinato da cercare
      * @param hubName nome del centro vaccinale
@@ -277,7 +277,7 @@ public interface Server extends Remote {
     User fetchHubVaccinatedInfo(short UId, String hubName) throws RemoteException;
 
     /**
-     * Utilizzato per recuperare tutti i dati dello user lato centro vaccinale
+     * Utilizzato per recuperare tutti i dati dello user lato centro vaccinale.
      *
      * @param email email del cittadino da cercare
      * @return restituisce i dati del cittadino richiesto, in caso di errore restituisce null
@@ -290,7 +290,7 @@ public interface Server extends Remote {
 
     /**
      * Utilizzato nelle impostazioni, per cambiare immagine all'utente, sia cittadini
-     * sia centri vaccinali
+     * sia centri vaccinali.
      *
      * @param selectedImage nuovo riferimento dell'immagine da caricare sul DB
      * @param hubName       nome del centro (se chiamato dal lato cittadino viene settato a "")
@@ -301,7 +301,7 @@ public interface Server extends Remote {
 
     /**
      * Controlla se le credenziali inserite in fase di login sono corrette,
-     * ndando a confrontarle con quelle presenti nel DB
+     * andando a confrontarle con quelle presenti nel DB.
      *
      * @param key chiave per accedere alla tabella, puo' essere o il nome del
      *            centro vaccinale o il codice fiscale del cittadino
@@ -314,7 +314,7 @@ public interface Server extends Remote {
 
     /**
      * Va a modificare la password precedente, controllando prima su che tabella deve andare
-     * modificare
+     * a modificare.
      *
      * @param hubName nome del centro (se chiamato dal lato cittadino viene settato a "")
      * @param email   email del cittadino(se chiamato dal lato centro vaccinale viene settato a "")
@@ -324,7 +324,7 @@ public interface Server extends Remote {
     void changePwd(String hubName, String email, String newPwd) throws RemoteException;
 
     /**
-     * Controlla se la password inserita coincide con quella inserita dall'utente
+     * Controlla se la password inserita coincide con quella inserita dall'utente.
      *
      * @param hubName nome del centro (se chiamato dal lato cittadino viene settato a "")
      * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene settato a "")
@@ -336,7 +336,7 @@ public interface Server extends Remote {
     boolean checkPassword(String hubName, String email, String pwd) throws RemoteException;
 
     /**
-     * Si occupa dell'eliminazione di tutti i riferimenti lato cittadino e centro
+     * Si occupa dell'eliminazione di tutti i riferimenti lato cittadino e centro.
      *
      * @param hubName nome del centro (se chiamato dal lato cittadino viene settato a "")
      * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene settato a "")
@@ -356,8 +356,8 @@ public interface Server extends Remote {
     ArrayList<AdverseEvent> fetchAllAdverseEvent(String hubName) throws RemoteException;
 
     /**
-     * Utilizzato per prendere tutte le informazioni per quanto riguardo
-     * l'andamento vaccinale
+     * Utilizzato per prendere tutte le informazioni per quanto riguarda
+     * l'andamento vaccinale.
      *
      * @param hubName nome centro
      * @return restuisce un array di 3 posizioni con, in prima posizione

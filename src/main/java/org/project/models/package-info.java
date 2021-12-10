@@ -1,6 +1,6 @@
 /**
  * Questo package include le classi necessarie alla
- * creazione degli oggetti utilizzati nel programma
+ * creazione degli oggetti utilizzati nel programma.
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)

@@ -18,7 +18,7 @@ import java.util.Locale;
 /**
  * Questa classe contiene tutti i metodi utilizzati dal client,
  * i quali vanno a lavorare sul DB. In diversi
- * metodi verranno utilizzati metodi presenti nella classe {@link DbHelper}
+ * metodi verranno utilizzati metodi presenti nella classe {@link DbHelper}.
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico  739893 (VA)
@@ -31,7 +31,7 @@ public class Statements {
     /**
      * Creazione della tabella riferita ai centri vaccinali
      * La creazione avviene solo se la tabella
-     * non esiste gia'
+     * e' gia' presente su DB.
      */
     @Language("POSTGRES-SQL")
     private final static String CR_TB_CV =
@@ -51,7 +51,7 @@ public class Statements {
     /**
      * Creazione della tabella riferita alle tabelle dei vaccinati
      * per i singoli centri. La creazione avviene solo se la tabella
-     * non esiste gia'
+     * e' gia' presente su DB.
      */
     @Language("POSTGRES-SQL")
     private static final String CR_TB_VAC_NOMCV =
@@ -67,9 +67,9 @@ public class Statements {
                     ");";
 
     /**
-     * Creazione della tabella riferita alla tabella dei cittadini
-     * registrati. La creazione avviene solo se la tabella non
-     * esiste gia'
+     * Creazione della tabella riferita ai cittadini
+     * registrati. La creazione avviene solo se la tabella
+     * e' gia' presente su DB.
      */
     @Language("POSTGRES-SQL")
     private final static String CR_TB_CITT_REG =
@@ -87,9 +87,9 @@ public class Statements {
                     ");";
 
     /**
-     * Creazione della tabella riferita alla tabella contenente
-     * tutti gli eventi avversi. La creazione avviene solo se la tabella
-     * non esiste gia'
+     * Creazione della tabella contenente tutti gli
+     * eventi avversi.La creazione avviene solo se la tabella
+     * e' gia' presente su DB.
      */
     @Language("POSTGRES-SQL")
     private final static String CR_TB_EV_AVV =
@@ -104,8 +104,7 @@ public class Statements {
 
 
     /**
-     * Utilizzato per inizializzare il DB creando le tabelle vuote
-     * necessarie
+     * Utilizzato per inizializzare il DB creando le tabelle necessarie.
      *
      * @throws SQLException SQLException
      */
@@ -120,7 +119,7 @@ public class Statements {
 
     /**
      * Utilizzato in fase di registrazione, va a richiamare un metodo presente in DbHelper
-     * il quale verra' poi riempito dai parametri presi dal parametro
+     * il quale verra' poi riempito dai dati presi dal parametro.
      *
      * @param user tutti i dati del cittadino da inserire nel DB
      * @throws SQLException SQLException
@@ -139,7 +138,7 @@ public class Statements {
 
     /**
      * Utilizzato in fase di registrazione, va a richiamare un metodo presente in DbHelper
-     * il quale verra' poi riempito dai parametri presi dal parametro
+     * il quale verra' poi riempito dai dati presi dal parametro passato.
      *
      * @param vaccinatedUser tutti i dati del cittadino da inserire nel DB
      * @throws SQLException SQLException
@@ -158,7 +157,7 @@ public class Statements {
 
     /**
      * Utilizzato per controllare se esiste gia' un utente registrato
-     * con questo nickname
+     * con questo nickname.
      *
      * @param nick nickname
      * @return true se il nickname &egrave; disponibile false in caso contrario
@@ -182,10 +181,10 @@ public class Statements {
 
     /**
      * Utilizzato per controllare se esiste gia' un utente registrato
-     * con questa email
+     * con questa email.
      *
      * @param email email
-     * @return true se la email &egrave; disponibile false in caso contrario
+     * @return true se l'email &egrave; disponibile false in caso contrario
      * @throws SQLException SQLException
      */
     public static boolean checkDuplicateEmail(String email) throws SQLException {
@@ -206,7 +205,7 @@ public class Statements {
 
     /**
      * Utilizzato per controllare se esiste gia' un utente registrato
-     * con questo codice fiscale
+     * con questo codice fiscale.
      *
      * @param fiscalCode codice fiscale del cittadino
      * @return true se il codice fiscale &egrave; disponibile false in caso contrario
@@ -229,7 +228,7 @@ public class Statements {
     /**
      * Vengono scaricati da DB tutti i centri vaccinali presenti e,
      * tramite un while, vengono inseriti in una lista di centri uno per uno.
-     * La creazione avviene tramite il metodo {@link #createHub}
+     * La creazione avviene tramite il metodo {@link #createHub}.
      *
      * @return un array contenente tutti i centri vaccinali
      * presenti nel DB
@@ -267,7 +266,7 @@ public class Statements {
 
     /**
      * Utilizzato per riempire il campo presente nella riga della home del
-     * cittadino
+     * cittadino, dove si trova la percentuale degli eventi avversi.
      *
      * @param hubName nome del centro vaccinale
      * @return La media degli eventi avversi se ne esiste almeno uno,
@@ -287,7 +286,7 @@ public class Statements {
     }
 
     /**
-     * Utilizzato nella visualizzazione delle info del centro vaccinale
+     * Utilizzato nella visualizzazione delle info del centro vaccinale.
      *
      * @param hubName    nome del centro vaccinale preso in considerazione
      * @param fiscalCode codice fiscale del cittadino che vuole rilasciare un
@@ -314,7 +313,7 @@ public class Statements {
      *
      * @param adverseEvent model con tutti i campi necessari per l'aggiunta
      *                     dell'evento alla tabella
-     * @return true se l'aggiunta è avvenuta con successo, false in caso contrario
+     * @return true se l'aggiunta e' avvenuta con successo, false in caso contrario
      * @throws SQLException SQLException
      */
     public static boolean addAdverseEvent(AdverseEvent adverseEvent) throws SQLException {
@@ -346,7 +345,7 @@ public class Statements {
     /**
      * Utilizzato per prendere tutti i dati di un hub in fase
      * di apertura della riga presente nella home dei cittadini.
-     * Utilizza il metodo {@link #createHub} per la creazione del centro vaccinale
+     * Utilizza il metodo {@link #createHub} per la creazione del centro vaccinale.
      *
      * @param hubName nome del centro vaccinale
      * @return un centro vaccinale se esiste, null in caso contrario
@@ -371,7 +370,7 @@ public class Statements {
 
     /**
      * Viene chiamato da {@link #getHub} e {@link #fetchAllHub},
-     * utilizzato per creare l'oggetto che verra' poi restituito
+     * utilizzato per creare l'oggetto che verra' poi restituito.
      *
      * @param rs      contiene tutti i campi del centro prelevati dal DB
      * @param hub     oggetto da riempire con i campi presenti nel rs
@@ -395,7 +394,7 @@ public class Statements {
     //METODI LATO HUB
 
     /**
-     * Utilizzato per controllare se l'indirizzo esiste gia'
+     * Utilizzato per controllare se l'indirizzo esiste gia'.
      *
      * @param address indirizzo da controllare
      * @return true se l'indirizzo &egrave; disponibile, false in caso contrario
@@ -419,7 +418,7 @@ public class Statements {
 
     /**
      * Utilizzato in fase di registrazione per inserire i dati dei centri
-     * vaccinali nel DB
+     * vaccinali nel DB.
      *
      * @param hub centro vaccinale da inserire
      * @throws SQLException SQLException
@@ -443,13 +442,13 @@ public class Statements {
 
     /**
      * Tramite il metodo {@link #checkIfUserExist} viene controllato se il
-     * cittadino è gia' registrato. Nel caso in cui il cittadino sia gia' registrato
+     * cittadino e' gia' registrato. Nel caso in cui il cittadino sia gia' registrato
      * viene inserito nella tabella di riferimento del centro tramite
      * {@link #insertVaccinatedTableVaccinatedHospital}. In caso contrario viene prima inserito
      * nella tabella dei cittadini registrati, tramite {@link #insertCitizenNotRegistered} e
      * successivamente nella tabella di riferimento del centro tramite
      * {@link #insertVaccinatedTableVaccinatedHospital}. Questo avviene per rispettare i vincoli
-     * delle tabelle
+     * delle tabelle.
      *
      * @param vaccinatedUser contiene tutti i dati del cittadino da inserire nel DB
      *                       come cittadino vaccinato
@@ -478,7 +477,7 @@ public class Statements {
 
     /**
      * Utilizzato in {@link #checkIfFirstDose} e {@link #insertNewVaccinated},
-     * verifica se il cittadino e già registrato nel DB o meno.
+     * verifica se il cittadino e gia' registrato nel DB o meno.
      *
      * @param fiscalCode codice fiscale da controllare
      * @return true se il cittadino e' registrato, false in caso contrario
@@ -539,7 +538,7 @@ public class Statements {
     /**
      * Si avvale dei metodi {@link #insertVaccinatedTableVaccinatedHospital} e
      * {@link #updateCitizen}. Si occupa della registrazione dei cittadini
-     * precedentemente vaccinati in un altro centro vaccinale
+     * precedentemente vaccinati in un altro centro vaccinale.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
      * @throws SQLException SQLException
@@ -551,7 +550,7 @@ public class Statements {
 
     /**
      * Utilizzato in {@link #insertVaccinatedUserInNewHub} e {@link #updateVaccinatedUser},
-     * viene utilizzato per aggiornare il numero della dose e l'id univoco nel DB
+     * viene utilizzato per aggiornare il numero della dose e l'id univoco nel DB.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
      * @throws SQLException SQLException
@@ -568,7 +567,7 @@ public class Statements {
 
     /**
      * Utilizza {@link #updateCitizen} per aggiornare la tabella dei cittadini registrati,
-     * dopo aver aggiornato la tabella dei vaccinati
+     * dopo aver aggiornato la tabella dei vaccinati.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
      * @throws SQLException SQLException
@@ -590,7 +589,7 @@ public class Statements {
 
     /**
      * Utilizzato per controllare se esiste gia' un centro vaccinale registrato
-     * con questo nome
+     * con questo nome.
      *
      * @param name nome del centro vaccinale
      * @return true se il nome &egrave; disponibile, false in caso contrario
@@ -613,12 +612,16 @@ public class Statements {
     /**
      * Utilizza il metodo {@link #checkIfHubExist} per verificare se il centro vaccinale
      * esiste nel DB, successivamente si effettua il controllo per verificare se l'utente e' gia'
-     * vaccinato. In caso positivo, verra' restituito un array di Object con il cittadino all'interno
+     * vaccinato. In caso positivo, verra' restituito un array di Object con il cittadino all'interno.
      *
      * @param hubName    nome del centro presso il quale effettuare la vaccinazione
      * @param fiscalCode codice fiscale del cittadino
-     * @return un array con in prima posizione 2, se il centro non esiste, 0 se esiste il centro
-     * ma il cittadino non risulta vaccinato, 1 e i dati del cittadino in caso contrario
+     * @return un array con in prima posizione:
+     * <ol>
+     *     <li>2 se il centro non esiste</li>
+     *     <li>0 se esiste il centro ma il cittadino non risulta vaccinato</li>
+     *     <li>1 e in seconda posizione i dati del cittadino in caso di successo</li>
+     * </ol>
      * @throws SQLException SQLException
      */
     public static Object[] checkIfUserIsVaccinated(String hubName, String fiscalCode) throws SQLException {
@@ -646,7 +649,7 @@ public class Statements {
 
     /**
      * Viene utilizzato in {@link #checkIfUserIsVaccinated}, controlla se il centro
-     * vaccinale passato come parametro esiste nel DB
+     * vaccinale passato come parametro esiste nel DB.
      *
      * @param hubName nome del centro
      * @return true se esiste, false in caso contrario
@@ -663,14 +666,18 @@ public class Statements {
     }
 
     /**
-     * Si avvale del metodo {@link #checkIfUserExist} per verificar se il cittadino
+     * Si avvale del metodo {@link #checkIfUserExist} per verificare se il cittadino
      * e' gia' registrato. In caso affermativo si verifica che sia effettivamente la prima volta
      * che viene vaccinato, in caso contrario deve esser utilizzato un altro metodo.
      *
      * @param fiscalCode codice fiscale del cittadino
-     * @return restituisce 0 se il cittadino non è stato vaccinato o non e' presente
-     * nel DB, 1 se ha effettuato la prima o la seconda dose, 2 se i dati non sono corretti,
-     * -1 in caso di errori
+     * @return restituisce:
+     * <ol>
+     *     <li>0 se il cittadino non e' stato vaccinato o non e' presente nel DB</li>
+     *     <li>1 se ha effettuato la prima o la seconda dose</li>
+     *     <li>2 se i dati non sono corretti</li>
+     *     <li>-1 in caso di errori</li>
+     * </ol>
      * @throws SQLException SQLException
      */
     public static int checkIfFirstDose(String fiscalCode) throws SQLException {
@@ -699,7 +706,7 @@ public class Statements {
     /**
      * Utilizzato dai centri vaccinali per riempire le righe della home. Vengono effettuate
      * due query, la prima per trovare tutti i cittadini vaccinati presso il centro, la seconda
-     * per controllare se ogni singolo cittadino ha rilasciato o meno un evento presso il centro
+     * per controllare se ogni singolo cittadino ha rilasciato o meno un evento presso il centro.
      *
      * @param hubName nome del centro vaccinale
      * @return restituisce un array di cittadini che hanno ricevuto almeno una
@@ -754,7 +761,7 @@ public class Statements {
 
     /**
      * Utilizzato per visualizzare le info del cittadino selezionato dalla riga della
-     * home del centro
+     * home del centro.
      *
      * @param UId     id univoco del cittadino vaccinato da cercare
      * @param hubName nome del centro vaccinale
@@ -783,7 +790,7 @@ public class Statements {
     }
 
     /**
-     * Utilizzato per recuperare tutti i dati dello user lato centro vaccinale
+     * Utilizzato per recuperare tutti i dati dello user lato centro vaccinale.
      *
      * @param email email del cittadino da cercare
      * @return restituisce i dati del cittadino richiesto, in caso di errore restituisce null
@@ -816,11 +823,11 @@ public class Statements {
 
     /**
      * Utilizzato nelle impostazioni, per cambiare immagine all'utente, sia cittadini
-     * sia centri vaccinali
+     * sia centri vaccinali.
      *
      * @param selectedImage nuovo riferimento dell'immagine da caricare sul DB
-     * @param hubName       nome del centro (se chiamato dal lato cittadino viene settato a "")
-     * @param fiscalCode    codice fiscale del cittadino(se chiamato dal lato centro viene settato a "")
+     * @param hubName       nome del centro (se chiamato dal lato cittadino viene impostato a "")
+     * @param fiscalCode    codice fiscale del cittadino(se chiamato dal lato centro viene impostato a "")
      * @throws SQLException SQLException
      */
     public static void changeImage(int selectedImage, String hubName, String fiscalCode) throws SQLException {
@@ -840,7 +847,7 @@ public class Statements {
 
     /**
      * Controlla se le credenziali inserite in fase di login sono corrette,
-     * andando a confrontarle con quelle presenti nel DB
+     * andando a confrontarle con quelle presenti nel DB.
      *
      * @param key chiave per accedere alla tabella, puo' essere o il nome del
      *            centro vaccinale o il codice fiscale del cittadino
@@ -877,10 +884,10 @@ public class Statements {
 
     /**
      * Va a modificare la password precedente, controllando prima su che tabella deve andare
-     * modificare
+     * modificare.
      *
-     * @param hubName nome del centro (se chiamato dal lato cittadino viene settato a "")
-     * @param email   email del cittadino(se chiamato dal lato centro vaccinale viene settato a "")
+     * @param hubName nome del centro (se chiamato dal lato cittadino viene impostato a "")
+     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene impostato a "")
      * @param newPwd  nuova password da inserire nel DB
      * @throws SQLException SQLException
      */
@@ -900,12 +907,12 @@ public class Statements {
     }
 
     /**
-     * Controlla se la password inserita coincide con quella inserita dall'utente
+     * Controlla se la password inserita coincide con quella inserita dall'utente.
      *
-     * @param hubName nome del centro (se chiamato dal lato cittadino viene settato a "")
-     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene settato a "")
+     * @param hubName nome del centro (se chiamato dal lato cittadino viene impostato a "")
+     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene impostato a "")
      * @param pwd     password da controllare sul DB
-     * @return restiuisce true se coincide con quelle presenti nel DB, sia lato centro
+     * @return true se coincide con quelle presenti nel DB, sia lato centro
      * che lato cittadino, false se non coincidono o si verifica un errore
      * @throws SQLException SQLException
      */
@@ -934,10 +941,10 @@ public class Statements {
     }
 
     /**
-     * Si occupa dell'eliminazione di tutti i riferimenti lato cittadino e centro
+     * Si occupa dell'eliminazione di tutti i riferimenti lato cittadino o centro.
      *
-     * @param hubName nome del centro (se chiamato dal lato cittadino viene settato a "")
-     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene settato a "")
+     * @param hubName nome del centro (se chiamato dal lato cittadino viene impostato a "")
+     * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene impostato a "")
      * @throws SQLException SQLException
      */
     public static void deleteAccount(String hubName, String email) throws SQLException {
@@ -988,11 +995,14 @@ public class Statements {
     /**
      * Effettua una serie query per recuperare una serie dati con cui
      * vengono riempite le label presenti nelle home e il grafico
-     * sull'andamento delle vaccinazioni
+     * sull'andamento delle vaccinazioni.
      *
-     * @return restuisce un array di 3 posizioni con, in prima posizione
-     * il numero totale di vaccinati; in seconda il numero di vaccinati con una sola
-     * dose; in terza il numero di vaccinati con due dosi
+     * @return restuisce un array di 3 posizioni con:
+     * <ol>
+     *   <li>in prima posizione il numero totale di vaccinati</li>
+     *   <li>in seconda il numero di vaccinati con una sola dose</li>
+     *   <li>in terza il numero di vaccinati con due dosi</li>
+     * </ol>
      * @throws SQLException SQLException
      */
     public static int[] getNumberVaccinated() throws SQLException {
@@ -1032,7 +1042,7 @@ public class Statements {
     }
 
     /**
-     * Utilizzato in serverImpl per riempire l'array per l'andamento vaccinazioni
+     * Utilizzato in serverImpl per riempire l'array per l'andamento vaccinazioni.
      *
      * @param hubName nome del centro vaccinale
      * @return restituisce il numero di vaccinati presso quel centro, 0 se non ce

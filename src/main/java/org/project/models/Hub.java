@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * In questa classe viene creato l'oggetto centro vaccinale, utilizzato
- * per i passaggio dei dati e per la scrittura su DB
+ * per i passaggio dei dati e per la scrittura su DB.
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)
@@ -15,38 +15,38 @@ import java.io.Serializable;
 public class Hub implements Serializable {
 
     /**
-     * Nome del centro vaccinale
+     * Nome del centro vaccinale.
      */
     private String nameHub;
 
     /**
-     * password del centro vaccinale
+     * Password del centro vaccinale.
      */
     private String password;
 
     /**
-     * indirizzo del centro vaccinale
+     * Indirizzo del centro vaccinale.
      */
     private Address address;
 
     /**
-     * Tipologia di centro vaccinale
+     * Tipologia di centro vaccinale.
      */
     private String type;
 
     /**
-     * RIferimento dell'immagine scelta dal centro vaccinale
+     * Riferimento dell'immagine scelta dal centro vaccinale.
      */
     private int image;
 
     /**
-     * Costruttore vuoto
+     * Costruttore vuoto.
      */
     public Hub() {
     }
 
     /**
-     * Utilizzato per prendere il numero dell'immagine
+     * Utilizzato per prendere il numero dell'immagine.
      *
      * @return numero di riferimento dell'immagine
      */
@@ -55,7 +55,7 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il numero dell'immagine
+     * Utilizzato per impostare il numero dell'immagine.
      *
      * @param image numero di riferimento dell'immagine
      */
@@ -64,7 +64,7 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il nome
+     * Utilizzato per prendere il nome.
      *
      * @return nome del centro vaccinale
      */
@@ -73,7 +73,7 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il nome del centro vaccinale
+     * Utilizzato per impostare il nome del centro vaccinale.
      *
      * @param nameHub nome da impostare
      */
@@ -82,7 +82,7 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere la password
+     * Utilizzato per prendere la password.
      *
      * @return password del centro vaccinale
      */
@@ -91,7 +91,7 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare la password del centro vaccinale
+     * Utilizzato per impostare la password del centro vaccinale.
      *
      * @param password password da impostare
      */
@@ -100,7 +100,7 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere l'indirizzo
+     * Utilizzato per prendere l'indirizzo.
      *
      * @return indirizzo del centro vaccinale
      */
@@ -109,7 +109,7 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare l'indirizzo del centro vaccinale
+     * Utilizzato per impostare l'indirizzo del centro vaccinale.
      *
      * @param address indirizzo da impostare
      */
@@ -118,7 +118,7 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere la tipologia del centro vaccinale
+     * Utilizzato per prendere la tipologia del centro vaccinale.
      *
      * @return tipologia del centro vaccinale
      */
@@ -127,7 +127,7 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare la tipologia del centro vaccinale
+     * Utilizzato per impostare la tipologia del centro vaccinale.
      *
      * @param type tipologia centro vaccinale
      */
@@ -136,9 +136,9 @@ public class Hub implements Serializable {
     }
 
     /**
-     * Utilizzato per effettuare la concatezione in string
+     * Utilizzato per effettuare la concatenazione in string.
      *
-     * @return concatezione di tutti i parametri
+     * @return concatenazione di tutti i parametri
      */
     @Override
     public String toString() {

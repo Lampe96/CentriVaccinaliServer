@@ -1,17 +1,17 @@
 package org.project;
 
 /**
-* Enumeratori utilizzati per differenziare i diversi accessi al programma
+* Enumeratori utilizzati per differenziare gli accessi al programma.
 */
 public enum UserType {
 
     /**
-     * Utente
+     * Utente.
      */
     USER,
 
     /**
-     * Centro vaccinale
+     * Centro vaccinale.
      */
     HUB
 }

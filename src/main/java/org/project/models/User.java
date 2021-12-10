@@ -5,7 +5,7 @@ import java.sql.Date;
 
 /**
  * In questa classe viene creato l'oggetto user, utilizzato
- * per i passaggio dei dati e per la scrittura su DB
+ * per i passaggio dei dati e per la scrittura su DB.
  *
  * @author Federico Mainini 740691 (VA)
  * @author Gianluca Latronico 739893 (VA)
@@ -16,79 +16,79 @@ import java.sql.Date;
 public class User implements Serializable {
 
     /**
-     * Nome del cittadino
+     * Nome del cittadino.
      */
     private String name;
 
     /**
-     * Cognome del cittadino
+     * Cognome del cittadino.
      */
     private String surname;
 
     /**
-     * codice fiscale del cittadino
+     * Codice fiscale del cittadino.
      */
     private String fiscalCode;
 
     /**
-     * email del cittadino
+     * Email del cittadino.
      */
     private String email;
 
     /**
-     * nickname del cittadino
+     * Nickname del cittadino.
      */
     private String nickname;
 
     /**
-     * password del cittadino
+     * Password del cittadino.
      */
     private String password;
 
     /**
-     * parametro utilizzato per controllare se il cittadino
+     * Parametro utilizzato per controllare se il cittadino
      * ha o meno segnalato un evento
      */
     private String event;
 
     /**
-     * Id univo del cittadino, assegnato dai centri vaccinali
+     * Id univo del cittadino, assegnato dai centri vaccinali.
      */
     private short id;
 
     /**
-     * Nome hub presso cui e' stato vaccinato il cittadino
+     * Nome hub presso cui e' stato vaccinato il cittadino.
      */
     private String hubName;
 
     /**
-     * Data del vaccino effettuato dal cittadino
+     * Data del vaccino effettuato dal cittadino.
      */
     private Date vaccineDate;
 
     /**
-     * Tipologia di vaccino ricevuto dal cittadino
+     * Tipologia di vaccino ricevuto dal cittadino.
      */
     private String vaccineType;
 
     /**
-     * Numero dosi ricevute dal cittadino
+     * Numero dosi ricevute dal cittadino.
      */
     private short dose;
 
     /**
-     * RIferimento dell'immagine scelta dal cittadino
+     * Riferimento dell'immagine scelta dal cittadino.
      */
     private short image;
 
     /**
-     * Costruttore vuoto
+     * Costruttore vuoto.
      */
     public User() {
     }
 
     /**
-     * Utilizzato per prendere il nome
+     * Utilizzato per prendere il nome.
      *
      * @return nome del cittadino
      */
@@ -97,7 +97,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il nome del cittadino
+     * Utilizzato per impostare il nome del cittadino.
      *
      * @param name nome da impostare
      */
@@ -106,7 +106,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il cognome
+     * Utilizzato per prendere il cognome.
      *
      * @return cognome del cittadino
      */
@@ -115,7 +115,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilazzato per impostare il cognome del cittadino
+     * Utilazzato per impostare il cognome del cittadino.
      *
      * @param surname cognome da impostare
      */
@@ -124,7 +124,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il codice fiscale
+     * Utilizzato per prendere il codice fiscale.
      *
      * @return codice fiscale del cittadino
      */
@@ -133,7 +133,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il codice fiscale del cittadino
+     * Utilizzato per impostare il codice fiscale del cittadino.
      *
      * @param fiscalCode codice fiscale da impostare
      */
@@ -142,7 +142,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere l'email
+     * Utilizzato per prendere l'email.
      *
      * @return email del cittadino
      */
@@ -151,7 +151,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare l'email del cittadino
+     * Utilizzato per impostare l'email del cittadino.
      *
      * @param email email da impostare
      */
@@ -160,7 +160,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il nickname
+     * Utilizzato per prendere il nickname.
      *
      * @return nickname del cittadino
      */
@@ -169,7 +169,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il nickname del cittadino
+     * Utilizzato per impostare il nickname del cittadino.
      *
      * @param nickname nickname da impostare
      */
@@ -178,7 +178,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere la password
+     * Utilizzato per prendere la password.
      *
      * @return password del cittadino
      */
@@ -187,7 +187,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare la password del cittadino
+     * Utilizzato per impostare la password del cittadino.
      *
      * @param password password da impostare
      */
@@ -197,7 +197,7 @@ public class User implements Serializable {
 
     /**
      * Utilizzato per verificare se il cittadino ha o meno segnalato
-     * un evento
+     * un evento.
      *
      * @return una stringa
      */
@@ -207,7 +207,7 @@ public class User implements Serializable {
 
     /**
      * Utilizzato per verificare se il cittadino ha o meno segnalato
-     * un evento
+     * un evento.
      *
      * @param event eventuale evento segnalato
      */
@@ -216,7 +216,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere l'id univoco
+     * Utilizzato per prendere l'id univoco.
      *
      * @return id univoco del cittadino
      */
@@ -225,7 +225,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare l'id univoco del cittadino
+     * Utilizzato per impostare l'id univoco del cittadino.
      *
      * @param id id univoco da impostare
      */
@@ -234,7 +234,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il nome del centro vaccinale
+     * Utilizzato per prendere il nome del centro vaccinale.
      *
      * @return nome del centro presso cui si e' vaccinato
      */
@@ -243,7 +243,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il nome del centro
+     * Utilizzato per impostare il nome del centro.
      *
      * @param hubName nome del centro vaccinale presso cui si e' vaccinato
      */
@@ -252,7 +252,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere la data del vaccino
+     * Utilizzato per prendere la data del vaccino.
      *
      * @return data in cui e' stato effettuato il vaccino
      */
@@ -261,7 +261,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare la data del vaccino
+     * Utilizzato per impostare la data del vaccino.
      *
      * @param vaccineDate data del vaccino
      */
@@ -270,7 +270,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere la tipologia del vaccino effettuato
+     * Utilizzato per prendere la tipologia del vaccino effettuato.
      *
      * @return tipo del vaccino
      */
@@ -279,7 +279,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare la tipologia del vaccino
+     * Utilizzato per impostare la tipologia del vaccino.
      *
      * @param vaccineType tipologia del vaccino
      */
@@ -288,7 +288,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il numero di dose effettuato
+     * Utilizzato per prendere il numero di dose effettuato.
      *
      * @return numero della dose
      */
@@ -297,7 +297,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il numero della dose
+     * Utilizzato per impostare il numero della dose.
      *
      * @param dose numero della dose
      */
@@ -306,7 +306,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per prendere il numero dell'immagine
+     * Utilizzato per prendere il numero dell'immagine.
      *
      * @return numero di riferimento dell'immagine
      */
@@ -315,7 +315,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per impostare il numero dell'immagine
+     * Utilizzato per impostare il numero dell'immagine.
      *
      * @param image numero di riferimento dell'immagine
      */
@@ -324,9 +324,9 @@ public class User implements Serializable {
     }
 
     /**
-     * Utilizzato per effettuare la concatezione in string
+     * Utilizzato per effettuare la concatenazione in string.
      *
-     * @return concatezione di tutti i parametri
+     * @return concatenazione di tutti i parametri
      */
     @Override
     public String toString() {
