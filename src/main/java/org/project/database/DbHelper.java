@@ -33,11 +33,11 @@ public class DbHelper {
     /**
      * Username del database.
      */
-    private final static String USERNAME = "postgres";
+    private static String username;
     /**
      * Password del database.
      */
-    private final static String PASSWORD = "ProgettoLabB";
+    private static String password;
     /**
      * Connessione con il database.
      */
@@ -48,6 +48,24 @@ public class DbHelper {
     private static Statement statement = null;
 
     /**
+     * Utilizzato per impostare l'username per poter accedere al DB.
+     *
+     * @param username username
+     */
+    public static void setUsernameDB(String username) {
+        DbHelper.username = username;
+    }
+
+    /**
+     * Utilizzato per impostare la password per poter accedere al DB.
+     *
+     * @param password password
+     */
+    public static void setPasswordDB(String password) {
+        DbHelper.password = password;
+    }
+
+    /**
      * Utilizzato per stabilire la connessione con il database
      * attraverso JDBC e driver necessari.
      *
@@ -56,7 +74,7 @@ public class DbHelper {
      */
     private static Connection getConnection() throws SQLException {
         if (connection == null) {
-            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connection = DriverManager.getConnection(URL, username, password);
         }
         return connection;
     }

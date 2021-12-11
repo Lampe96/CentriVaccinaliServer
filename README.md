@@ -13,7 +13,7 @@ Le principali librerie esterne utilizzate sono:
 <li>
 postgresql
 <ul>
-<li>Utilizzato per interfacciarsi con il DataBase (JDBC)</li>
+<li>Utilizzata per interfacciarsi con il DataBase (JDBC)</li>
 </ul>
 
 <li>
@@ -23,13 +23,19 @@ password4j
 </ul>
 
 <li>
-com.sun.mail e commons-io
+javax.mail
 <ul>
-<li>Utilizzate per inviare le email di verifica</li>
+<li>Utilizzata per inviare le email di verifica</li>
+</ul>
+
+<li>
+commons-io
+<ul>
+<li>Utilizzata per leggere i file</li>
 </ul>
 </ol>
 
-Per poter installare e compilare correttamente il progetto,
-è necessario configurare una nuova applicazione in questo modo:
+Per poter installare e compilare correttamente il progetto, è necessario configurare una nuova applicazione in questo
+modo:
 
 ![Immagine di esempio configurazione](https://cdn.discordapp.com/attachments/893484185036152869/919251266570432523/Server.PNG)

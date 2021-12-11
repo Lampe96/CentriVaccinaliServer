@@ -1,4 +1,3 @@
-
 /**
  * Questo package include le classi necessarie per svolgere le
  * funzioni e le query utilizzate a livello server.
@@ -7,9 +6,7 @@
  * @author Gianluca Latronico 739893 (VA)
  * @author Marc Alexander Orlando 741473 (VA)
  * @author Enrico Luigi Lamperti 740612 (VA)
- *
  * @see org.project.database.DbHelper
  * @see org.project.database.Statements
- *
  */
 package org.project.database;

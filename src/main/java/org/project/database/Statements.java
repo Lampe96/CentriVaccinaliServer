@@ -54,7 +54,7 @@ public class Statements {
      * e' gia' presente su DB.
      */
     @Language("POSTGRES-SQL")
-    private static final String CR_TB_VAC_NOMCV =
+    private final static String CR_TB_VAC_NOMCV =
             "CREATE TABLE IF NOT EXISTS Vaccinato_NomeCentroVaccinale(" +
                     "id_univoco SMALLINT PRIMARY KEY," +
                     "nome VARCHAR(25) NOT NULL," +

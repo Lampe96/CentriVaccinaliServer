@@ -28,6 +28,7 @@ var packageSearchIndex;
 var typeSearchIndex;
 var memberSearchIndex;
 var tagSearchIndex;
+
 function loadScripts(doc, tag) {
     createElem(doc, tag, 'search.js');
 
@@ -49,11 +50,10 @@ function show(type) {
     count = 0;
     for (var key in data) {
         var row = document.getElementById(key);
-        if ((data[key] &  type) !== 0) {
+        if ((data[key] & type) !== 0) {
             row.style.display = '';
             row.className = (count++ % 2) ? rowColor : altColor;
-        }
-        else
+        } else
             row.style.display = 'none';
     }
     updateTabs(type);
@@ -68,14 +68,13 @@ function updateTabs(type) {
             tab.className = activeTableTab;
             tab.innerHTML = tabs[value][1];
             tab.setAttribute('aria-selected', true);
-            tab.setAttribute('tabindex',0);
+            tab.setAttribute('tabindex', 0);
             table.setAttribute('aria-labelledby', tabs[value][0]);
-        }
-        else {
+        } else {
             tab.className = tableTab;
             tab.setAttribute('aria-selected', false);
-            tab.setAttribute('tabindex',-1);
-            tab.setAttribute('onclick', "show("+ value + ")");
+            tab.setAttribute('tabindex', -1);
+            tab.setAttribute('onclick', "show(" + value + ")");
             tab.innerHTML = tabs[value][1];
         }
     }
@@ -92,7 +91,8 @@ function switchTab(e) {
     }
 }
 
-var updateSearchResults = function() {};
+var updateSearchResults = function () {
+};
 
 function indexFilesLoaded() {
     return moduleSearchIndex

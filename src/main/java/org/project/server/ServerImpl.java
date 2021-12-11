@@ -595,7 +595,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      *
      * @param hubName nome del centro (se chiamato dal lato cittadino viene impostato a "")
      * @param email   email del cittadino (se chiamato dal lato centro vaccinale viene impostato a "")
-     * @param newPwd nuova password da inserire nel DB
+     * @param newPwd  nuova password da inserire nel DB
      * @throws RemoteException RemoteException
      */
     @Override
@@ -668,7 +668,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      * di 4 posizioni.
      *
      * @param hubName nome centro
-     *
      * @return restuisce un array di 3 o 4 posizioni con:
      * <ol>
      *   <li>in prima posizione il numero totale di vaccinati</li>
@@ -676,7 +675,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      *   <li>in terza il numero di vaccinati con due dosi</li>
      *   <li>in quarta i vaccinati presso il centro</li>
      *  </ol>
-     *
      * @throws RemoteException RemoteException
      */
     @Override

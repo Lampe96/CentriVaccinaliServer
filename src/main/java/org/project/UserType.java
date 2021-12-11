@@ -1,8 +1,8 @@
 package org.project;
 
 /**
-* Enumeratori utilizzati per differenziare gli accessi al programma.
-*/
+ * Enumeratori utilizzati per differenziare gli accessi al programma.
+ */
 public enum UserType {
 
     /**

@@ -303,9 +303,10 @@ public interface Server extends Remote {
      * Controlla se le credenziali inserite in fase di login sono corrette,
      * andando a confrontarle con quelle presenti nel DB.
      *
-     * @param key chiave per accedere alla tabella, puo' essere o il nome del
-     *            centro vaccinale o il codice fiscale del cittadino
-     * @param pwd password da confrontare
+     * @param key      chiave per accedere alla tabella, puo' essere o il nome del
+     *                 centro vaccinale o il codice fiscale del cittadino
+     * @param pwd      password da confrontare
+     * @param userType tipo di utente
      * @return restituisce il tipo dell'utente, in modo da caricare la home corretta.
      * se non trova riscontro restituisce null
      * @throws RemoteException RemoteException
