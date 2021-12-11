@@ -849,36 +849,38 @@ public class Statements {
      * Controlla se le credenziali inserite in fase di login sono corrette,
      * andando a confrontarle con quelle presenti nel DB.
      *
-     * @param key chiave per accedere alla tabella, puo' essere o il nome del
-     *            centro vaccinale o il codice fiscale del cittadino
-     * @param pwd password da confrontare
+     * @param key      chiave per accedere alla tabella, puo' essere o il nome del
+     *                 centro vaccinale o il codice fiscale del cittadino
+     * @param pwd      password da confrontare
+     * @param userType tipo di utente
      * @return restituisce il tipo dell'utente, in modo da caricare la home corretta.
      * se non trova riscontro restituisce null
      * @throws SQLException SQLException
      */
-    public static UserType checkCredential(String key, String pwd) throws SQLException {
-        PreparedStatement psU = DbHelper.getEmailAndPwdU();
-        psU.setString(1, key);
-        ResultSet rsU = psU.executeQuery();
-        psU.closeOnCompletion();
+    public static UserType checkCredential(String key, String pwd, UserType userType) throws SQLException {
+        if (userType == UserType.USER) {
+            PreparedStatement psU = DbHelper.getEmailAndPwdU();
+            psU.setString(1, key);
+            ResultSet rsU = psU.executeQuery();
+            psU.closeOnCompletion();
 
-        if (rsU.next()) {
-            if (Password.check(pwd, rsU.getString(1)).withArgon2()) {
-                return UserType.USER;
+            if (rsU.next()) {
+                if (Password.check(pwd, rsU.getString(1)).withArgon2()) {
+                    return UserType.USER;
+                }
+            }
+        } else {
+            PreparedStatement psH = DbHelper.getEmailAndPwdH();
+            psH.setString(1, key);
+            ResultSet rsH = psH.executeQuery();
+            psH.closeOnCompletion();
+
+            if (rsH.next()) {
+                if (Password.check(pwd, rsH.getString(1)).withArgon2()) {
+                    return UserType.HUB;
+                }
             }
         }
-
-        PreparedStatement psH = DbHelper.getEmailAndPwdH();
-        psH.setString(1, key);
-        ResultSet rsH = psH.executeQuery();
-        psH.closeOnCompletion();
-
-        if (rsH.next()) {
-            if (Password.check(pwd, rsH.getString(1)).withArgon2()) {
-                return UserType.HUB;
-            }
-        }
-
         return null;
     }
 

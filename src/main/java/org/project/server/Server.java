@@ -310,7 +310,7 @@ public interface Server extends Remote {
      * se non trova riscontro restituisce null
      * @throws RemoteException RemoteException
      */
-    UserType checkCredential(String key, String pwd) throws RemoteException;
+    UserType checkCredential(String key, String pwd, UserType userType) throws RemoteException;
 
     /**
      * Va a modificare la password precedente, controllando prima su che tabella deve andare
