@@ -387,12 +387,13 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      * precedentemente vaccinati in un altro centro vaccinale.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
+     * @param oldNameHub nome del vecchio centro vaccinale presso cui è stato vaccinato
      * @throws RemoteException RemoteException
      */
     @Override
-    public synchronized void insertVaccinatedUserInNewHub(User vaccinatedUser) throws RemoteException {
+    public synchronized void insertVaccinatedUserInNewHub(User vaccinatedUser, String oldNameHub) throws RemoteException {
         try {
-            Statements.insertVaccinatedUserInNewHub(vaccinatedUser);
+            Statements.insertVaccinatedUserInNewHub(vaccinatedUser, oldNameHub);
         } catch (SQLException e) {
             e.printStackTrace();
         }

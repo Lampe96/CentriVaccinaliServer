@@ -541,9 +541,21 @@ public class Statements {
      * precedentemente vaccinati in un altro centro vaccinale.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
+     * @param oldNameHub nome del vecchio centro vaccinale presso cui è stato vaccinato
      * @throws SQLException SQLException
      */
-    public static void insertVaccinatedUserInNewHub(User vaccinatedUser) throws SQLException {
+    public static void insertVaccinatedUserInNewHub(User vaccinatedUser, String oldNameHub) throws SQLException {
+        String tableName =oldNameHub.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+        PreparedStatement pStats = DbHelper.updateVaccinatedUser(tableName);
+        pStats.setShort(1, vaccinatedUser.getId());
+        pStats.setString(2, vaccinatedUser.getHubName());
+        pStats.setDate(3, vaccinatedUser.getVaccineDate());
+        pStats.setString(4, vaccinatedUser.getVaccineType());
+        pStats.setShort(5, vaccinatedUser.getDose());
+        pStats.setString(6, vaccinatedUser.getFiscalCode());
+        pStats.executeUpdate();
+        pStats.closeOnCompletion();
+
         insertVaccinatedTableVaccinatedHospital(vaccinatedUser);
         updateCitizen(vaccinatedUser);
     }
