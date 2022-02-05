@@ -57,17 +57,14 @@ public class ServerMain {
 
         try {
             Statements.initializeDb();
-
             System.out.println("ACCESSO AL DB ESEGUITO\n");
 
             ServerImpl server = null;
             try {
                 server = new ServerImpl();
-
                 LocateRegistry.createRegistry(Server.PORT);
                 Naming.rebind("rmi://localhost:" + Server.PORT + "/" + Server.NAME, server);
                 System.out.println("REBIND SERVER ESEGUITA");
-
             } catch (RemoteException | MalformedURLException e) {
                 e.printStackTrace();
                 System.exit(-1);

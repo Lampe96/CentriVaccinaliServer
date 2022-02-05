@@ -54,7 +54,7 @@ public class User implements Serializable {
     /**
      * Id univo del cittadino, assegnato dai centri vaccinali.
      */
-    private short id;
+    private long id;
 
     /**
      * Nome hub presso cui e' stato vaccinato il cittadino.
@@ -220,7 +220,7 @@ public class User implements Serializable {
      *
      * @return id univoco del cittadino
      */
-    public short getId() {
+    public long getId() {
         return id;
     }
 
@@ -229,7 +229,7 @@ public class User implements Serializable {
      *
      * @param id id univoco da impostare
      */
-    public void setId(short id) {
+    public void setId(long id) {
         this.id = id;
     }
 

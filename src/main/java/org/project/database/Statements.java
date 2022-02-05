@@ -56,11 +56,13 @@ public class Statements {
     @Language("POSTGRES-SQL")
     private final static String CR_TB_VAC_NOMCV =
             "CREATE TABLE IF NOT EXISTS Vaccinato_NomeCentroVaccinale(" +
-                    "id_univoco SMALLINT PRIMARY KEY," +
+                    "id_univoco BIGINT PRIMARY KEY," +
                     "nome VARCHAR(25) NOT NULL," +
                     "cognome VARCHAR(25) NOT NULL," +
-                    "codice_fiscale CHAR(16) references Cittadino_Registrato (codice_fiscale) ON DELETE CASCADE ON UPDATE CASCADE," +
-                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON DELETE SET NULL ON UPDATE CASCADE," +
+                    "codice_fiscale CHAR(16) references Cittadino_Registrato (codice_fiscale) " +
+                    "ON DELETE CASCADE ON UPDATE CASCADE," +
+                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) " +
+                    "ON DELETE SET NULL ON UPDATE CASCADE," +
                     "data_vaccino DATE NOT NULL," +
                     "tipo_vaccino VARCHAR(20) NOT NULL," +
                     "numero_dose SMALLINT DEFAULT 1" +
@@ -80,7 +82,7 @@ public class Statements {
                     "cognome VARCHAR(25) NOT NULL," +
                     "codice_fiscale CHAR(16) UNIQUE," +
                     "password VARCHAR(500)  DEFAULT NULL," +
-                    "id_univoco SMALLINT DEFAULT 0," +
+                    "id_univoco BIGINT DEFAULT 0," +
                     "numero_dose SMALLINT DEFAULT 0," +
                     "immagine SMALLINT DEFAULT 1," +
                     "PRIMARY KEY(codice_fiscale, nickname)" +
@@ -95,10 +97,12 @@ public class Statements {
     private final static String CR_TB_EV_AVV =
             "CREATE TABLE IF NOT EXISTS Evento_Avverso(" +
                     "tipo VARCHAR(20)," +
-                    "nickname VARCHAR(25) references Cittadino_Registrato (nickname) ON UPDATE CASCADE ON DELETE CASCADE," +
+                    "nickname VARCHAR(25) references Cittadino_Registrato (nickname) " +
+                    "ON UPDATE CASCADE ON DELETE CASCADE," +
                     "severita SMALLINT NOT NULL," +
                     "testo VARCHAR(256)," +
-                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) ON UPDATE CASCADE ON DELETE CASCADE," +
+                    "nome_centro VARCHAR(50) references Centro_Vaccinale (nome_centro) " +
+                    "ON UPDATE CASCADE ON DELETE CASCADE," +
                     "PRIMARY KEY(tipo, nickname, nome_centro)" +
                     ");";
 
@@ -461,7 +465,7 @@ public class Statements {
             insertVaccinatedTableVaccinatedHospital(vaccinatedUser);
 
             PreparedStatement pStat2 = DbHelper.getUpdateIdUser();
-            pStat2.setShort(1, vaccinatedUser.getId());
+            pStat2.setLong(1, vaccinatedUser.getId());
             pStat2.setShort(2, vaccinatedUser.getDose());
             pStat2.setString(3, vaccinatedUser.getFiscalCode());
 
@@ -502,7 +506,7 @@ public class Statements {
      */
     private static void insertVaccinatedTableVaccinatedHospital(User vaccinatedUser) throws SQLException {
         PreparedStatement pStat = DbHelper.getInsertNewVaccinated(vaccinatedUser.getHubName().replaceAll("\\s+", "_"));
-        pStat.setShort(1, vaccinatedUser.getId());
+        pStat.setLong(1, vaccinatedUser.getId());
         pStat.setString(2, vaccinatedUser.getName());
         pStat.setString(3, vaccinatedUser.getSurname());
         pStat.setString(4, vaccinatedUser.getFiscalCode());
@@ -528,7 +532,7 @@ public class Statements {
         pStat.setString(1, vaccinatedUser.getName());
         pStat.setString(2, vaccinatedUser.getSurname());
         pStat.setString(3, vaccinatedUser.getFiscalCode());
-        pStat.setShort(4, vaccinatedUser.getId());
+        pStat.setLong(4, vaccinatedUser.getId());
         pStat.setShort(5, vaccinatedUser.getDose());
         pStat.setString(6, "Guest " + vaccinatedUser.getId());
         pStat.executeUpdate();
@@ -541,13 +545,13 @@ public class Statements {
      * precedentemente vaccinati in un altro centro vaccinale.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
-     * @param oldNameHub nome del vecchio centro vaccinale presso cui è stato vaccinato
+     * @param oldNameHub     nome del vecchio centro vaccinale presso cui è stato vaccinato
      * @throws SQLException SQLException
      */
     public static void insertVaccinatedUserInNewHub(User vaccinatedUser, String oldNameHub) throws SQLException {
-        String tableName =oldNameHub.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+        String tableName = oldNameHub.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
         PreparedStatement pStats = DbHelper.updateVaccinatedUser(tableName);
-        pStats.setShort(1, vaccinatedUser.getId());
+        pStats.setLong(1, vaccinatedUser.getId());
         pStats.setString(2, vaccinatedUser.getHubName());
         pStats.setDate(3, vaccinatedUser.getVaccineDate());
         pStats.setString(4, vaccinatedUser.getVaccineType());
@@ -569,7 +573,7 @@ public class Statements {
      */
     private static void updateCitizen(User vaccinatedUser) throws SQLException {
         PreparedStatement pStats = DbHelper.updateVaccinatedCitizen();
-        pStats.setShort(1, vaccinatedUser.getId());
+        pStats.setLong(1, vaccinatedUser.getId());
         pStats.setInt(2, vaccinatedUser.getDose());
         pStats.setString(3, vaccinatedUser.getFiscalCode());
 
@@ -587,7 +591,7 @@ public class Statements {
     public static void updateVaccinatedUser(User vaccinatedUser) throws SQLException {
         String tableName = vaccinatedUser.getHubName().toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
         PreparedStatement pStats = DbHelper.updateVaccinatedUser(tableName);
-        pStats.setShort(1, vaccinatedUser.getId());
+        pStats.setLong(1, vaccinatedUser.getId());
         pStats.setString(2, vaccinatedUser.getHubName());
         pStats.setDate(3, vaccinatedUser.getVaccineDate());
         pStats.setString(4, vaccinatedUser.getVaccineType());
@@ -646,7 +650,7 @@ public class Statements {
 
             if (rs.next()) {
                 User vu = new User();
-                vu.setId(rs.getShort(1));
+                vu.setId(rs.getLong(1));
                 vu.setName(rs.getString(2));
                 vu.setSurname(rs.getString(3));
 
@@ -747,7 +751,7 @@ public class Statements {
             vu.setName(rsAll.getString(1));
             vu.setSurname(rsAll.getString(2));
             vu.setNickname(rsAll.getString(3));
-            vu.setId(rsAll.getShort(4));
+            vu.setId(rsAll.getLong(4));
             vu.setDose(rsAll.getShort(5));
             avu.add(vu);
         }
@@ -780,10 +784,10 @@ public class Statements {
      * @return restituisce i dati del cittadino richiesto, in caso di errore restituisce null
      * @throws SQLException SQLException
      */
-    public static User fetchHubVaccinatedInfo(short UId, String hubName) throws SQLException {
+    public static User fetchHubVaccinatedInfo(long UId, String hubName) throws SQLException {
         String tableName = hubName.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
         PreparedStatement pStat = DbHelper.getFetchHubVaccinatedInfo(tableName);
-        pStat.setShort(1, UId);
+        pStat.setLong(1, UId);
 
         ResultSet rs = pStat.executeQuery();
         pStat.closeOnCompletion();
@@ -822,7 +826,7 @@ public class Statements {
             us.setName(rs.getString(3));
             us.setSurname(rs.getString(4));
             us.setFiscalCode(rs.getString(5));
-            us.setId(rs.getShort(7));
+            us.setId(rs.getLong(7));
             us.setDose(rs.getShort(8));
             us.setImage(rs.getShort(9));
             return us;

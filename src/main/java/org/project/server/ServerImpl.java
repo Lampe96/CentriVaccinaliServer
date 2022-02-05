@@ -329,6 +329,19 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
         return null;
     }
 
+    /**
+     * Utilizzato per generare l'id univoco basato sull'orario della
+     * somministrazione della prima dose in millisecondi.
+     *
+     * @return Id univoco basato sull'orario in millisecondi
+     * @throws RemoteException RemoteException
+     */
+    @Override
+    public synchronized long getUId() throws RemoteException {
+        return System.currentTimeMillis();
+    }
+
+
     //METODI LATO HUB
 
     /**
@@ -387,7 +400,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      * precedentemente vaccinati in un altro centro vaccinale.
      *
      * @param vaccinatedUser oggetto contenente tutti i campi da inserire nel DB
-     * @param oldNameHub nome del vecchio centro vaccinale presso cui è stato vaccinato
+     * @param oldNameHub     nome del vecchio centro vaccinale presso cui è stato vaccinato
      * @throws RemoteException RemoteException
      */
     @Override
@@ -523,7 +536,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server {
      * @throws RemoteException RemoteException
      */
     @Override
-    public synchronized User fetchHubVaccinatedInfo(short UId, String hubName) throws RemoteException {
+    public synchronized User fetchHubVaccinatedInfo(long UId, String hubName) throws RemoteException {
         try {
             return Statements.fetchHubVaccinatedInfo(UId, hubName);
         } catch (SQLException e) {
