@@ -38,4 +38,4 @@ commons-io
 Per poter installare e compilare correttamente il progetto, è necessario configurare una nuova applicazione in questo
 modo:
 
-![Immagine di esempio configurazione](https://cdn.discordapp.com/attachments/893484185036152869/919251266570432523/Server.PNG)
+![Immagine di esempio configurazione](https://cdn.discordapp.com/attachments/939101398975545384/940267291474554890/Immagine_2022-02-07_162605.png)
